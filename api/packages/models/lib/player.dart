@@ -2,24 +2,28 @@
 import 'dart:convert';
 
 class Player {
-  String userId;
-  String name;
+   String userId;
+   String name;
+   String imagePath;
   final bool hasAnsweredCorrectly;
 
   Player({
     required this.userId,
     required this.name,
+    required this.imagePath,
     this.hasAnsweredCorrectly = false,
   });
 
   Player copyWith({
     String? userId,
     String? name,
+    String? imagePath,
     bool? hasAnsweredCorrectly,
   }) {
     return Player(
       userId: userId ?? this.userId,
       name: name ?? this.name,
+      imagePath: imagePath ?? this.imagePath,
       hasAnsweredCorrectly: hasAnsweredCorrectly ?? this.hasAnsweredCorrectly,
     );
   }
@@ -28,6 +32,7 @@ class Player {
     return <String, dynamic>{
       'userId': userId,
       'name': name,
+      'imagePath': imagePath,
       'hasAnsweredCorrectly': hasAnsweredCorrectly,
     };
   }
@@ -36,6 +41,7 @@ class Player {
     return Player(
       userId: map['userId'] as String,
       name: map['name'] as String,
+      imagePath: map['imagePath'] as String,
       hasAnsweredCorrectly: (map['hasAnsweredCorrectly'] ?? false) as bool,
     );
   }

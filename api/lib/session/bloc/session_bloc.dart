@@ -22,9 +22,9 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
   }
 
   void _onPlayerAdded(OnPlayerAdded event, Emitter<SessionState> emit) {
-    // Round has started when the second player joins the game
     if (state.players.length == 1 && state.correctAnswer.isEmpty) {
       emit(state.copyWith(correctAnswer: getRandomWord));
+      print('correctAnswer: ${state.correctAnswer}');
     }
     emit(
       state.copyWith(

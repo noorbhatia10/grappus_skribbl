@@ -17,7 +17,7 @@ abstract class UITextStyle {
   static const _baseTextStyle = TextStyle(
     package: 'app_ui',
     fontWeight: AppFontWeight.regular,
-    fontFamily: 'NotoSansDisplay',
+    fontFamily: 'OpenSans',
     decoration: TextDecoration.none,
     textBaseline: TextBaseline.alphabetic,
   );
@@ -141,7 +141,7 @@ abstract class ContentTextStyle {
   static const _baseTextStyle = TextStyle(
     package: 'app_ui',
     fontWeight: AppFontWeight.regular,
-    fontFamily: 'NotoSerif',
+    fontFamily: 'OpenSans',
     decoration: TextDecoration.none,
     textBaseline: TextBaseline.alphabetic,
   );
@@ -241,7 +241,7 @@ abstract class ContentTextStyle {
 
   /// Button Text Style
   static final TextStyle button = _baseTextStyle.copyWith(
-    fontFamily: 'Montserrat',
+    fontFamily: 'OpenSans',
     fontSize: 14,
     fontWeight: AppFontWeight.medium,
     height: 1.42,
@@ -250,7 +250,7 @@ abstract class ContentTextStyle {
 
   /// Caption Text Style
   static final TextStyle caption = _baseTextStyle.copyWith(
-    fontFamily: 'NotoSansDisplay',
+    fontFamily: 'OpenSans',
     fontSize: 12,
     height: 1.33,
     letterSpacing: 0.4,
@@ -258,7 +258,7 @@ abstract class ContentTextStyle {
 
   /// Overline Text Style
   static final TextStyle overline = _baseTextStyle.copyWith(
-    fontFamily: 'NotoSansDisplay',
+    fontFamily: 'OpenSans',
     fontWeight: AppFontWeight.semiBold,
     fontSize: 12,
     height: 1.33,
@@ -267,7 +267,7 @@ abstract class ContentTextStyle {
 
   /// Label Small Text Style
   static final TextStyle labelSmall = _baseTextStyle.copyWith(
-    fontFamily: 'NotoSansDisplay',
+    fontFamily: 'OpenSans',
     fontSize: 11,
     height: 1.45,
     letterSpacing: 0.5,
@@ -277,6 +277,6 @@ abstract class ContentTextStyle {
 ///
 extension FontFamily on TextStyle {
   TextStyle get modernAntiqua {
-    return copyWith(fontFamily: 'ModernAntiqua');
+    return copyWith(fontFamily: 'OpenSans');
   }
 }

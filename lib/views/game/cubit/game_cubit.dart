@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:api/session/bloc/session_bloc.dart';
+import 'package:app_ui/app_ui.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_repository/game_repository.dart';
 import 'package:models/chat_model.dart';
 import 'package:models/drawing_points.dart';
+import 'package:models/player.dart';
+import 'package:uuid/uuid.dart';
 
 part 'game_state.dart';
 
@@ -25,12 +28,17 @@ class GameCubit extends Cubit<GameState> {
       }
       emit(state.copyWith(sessionState: sessionState));
     });
-    await Future.delayed(const Duration(seconds: 1), () => addPlayer(name));
+    await Future.delayed(const Duration(seconds: 1), () {
+      final imagePath = Assets().getRandomImage();
+      final player =
+          Player(userId: const Uuid().v4(), name: name, imagePath: imagePath);
+      addPlayer(player);
+    });
   }
 
-  Future<void> addPlayer(String name) async {
+  Future<void> addPlayer(Player player) async {
     try {
-      _gameRepository.addPlayer(name);
+      _gameRepository.addPlayer(player);
     } catch (e) {
       addError(e, StackTrace.current);
     }

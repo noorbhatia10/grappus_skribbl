@@ -1,5 +1,6 @@
 import 'package:models/chat_model.dart';
 import 'package:models/drawing_points.dart';
+import 'package:models/player.dart';
 import 'package:models/web_socket_event.dart';
 
 class WebSocketEventHandler {
@@ -20,7 +21,9 @@ class WebSocketEventHandler {
         return AddToChatEvent(data: ChatModel.fromMap(data));
 
       case EventType.addPlayer:
-        return AddPlayerEvent(data: data['name'].toString());
+        return AddPlayerEvent(
+          data: Player.fromMap(data),
+        );
 
       case EventType.invalid:
       case EventType.connect:

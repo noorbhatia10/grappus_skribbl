@@ -196,4 +196,12 @@ abstract class AppColors {
 
   /// The orange color.
   static const Color orange = Color(0xFFFB8B24);
+
+  static const Color lightPurple = Color(0xFFF7F2FA);
+
+  static const Color indigo = Color(0xFF6750A4);
+
+  static const Color midnightBlue = Color(0xFF100017);
+
+  static const Color darkCharcoalGrey = Color(0xFF1D1B20);
 }

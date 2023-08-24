@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:models/chat_model.dart';
 import 'package:models/drawing_points.dart';
+import 'package:models/player.dart';
 
 enum EventType {
   connect('__connect__'),
@@ -15,6 +16,7 @@ enum EventType {
   factory EventType.fromJson(Map<String, dynamic> json) => EventType.values
       .firstWhere((element) => element.name == json['eventType']);
   final String name;
+
   Map<String, dynamic> toJson() {
     return {'eventType': name};
   }
@@ -60,7 +62,7 @@ class AddToChatEvent extends WebSocketEvent<ChatModel> {
   }
 }
 
-class AddPlayerEvent extends WebSocketEvent<String> {
+class AddPlayerEvent extends WebSocketEvent<Player> {
   AddPlayerEvent({
     required super.data,
     super.eventType = EventType.addPlayer,
@@ -68,9 +70,6 @@ class AddPlayerEvent extends WebSocketEvent<String> {
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'eventType': eventType.name,
-      'data': {'name': data},
-    };
+    return {'eventType': eventType.name, 'data': data.toMap()};
   }
 }

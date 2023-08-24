@@ -6,13 +6,12 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_web_socket/dart_frog_web_socket.dart';
 import 'package:models/player.dart';
 import 'package:models/web_socket_event.dart';
-import 'package:uuid/uuid.dart';
 
 /// Websocket Handler
 Future<Response> onRequest(RequestContext context) async {
   final handler = webSocketHandler((channel, protocol) {
     final sessionBloc = context.read<SessionBloc>()..subscribe(channel);
-    final player = Player(userId: '', name: '');
+    var player = Player(userId: '', name: '',imagePath: '');
     channel.stream.listen(
       (data) {
         try {
@@ -48,9 +47,7 @@ Future<Response> onRequest(RequestContext context) async {
               sessionBloc.add(OnMessageSent(chatModel));
 
             case AddPlayerEvent:
-              player.name = (websocketEvent as AddPlayerEvent).data;
-              player.userId = const Uuid().v4();
-
+              player = (websocketEvent as AddPlayerEvent).data;
               sessionBloc.add(OnPlayerAdded(player));
           }
         } catch (e) {

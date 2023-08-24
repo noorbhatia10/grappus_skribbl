@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:api/session/bloc/session_bloc.dart';
 import 'package:models/chat_model.dart';
 import 'package:models/drawing_points.dart';
+import 'package:models/player.dart';
 import 'package:models/web_socket_event.dart';
 import 'package:models/web_socket_response.dart';
 import 'package:web_socket_client/web_socket_client.dart';
@@ -38,8 +39,8 @@ class GameRepository {
       _ws.send(AddDrawingPointsEvent(data: points).encodedJson);
 
   /// function to add player to the server
-  void addPlayer(String name) =>
-      _ws.send(AddPlayerEvent(data: name).encodedJson);
+  void addPlayer(Player player) =>
+      _ws.send(AddPlayerEvent(data: player).encodedJson);
 
   /// function to send the chats to the server
   void sendChat(ChatModel chat) {

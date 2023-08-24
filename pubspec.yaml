@@ -25,6 +25,8 @@ dependencies:
     path: api/packages/player_repository
   app_ui:
     path: packages/app_ui
+  uuid: ^3.0.7
+  flutter_svg: ^1.1.6
 
 dev_dependencies:
   bloc_test: ^9.1.2

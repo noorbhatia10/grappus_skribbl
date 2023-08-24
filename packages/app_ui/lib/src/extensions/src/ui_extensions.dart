@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ScreenUtils {
   static const double figmaScreenHeight = 844;
-  static const double figmaScreenWidth = 390;
+  static const double figmaScreenWidth = 1512;
 }
 
 /// Converts the value with respect to the component:figma Screen ratio.
