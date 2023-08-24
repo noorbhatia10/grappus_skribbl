@@ -11,24 +11,25 @@ class ChatModel {
     required this.message,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'player': player.toMap(),
       'message': message,
     };
   }
 
-  factory ChatModel.fromMap(Map<String, dynamic> map) {
+  factory ChatModel.fromJson(Map<String, dynamic> map) {
     return ChatModel(
       player: Player.fromMap(map['player'] as Map<String, dynamic>),
       message: map['message'] as String,
     );
   }
 
-  String toJson() => json.encode(toMap());
 
-  factory ChatModel.fromJson(String source) =>
-      ChatModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
 
   @override
   List<Object> get props => [player, message];

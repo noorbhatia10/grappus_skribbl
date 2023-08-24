@@ -1,42 +1,62 @@
 import 'dart:convert';
 
-import 'package:models/chat_model.dart';
-import 'package:models/drawing_points.dart';
-
 enum EventType { drawing, chat, invalid }
 
-abstract class WebSocketEvent<T> {
+class WebSocketEvent<T> {
   WebSocketEvent({
     required this.eventType,
     required this.data,
   });
+
   final EventType eventType;
   final T data;
+
   Map<String, dynamic> toJson() {
-    throw UnimplementedError();
+    return {'eventType': eventType.name, 'data': data};
   }
 
-  String get encodedJson => jsonEncode(toJson());
-}
+  static WebSocketEvent<Map<String, dynamic>> fromJson(
+    Map<String, dynamic> jsonData,
+  ) {
+    try {
+      final eventTypeName = jsonData['eventType'];
+      final data = jsonData['data'] as Map<String, dynamic>;
+      final eventType = EventType.values.firstWhere(
+        (element) => element.name == eventTypeName,
+        orElse: () => EventType.invalid,
+      );
+      return WebSocketEvent<Map<String, dynamic>>(
+          eventType: eventType, data: data);
+    } catch (e) {
+      print('$e');
+      rethrow;
+    }
+  }
 
-class AddDrawingPointsEvent extends WebSocketEvent<DrawingPointsWrapper> {
-  AddDrawingPointsEvent({
-    required super.data,
-    super.eventType = EventType.drawing,
-  });
   @override
-  Map<String, dynamic> toJson() {
-    return {'eventType': eventType.name, 'data': data.toJson()};
+  String toString() {
+    return jsonEncode(toJson());
   }
 }
-
-class AddToChatEvent extends WebSocketEvent<ChatModel> {
-  AddToChatEvent({
-    required super.data,
-    super.eventType = EventType.chat,
-  });
-  @override
-  Map<String, dynamic> toJson() {
-    return {'eventType': eventType.name, 'data': data.toMap()};
-  }
-}
+//
+// class AddDrawingPointsEvent extends WebSocketEvent<DrawingPointsWrapper> {
+//   AddDrawingPointsEvent({
+//     required super.data,
+//     super.eventType = EventType.drawing,
+//   });
+//   @override
+//   Map<String, dynamic> toJson() {
+//     return {'eventType': eventType.name, 'data': data.toJson()};
+//   }
+// }
+//
+// class AddToChatEvent extends WebSocketEvent<ChatModel> {
+//   AddToChatEvent({
+//     required super.data,
+//     super.eventType = EventType.chat,
+//   });
+//   @override
+//   Map<String, dynamic> toJson() {
+//     return {'eventType': eventType.name, 'data': data.toMap()};
+//   }
+// }

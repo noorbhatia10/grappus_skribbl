@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:broadcast_bloc/broadcast_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:models/chat_model.dart';
 import 'package:models/drawing_points.dart';
 import 'package:models/player.dart';
 import 'package:models/web_socket_event.dart';
@@ -16,6 +17,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     on<OnPlayerAdded>(_onPlayerAdded);
     on<OnPointsAdded>(_onAddPoints);
     on<OnPlayerDisconnect>(_onPlayerDisconnect);
+    on<OnChatAdded>(_onChatAdded);
   }
 
   void _onPlayerAdded(OnPlayerAdded event, Emitter<SessionState> emit) {
@@ -54,5 +56,9 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     emit(
       state.copyWith(players: players),
     );
+  }
+
+  void _onChatAdded(OnChatAdded event, Emitter<SessionState> emit) {
+    emit(state.copyWith(messages: [...state.messages, event.chatModel]));
   }
 }

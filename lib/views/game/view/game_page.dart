@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:chat_repository/chat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_repository/game_repository.dart';
@@ -20,9 +19,6 @@ class GamePage extends StatelessWidget {
         gameRepository: GameRepository(
           uri: Uri.parse(url),
         ),
-        chatRepository: ChatRepository(
-          uri: Uri.parse(url),
-        ),
       )..connect(),
       child: _GamePage(),
     );
@@ -32,7 +28,6 @@ class GamePage extends StatelessWidget {
 class _GamePage extends StatelessWidget {
   _GamePage();
 
-  // list of DrawingPoints to store points on client side
   final pointsList = <DrawingPoints>[];
 
   @override
@@ -40,7 +35,6 @@ class _GamePage extends StatelessWidget {
     final players =
         context.select((GameCubit cubit) => cubit.state.sessionState?.players);
 
-    // to update the PointList whenever new point comes from server
     final newDrawingPoint = context.select((GameCubit cubit) {
       final sessionState = cubit.state.sessionState;
       if (sessionState != null) {
@@ -132,7 +126,7 @@ class _GamePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const ChatComponent()
+                  const ChatComponent(),
                 ],
               )
             : const Center(

@@ -30,3 +30,12 @@ class OnPlayerDisconnect extends SessionEvent {
   @override
   List<Object?> get props => [userId];
 }
+
+class OnChatAdded extends SessionEvent{
+  const OnChatAdded(this.chatModel);
+
+  final ChatModel chatModel;
+
+  @override
+  List<Object?> get props => [chatModel];
+}

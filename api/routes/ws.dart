@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'package:api/chat/chat_bloc.dart';
 import 'package:api/session/bloc/session_bloc.dart';
-import 'package:api/utils/websocket_event_handler.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_web_socket/dart_frog_web_socket.dart';
+import 'package:models/chat_model.dart';
+import 'package:models/drawing_points.dart';
 import 'package:models/player.dart';
 import 'package:models/web_socket_event.dart';
-import 'package:models/web_socket_response.dart';
 
 import 'package:uuid/uuid.dart';
 
@@ -18,18 +17,13 @@ Future<Response> onRequest(RequestContext context) async {
       userId: uid,
       name: 'name',
     );
-    final sessionBloc = context.read<SessionBloc>()..add(OnPlayerAdded(player));
-    final chatCubit = context.read<ChatCubit>();
+    final sessionBloc = context.read<SessionBloc>()
+      ..subscribe(channel)
+      ..add(OnPlayerAdded(player));
 
     channel.sink.add(
-      WebSocketResponse(
-        data: chatCubit.state.toMap(),
-        eventType: EventType.chat,
-      ).encodedJson(),
+      sessionBloc.state.toString(),
     );
-
-    sessionBloc.subscribe(channel);
-    chatCubit.subscribe(channel);
 
     channel.stream.listen(
       (data) {
@@ -52,21 +46,19 @@ Future<Response> onRequest(RequestContext context) async {
             );
             return;
           }
-          final websocketEvent =
-              WebSocketEventHandler.handleWebSocketEvent(jsonData);
 
-          switch (websocketEvent.runtimeType) {
-            case AddDrawingPointsEvent:
-              final receivedPoints =
-                  (websocketEvent as AddDrawingPointsEvent).data;
-              sessionBloc.add(OnPointsAdded(receivedPoints));
+          final websocketEvent = WebSocketEvent.fromJson(jsonData);
 
-            case AddToChatEvent:
-              final chatModel = (websocketEvent as AddToChatEvent).data;
-              chatCubit.addToChat(chatModel);
+          if (websocketEvent.eventType == EventType.drawing) {
+            final receivedPoints =
+                DrawingPointsWrapper.fromJson(websocketEvent.data);
+            sessionBloc.add(OnPointsAdded(receivedPoints));
+          }
+          if (websocketEvent.eventType == EventType.chat) {
+            final chatModel = ChatModel.fromJson(websocketEvent.data);
+            sessionBloc.add(OnChatAdded(chatModel));
           }
         } catch (e) {
-          rethrow;
           channel.sink.add(
             jsonEncode({'status': 'error', 'message': e.toString()}),
           );
