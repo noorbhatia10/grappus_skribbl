@@ -8,6 +8,7 @@ class SessionState extends Equatable {
     this.eventType = EventType.invalid,
     this.messages = const [],
     this.correctAnswer = '',
+    this.timer = -1,
   });
 
   factory SessionState.fromJson(Map<String, dynamic> json) => SessionState(
@@ -27,6 +28,7 @@ class SessionState extends Equatable {
             (x) => ChatModel.fromMap(x as Map<String, dynamic>),
           ),
         ),
+        timer: json['timer'] as int,
       );
 
   final String? currentPlayerId;
@@ -35,6 +37,7 @@ class SessionState extends Equatable {
   final EventType eventType;
   final List<ChatModel> messages;
   final String correctAnswer;
+  final int timer;
 
   SessionState copyWith({
     String? currentPlayerId,
@@ -43,6 +46,7 @@ class SessionState extends Equatable {
     EventType? eventType,
     List<ChatModel>? messages,
     String? correctAnswer,
+    int? timer,
   }) {
     return SessionState(
       currentPlayerId: currentPlayerId ?? this.currentPlayerId,
@@ -51,12 +55,20 @@ class SessionState extends Equatable {
       eventType: eventType ?? this.eventType,
       messages: messages ?? this.messages,
       correctAnswer: correctAnswer ?? this.correctAnswer,
+      timer: timer ?? this.timer,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [points, currentPlayerId, players, eventType, messages, correctAnswer];
+  List<Object?> get props => [
+        points,
+        currentPlayerId,
+        players,
+        eventType,
+        messages,
+        correctAnswer,
+        timer,
+      ];
 
   Map<String, dynamic> toJson() => {
         'players': Map<String, Player>.from(players),
@@ -65,6 +77,7 @@ class SessionState extends Equatable {
         'eventType': eventType.toJson(),
         'messages': messages.map((x) => x.toMap()).toList(),
         'correctAnswer': correctAnswer,
+        'timer': timer,
       };
 
   @override

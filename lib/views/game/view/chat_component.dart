@@ -139,10 +139,10 @@ class _ChatComponentState extends State<ChatComponent> {
                 if (gameState.sessionState == null) {
                   throw Exception('null session');
                 }
-                final players2 = gameState.sessionState!.players;
+                final players = gameState.sessionState!.players;
                 context.read<GameCubit>().addChats(
                       ChatModel(
-                        player: players2[gameState.uid] ??
+                        player: players[gameState.uid] ??
                             Player(
                               name: 'err',
                               userId: 'err',

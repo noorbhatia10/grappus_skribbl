@@ -39,3 +39,12 @@ class OnMessageSent extends SessionEvent {
   @override
   List<Object?> get props => [chat];
 }
+
+class OnTimerUpdate extends SessionEvent {
+  const OnTimerUpdate(this.timer);
+
+  final int timer;
+
+  @override
+  List<Object?> get props => [timer];
+}

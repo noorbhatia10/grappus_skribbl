@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:api/utils/random_words.dart';
@@ -19,6 +20,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     on<OnPointsAdded>(_onAddPoints);
     on<OnPlayerDisconnect>(_onPlayerDisconnect);
     on<OnMessageSent>(_onMessageSent);
+    on<OnTimerUpdate>(_onTimerUpdate);
   }
 
   void _onPlayerAdded(OnPlayerAdded event, Emitter<SessionState> emit) {
@@ -99,5 +101,9 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
       data: state.toJson(),
       eventType: state.eventType,
     ).encodedJson();
+  }
+
+  void _onTimerUpdate(OnTimerUpdate event, Emitter<SessionState> emit) {
+    emit(state.copyWith(timer: event.timer));
   }
 }

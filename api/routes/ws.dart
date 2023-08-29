@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:api/session/bloc/session_bloc.dart';
@@ -12,6 +13,25 @@ Future<Response> onRequest(RequestContext context) async {
   final handler = webSocketHandler((channel, protocol) {
     final sessionBloc = context.read<SessionBloc>()..subscribe(channel);
     var player = Player(userId: '', name: '',imagePath: '');
+
+    Timer? gameTimer;
+    var timerDuration = 60; // Timer duration in seconds
+
+    void startTimer() {
+      if(gameTimer!.isActive){
+        gameTimer?.cancel();
+      }
+      gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (timerDuration >= 0) {
+          sessionBloc.add(OnTimerUpdate(timerDuration));
+          timerDuration--;
+        } else {
+          gameTimer?.cancel();
+          sessionBloc.add(OnTimerUpdate(timerDuration));
+        }
+      });
+    }
+
     channel.stream.listen(
       (data) {
         try {
@@ -49,6 +69,7 @@ Future<Response> onRequest(RequestContext context) async {
             case AddPlayerEvent:
               player = (websocketEvent as AddPlayerEvent).data;
               sessionBloc.add(OnPlayerAdded(player));
+              if(sessionBloc.state.timer < 0) startTimer();
           }
         } catch (e) {
           channel.sink.add(

@@ -54,10 +54,17 @@ class _GamePage extends StatelessWidget {
                     border: Border.all(color: AppColors.indigo),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Text(
-                    '00',
-                    style: context.textTheme.headlineLarge
-                        ?.copyWith(color: AppColors.indigo),
+                  child: BlocBuilder<GameCubit, GameState>(
+                    builder: (context, state) {
+                      final timer = (state.sessionState?.timer ?? 0) > 0
+                          ? state.sessionState?.timer.toString()
+                          : '00';
+                      return Text(
+                        timer.toString(),
+                        style: context.textTheme.headlineLarge
+                            ?.copyWith(color: AppColors.indigo),
+                      );
+                    },
                   ),
                 ),
                 const Spacer(),

@@ -23,15 +23,13 @@ class GameCubit extends Cubit<GameState> {
 
   Future<void> connect(String name) async {
     _sessionStateSub = _gameRepository.session.listen((sessionState) {
-      if (state.uid == null) {
-        emit(state.copyWith(uid: sessionState?.currentPlayerId));
-      }
       emit(state.copyWith(sessionState: sessionState));
     });
     await Future.delayed(const Duration(seconds: 1), () {
       final imagePath = Assets().getRandomImage();
-      final player =
-          Player(userId: const Uuid().v4(), name: name, imagePath: imagePath);
+      final uid = const Uuid().v4();
+      final player = Player(userId: uid, name: name, imagePath: imagePath);
+      emit(state.copyWith(uid: uid));
       addPlayer(player);
     });
   }
