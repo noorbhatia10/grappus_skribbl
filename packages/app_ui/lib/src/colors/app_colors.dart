@@ -228,4 +228,6 @@ abstract class AppColors {
   static const Color charcoalGrey = Color(0xFF1E1E1E);
 
   static const Color ravenBlack = Color(0xFF231F20);
+
+  static const Color backgroundBlack = Color(0xFF0F0D0E);
 }

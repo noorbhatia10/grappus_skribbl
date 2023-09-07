@@ -15,7 +15,7 @@ class BaseBackground extends StatelessWidget {
         children: [
           Container(
             decoration: const BoxDecoration(
-              color: AppColors.ravenBlack,
+              color: AppColors.backgroundBlack,
             ),
           ),
           SvgPicture.asset(
