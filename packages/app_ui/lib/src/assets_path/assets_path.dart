@@ -1,49 +1,21 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
-
 class Assets {
-  Assets() {
-    if (kIsWeb) {
-      imagesBasePath = 'images';
-    } else {
-      imagesBasePath = 'assets/images';
-    }
-  }
 
-  late String imagesBasePath;
+  static const String imagesBasePath = 'packages/app_ui/assets/images';
 
-  late String avatar1 = '$imagesBasePath/1avatar.png';
-  late String avatar2 = '$imagesBasePath/2avatar.png';
-  late String avatar3 = '$imagesBasePath/3avatar.png';
-  late String avatar4 = '$imagesBasePath/4avatar.png';
-  late String avatar5 = '$imagesBasePath/5avatar.png';
-  late String avatar6 = '$imagesBasePath/6avatar.png';
-  late String avatar7 = '$imagesBasePath/7avatar.png';
-  late String avatar8 = '$imagesBasePath/8avatar.png';
-  late String avatar9 = '$imagesBasePath/9avatar.png';
-  late String avatar10 = '$imagesBasePath/10avatar.png';
-  late String avatar11 = '$imagesBasePath/11avatar.png';
-  late String avatar12 = '$imagesBasePath/12avatar.png';
-  late String avatar13 = '$imagesBasePath/13avatar.png';
-  late String avatar14 = '$imagesBasePath/14avatar.png';
-  late String avatar15 = '$imagesBasePath/15avatar.png';
-  late String avatar16 = '$imagesBasePath/16avatar.png';
-  late String avatar17 = '$imagesBasePath/17avatar.png';
-  late String avatar18 = '$imagesBasePath/18avatar.png';
-  late String avatar19 = '$imagesBasePath/19avatar.png';
-  late String avatar20 = '$imagesBasePath/20avatar.png';
-  late String avatar21 = '$imagesBasePath/21avatar.png';
-  late String avatar22 = '$imagesBasePath/22avatar.png';
-  late String avatar23 = '$imagesBasePath/23avatar.png';
-  late String avatar24 = '$imagesBasePath/24avatar.png';
-  late String avatar25 = '$imagesBasePath/25avatar.png';
-  late String avatar26 = '$imagesBasePath/26avatar.png';
-  late String avatar27 = '$imagesBasePath/27avatar.png';
-  late String avatar28 = '$imagesBasePath/28avatar.png';
-  late String avatar29 = '$imagesBasePath/29avatar.png';
-  late String avatar30 = '$imagesBasePath/30avatar.png';
-  static const String icPencil = 'packages/app_ui/assets/images/ic_pencil.svg';
+  static const String icPencil = '$imagesBasePath/ic_pencil.svg';
+
+  // new images
+  static const String avatar01 = '$imagesBasePath/avatar1.svg';
+  static const String avatar02 = '$imagesBasePath/avatar2.svg';
+  static const String avatar03 = '$imagesBasePath/avatar3.svg';
+  static const String avatar04 = '$imagesBasePath/avatar4.svg';
+  static const String avatar05 = '$imagesBasePath/avatar5.svg';
+  static const String avatar06 = '$imagesBasePath/avatar6.svg';
+  static const String avatar07 = '$imagesBasePath/avatar7.svg';
+  static const String gridBackground = '$imagesBasePath/grid_background.svg';
+  static const String pencil = '$imagesBasePath/pencil.svg';
 
   String getRandomImage() {
     final random = Random();
