@@ -4,6 +4,7 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grappus_skribbl/views/background/base_background.dart';
+import 'package:grappus_skribbl/views/common/primary_button.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -36,28 +37,30 @@ class OnboardingPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Graptoons',
-                    style: TextStyle(
+                    style: context.textTheme.bodyLarge?.copyWith(
                       color: AppColors.butterCreamYellow,
-                      fontSize: 180,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Outfit',
+                      fontSize: 183,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   Text(
                     'Making Masterpieces, One Chuckle at a Time.',
-                    style: TextStyle(
+                    style: context.textTheme.bodyLarge?.copyWith(
                       color: AppColors.white,
                       fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Outfit',
                     ),
+                  ),
+                  const SizedBox(height: 50),
+                  SkribblButton(
+                    onTap: () {},
+                    text: 'Get Started!',
                   ),
                 ],
               ),
