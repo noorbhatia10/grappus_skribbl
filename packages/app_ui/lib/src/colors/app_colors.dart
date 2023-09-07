@@ -224,4 +224,8 @@ abstract class AppColors {
   static const Color lavenderPurple = Color(0xFF7A5EA7);
 
   static const Color emeraldGreen = Color(0xFF10A95B);
+
+  static const Color charcoalGrey = Color(0xFF1E1E1E);
+
+  static const Color ravenBlack = Color(0xFF231F20);
 }
