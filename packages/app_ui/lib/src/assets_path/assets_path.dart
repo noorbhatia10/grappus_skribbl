@@ -16,6 +16,9 @@ class Assets {
   static const String avatar07 = '$imagesBasePath/avatar7.svg';
   static const String gridBackground = '$imagesBasePath/grid_background.svg';
   static const String pencil = '$imagesBasePath/pencil.svg';
+  static const String imgGoldMedal = '$imagesBasePath/img_gold_medal.svg';
+  static const String imgSilverMedal = '$imagesBasePath/img_silver_medal.svg';
+  static const String imgBronzeMedal = '$imagesBasePath/img_bronze_medal.svg';
 
   String getRandomImage() {
     final random = Random();

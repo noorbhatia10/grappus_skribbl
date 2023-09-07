@@ -2,7 +2,11 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 
 class SkribblButton extends StatefulWidget {
-  const SkribblButton({required this.text, required this.onTap, super.key});
+  const SkribblButton({
+    required this.text,
+    required this.onTap,
+    super.key,
+  });
 
   final String text;
   final VoidCallback onTap;

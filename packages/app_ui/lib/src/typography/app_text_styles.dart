@@ -12,6 +12,9 @@ import 'package:flutter/material.dart';
 /// Use `ContentThemeOverrideBuilder` to override the default [TextTheme]
 /// to [AppTheme.contentTextTheme].
 
+const String paytoneOne = 'PaytoneOne';
+const String outFit = 'Outfit';
+
 /// UI Text Style Definitions
 abstract class UITextStyle {
   static const _baseTextStyle = TextStyle(
@@ -272,6 +275,8 @@ abstract class ContentTextStyle {
     height: 1.45,
     letterSpacing: 0.5,
   );
+
+
 }
 
 ///

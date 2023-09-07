@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:grappus_skribbl/l10n/l10n.dart';
-import 'package:grappus_skribbl/views/game/view/game_main_page.dart';
 import 'package:grappus_skribbl/views/views.dart';
 
 class App extends StatelessWidget {
