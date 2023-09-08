@@ -21,6 +21,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     on<OnMessageSent>(_onMessageSent);
     on<OnRoundStarted>(_onRoundStarted);
     on<OnRoundEnded>(_onRoundEnded);
+    on<OnGameEnded>(_onGameEnded);
     on<_TimerTicked>(_onTicked);
   }
 
@@ -95,7 +96,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
 
       final allPlayersAnsweredCorrectly = state.players.keys
           .where((element) => element != state.isDrawing)
-          .any((playerID) => state.players[playerID]!.hasAnsweredCorrectly);
+          .every((playerID) => state.players[playerID]!.hasAnsweredCorrectly);
 
       if (allPlayersAnsweredCorrectly) {
         add(const OnRoundEnded());
@@ -148,9 +149,15 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     Emitter<SessionState> emit,
   ) {
     final map = state.players;
-    final players = map..removeWhere((key, value) => value == event.player);
-
+    if (state.players.isEmpty) {
+      return;
+    }
+    final players = map
+      ..removeWhere((key, value) => key == event.player.userId);
     emit(state.copyWith(players: players));
+    if (event.player.userId == state.isDrawing) {
+      add(const OnRoundEnded());
+    }
   }
 
   Future<void> _onRoundStarted(
@@ -167,9 +174,8 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
         .where((id) => !state.players[id]!.hasCompletedDrawingRound)
         .toList();
 
+    emit(state.copyWith(messages: <ChatModel>[]));
     if (remainingPlayers.isEmpty) {
-      // TODO: End game here then start a new match with everything reset
-      // At this point all players have drawn, we can show leaderboard.
       return;
     }
 
@@ -246,6 +252,9 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     OnRoundEnded event,
     Emitter<SessionState> emit,
   ) async {
+    await _tickerSub?.cancel();
+    emit(state.copyWith(messages: <ChatModel>[]));
+
     final players = <String, Player>{}..addAll(state.players);
     players.forEach((key, value) {
       final prevScore = value.score;
@@ -272,6 +281,15 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
       ),
     );
 
+    final remainingPlayers = state.players.keys
+        .where((id) => !state.players[id]!.hasCompletedDrawingRound)
+        .toList();
+
+    if (remainingPlayers.isEmpty) {
+      add(const OnGameEnded());
+      return;
+    }
+
     await Future.delayed(
       const Duration(seconds: 5),
       () => add(const OnRoundStarted()),
@@ -290,5 +308,13 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     return oldString.substring(0, index) +
         newChar +
         oldString.substring(index + 1);
+  }
+
+  void _onGameEnded(OnGameEnded event, Emitter<SessionState> emit) {
+    emit(
+      state.copyWith(
+        eventType: EventType.gameEnd,
+      ),
+    );
   }
 }

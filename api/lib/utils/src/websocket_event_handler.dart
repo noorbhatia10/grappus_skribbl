@@ -29,6 +29,7 @@ class WebSocketEventHandler {
       case EventType.connect:
       case EventType.roundStart:
       case EventType.roundEnd:
+      case EventType.gameEnd:
     }
     return null;
   }

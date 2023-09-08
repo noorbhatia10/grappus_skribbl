@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_repository/game_repository.dart';
 import 'package:grappus_skribbl/views/game/view/chat_component.dart';
+import 'package:grappus_skribbl/views/game/view/game_end_screen.dart';
 import 'package:grappus_skribbl/views/game/view/game_word.dart';
 import 'package:grappus_skribbl/views/game/view/leader_board.dart';
 import 'package:grappus_skribbl/views/game/view/round_end_dialog.dart';
@@ -34,8 +35,10 @@ class _GamePage extends StatelessWidget {
   _GamePage();
 
   late List<DrawingPoints> pointsList = <DrawingPoints>[];
+
   bool isDialogOpened(BuildContext context) =>
       ModalRoute.of(context)?.isCurrent != true;
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GameCubit>();
@@ -71,6 +74,13 @@ class _GamePage extends StatelessWidget {
                     listener: (context, state) {
                       if (state.sessionState == null) {
                         return;
+                      }
+                      if (state.sessionState!.eventType == EventType.gameEnd) {
+                        Navigator.of(context).push<Widget>(
+                          MaterialPageRoute(
+                            builder: (context) => const GameEndScreen(),
+                          ),
+                        );
                       }
                       if (state.sessionState!.eventType == EventType.roundEnd) {
                         if (isDialogOpened(context)) {
