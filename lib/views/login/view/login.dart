@@ -1,5 +1,6 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:grappus_skribbl/views/game/view/game_main_page.dart';
 import 'package:grappus_skribbl/views/views.dart';
 
 class LoginPage extends StatelessWidget {
@@ -46,7 +47,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   onPressed: () => Navigator.of(context).push<Widget>(
                     MaterialPageRoute(
-                      builder: (context) => GamePage(
+                      builder: (context) => GameMainPage(
                         url: _gameUrlController.text,
                         name: _nameController.text,
                       ),

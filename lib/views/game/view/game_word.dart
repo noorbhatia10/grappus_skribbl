@@ -17,8 +17,9 @@ class GameWord extends StatelessWidget {
     if (isDrawing) {
       return Text(
         theWord,
-        style: context.textTheme.headlineMedium?.copyWith(
-          color: AppColors.indigo,
+        style: context.textTheme.bodyLarge?.copyWith(
+          fontSize: 32,
+          color: AppColors.butterCreamYellow,
         ),
       );
     }
@@ -35,19 +36,28 @@ class GameWord extends StatelessWidget {
               decoration: const BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: AppColors.highEmphasisSurface,
+                    color: AppColors.butterCreamYellow,
                   ),
                 ),
               ),
               child: Text(
                 hiddenAnswer.split('').toList()[index],
-                style: context.textTheme.titleLarge,
+                style: context.textTheme.bodyLarge?.copyWith(
+                  fontSize: 32,
+                  color: AppColors.butterCreamYellow,
+                ),
               ),
             ),
           ),
         ),
         SizedBox(width: 10.toResponsiveWidth(context)),
-        Text('${theWord.length}'),
+        Text(
+          '${theWord.length}',
+          style: context.textTheme.bodyLarge?.copyWith(
+            fontSize: 32,
+            color: AppColors.butterCreamYellow,
+          ),
+        ),
       ],
     );
   }

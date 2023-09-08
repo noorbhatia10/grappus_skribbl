@@ -26,110 +26,108 @@ class _ChatComponentState extends State<ChatComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SizedBox(
-            width: 300.toResponsiveWidth(context),
-            child: Card(
-              color: AppColors.lightPurple,
-              surfaceTintColor: AppColors.lightPurple,
-              elevation: 10,
-              child: BlocBuilder<GameCubit, GameState>(
-                bloc: context.read<GameCubit>(),
-                builder: (context, state) {
-                  final sessionState = state.sessionState;
-                  if (sessionState == null) {
-                    return const SizedBox();
-                  }
-                  final messages = sessionState.messages;
-                  return ListView.builder(
-                    reverse: true,
-                    controller: _scrollController,
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      final newIndex = messages.length - index - 1;
-
-                      final isMessageCorrectAnswer =
-                          messages[newIndex].message ==
-                                  sessionState.correctAnswer ||
-                              messages[newIndex].player.hasAnsweredCorrectly;
-
-                      final currentPlayer =
-                          state.sessionState!.players[state.uid];
-
-                      return isMessageCorrectAnswer &&
-                              (!currentPlayer!.hasAnsweredCorrectly)
-                          ? const SizedBox()
-                          : Container(
-                              padding:
-                                  const EdgeInsets.all(8).responsive(context),
-                              color:
-                                  messages[newIndex].player.hasAnsweredCorrectly
-                                      ? Colors.green
-                                      : AppColors.lightPurple,
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    messages[newIndex].player.imagePath,
-                                    width: 45.toResponsiveWidth(context),
-                                    height: 45.toResponsiveHeight(context),
-                                  ),
-                                  SizedBox(width: 5.toResponsiveWidth(context)),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        messages[newIndex].player.name,
-                                        style: context.textTheme.bodyLarge
-                                            ?.copyWith(
-                                          color: AppColors.midnightBlue,
-                                        ),
-                                      ),
-                                      Text(
-                                        messages[newIndex]
-                                                .player
-                                                .hasAnsweredCorrectly
-                                            ? '${messages[newIndex].player.name} has guessed the correct word'
-                                            : messages[newIndex].message,
-                                        style: context.textTheme.bodySmall
-                                            ?.copyWith(
-                                          color: AppColors.midnightBlue,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                    },
-                  );
-                },
-              ),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        color: AppColors.ravenBlack,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Answers',
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: AppColors.pastelPink,
+              fontFamily: 'PaytoneOne',
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-        SizedBox(
-          height: 5.toResponsiveHeight(context),
-        ),
-        SizedBox(
-          width: 300.toResponsiveWidth(context),
-          height: 48.toResponsiveHeight(context),
-          child: Card(
-            color: AppColors.lightPurple,
-            surfaceTintColor: AppColors.lightPurple,
-            elevation: 10,
+          SizedBox(height: 14.toResponsiveHeight(context)),
+          Expanded(
+            child: BlocBuilder<GameCubit, GameState>(
+              bloc: context.read<GameCubit>(),
+              builder: (context, state) {
+                final sessionState = state.sessionState;
+                if (sessionState == null) {
+                  return const SizedBox();
+                }
+                final messages = sessionState.messages;
+                return ListView.builder(
+                  reverse: true,
+                  controller: _scrollController,
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final newIndex = messages.length - index - 1;
+
+                    final isMessageCorrectAnswer = messages[newIndex].message ==
+                            sessionState.correctAnswer ||
+                        messages[newIndex].player.hasAnsweredCorrectly;
+
+                    final currentPlayer =
+                        state.sessionState!.players[state.uid];
+
+                    return isMessageCorrectAnswer &&
+                            (!currentPlayer!.hasAnsweredCorrectly)
+                        ? const SizedBox()
+                        : Container(
+                            padding:
+                                const EdgeInsets.all(8).responsive(context),
+                            child: Row(
+                              children: [
+                                Text(
+                                  '${messages[newIndex].player.name}: ',
+                                  style: context.textTheme.bodyLarge?.copyWith(
+                                    color: AppColors.goldenOrange,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  messages[newIndex].player.hasAnsweredCorrectly
+                                      ? 'Guessed the Answer!'
+                                      : messages[newIndex].message,
+                                  style: context.textTheme.bodyLarge?.copyWith(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: messages[newIndex]
+                                            .player
+                                            .hasAnsweredCorrectly
+                                        ? AppColors.emeraldGreen
+                                        : AppColors.butterCreamYellow,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                  },
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 10.toResponsiveHeight(context)),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.backgroundBlack,
+              borderRadius: BorderRadius.circular(6),
+            ),
             child: TextField(
               style: context.textTheme.bodyLarge?.copyWith(
-                color: AppColors.darkCharcoalGrey,
+                color: AppColors.butterCreamYellow,
               ),
               focusNode: _focusNode,
               controller: _chatController,
               decoration: InputDecoration(
-                hintText: 'Enter your guess...',
+                hintText: 'Answer here',
                 filled: false,
+                hintStyle: context.textTheme.bodyLarge?.copyWith(
+                  color: AppColors.butterCreamYellow.withOpacity(0.3),
+                ),
                 suffixText: '${_chatController.value.text.length}',
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
               ),
               onChanged: (value) => setState(() {}),
               onSubmitted: (value) {
@@ -155,8 +153,8 @@ class _ChatComponentState extends State<ChatComponent> {
               },
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
