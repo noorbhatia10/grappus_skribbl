@@ -58,8 +58,8 @@ class _DrawingComponentState extends State<DrawingComponent> {
                     return GameWord(
                       isDrawing:
                           state.uid == cubit.state.sessionState?.isDrawing,
-                      theWord:
-                          state.sessionState?.correctAnswer ?? 'guessing word',
+                      theWord: state.sessionState?.correctAnswer ??
+                          'loading word...',
                     );
                   },
                 ),

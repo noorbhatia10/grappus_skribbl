@@ -15,12 +15,24 @@ class GameWord extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isDrawing) {
-      return Text(
-        theWord,
-        style: context.textTheme.bodyLarge?.copyWith(
-          fontSize: 32,
-          color: AppColors.butterCreamYellow,
-        ),
+      return Row(
+        children: [
+          Text(
+            'Word: ',
+            style: context.textTheme.bodyLarge?.copyWith(
+              fontSize: 32,
+              color: AppColors.pastelPink,
+              fontFamily: 'PaytoneOne',
+            ),
+          ),
+          Text(
+            theWord,
+            style: context.textTheme.bodyLarge?.copyWith(
+              fontSize: 32,
+              color: AppColors.butterCreamYellow,
+            ),
+          ),
+        ],
       );
     }
     return Row(
@@ -52,7 +64,7 @@ class GameWord extends StatelessWidget {
         ),
         SizedBox(width: 10.toResponsiveWidth(context)),
         Text(
-          '${theWord.length}',
+          theWord.isEmpty ? '' : '${theWord.length}',
           style: context.textTheme.bodyLarge?.copyWith(
             fontSize: 32,
             color: AppColors.butterCreamYellow,
