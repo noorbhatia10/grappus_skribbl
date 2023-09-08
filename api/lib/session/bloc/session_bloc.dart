@@ -148,7 +148,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     OnPlayerDisconnect event,
     Emitter<SessionState> emit,
   ) {
-    final map = state.players;
+    final map = Map<String, Player>.from(state.players);
     if (state.players.isEmpty) {
       return;
     }
