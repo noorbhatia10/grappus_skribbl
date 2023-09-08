@@ -1,7 +1,7 @@
 name: Web App
 on:
   push:
-    branches: [ develop ]
+    branches: [ fix/deploy ]
 jobs:
   build:
     name: Build Web
@@ -13,3 +13,4 @@ jobs:
         with:
           webRenderer: canvaskit
           customArgs: --target lib/main_development.dart
+          baseHref: /grappus-skribbl/
