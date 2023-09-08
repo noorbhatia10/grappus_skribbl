@@ -12,6 +12,7 @@ class GameMainPage extends StatelessWidget {
 
   final String url;
   final String name;
+  static const String routeName = '/game-page';
 
   @override
   Widget build(BuildContext context) {
