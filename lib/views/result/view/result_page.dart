@@ -37,18 +37,42 @@ class ResultPage extends StatelessWidget {
                 builder: (context, state) {
                   if (state.sessionState == null) return const SizedBox();
                   final leaderBoard = state.sessionState?.leaderboard;
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: leaderBoard?.length,
-                    itemBuilder: (context, index) {
-                      return _ResultCard(
-                        name: leaderBoard?[index].name ?? '',
-                        points: leaderBoard?[index].score.toDouble() ?? 0.0,
-                        avatar: Assets.avatar04,
-                        rank: index,
-                      );
-                    },
-                  );
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _ResultCard(
+                          name: leaderBoard?.last.name ?? '',
+                          points: leaderBoard?.last.score.toDouble() ?? 0.0,
+                          avatar: Assets.avatar04,
+                          rank: 2,
+                        ),
+                        ...List.generate(
+                          leaderBoard!.length - 1 ?? 0,
+                          (index) => Padding(
+                            padding:
+                                const EdgeInsets.all(20).responsive(context),
+                            child: _ResultCard(
+                              name: leaderBoard?[index].name ?? '',
+                              points:
+                                  leaderBoard?[index].score.toDouble() ?? 0.0,
+                              avatar: Assets.avatar04,
+                              rank: index,
+                            ),
+                          ),
+                        ),
+                      ]);
+                  //   ListView.builder(
+                  //   scrollDirection: Axis.horizontal,
+                  //   itemCount: leaderBoard?.length,
+                  //   itemBuilder: (context, index) {
+                  //     return _ResultCard(
+                  //       name: leaderBoard?[index].name ?? '',
+                  //       points: leaderBoard?[index].score.toDouble() ?? 0.0,
+                  //       avatar: Assets.avatar04,
+                  //       rank: index,
+                  //     );
+                  //   },
+                  // );
                 },
               ),
             ),
@@ -131,16 +155,16 @@ class _ResultCard extends StatelessWidget {
               const SizedBox(height: 24),
               Text(
                 name ?? '',
-                style: context.textTheme.headline1?.copyWith(
+                style: context.textTheme.headlineMedium?.copyWith(
                   fontFamily: outFit,
-                  color: rankDataList[rank ?? 0]['nameTextColor'] as Color,
+                  color: rankDataList[rank ?? 0]['nameTextColor']! as Color,
                   fontSize: 33,
                 ),
               ),
               const SizedBox(height: 10),
               Text(
                 '$points Points',
-                style: context.textTheme.headline3?.copyWith(
+                style: context.textTheme.headlineSmall?.copyWith(
                   fontFamily: outFit,
                   color: AppColors.white.withOpacity(0.3),
                   fontSize: 23,
@@ -153,7 +177,7 @@ class _ResultCard extends StatelessWidget {
           top: rank! > 0 ? 30 : -5,
           right: -18,
           child: SvgPicture.asset(
-            rankDataList[rank ?? 0]['medalImagePath'] as String,
+            rankDataList[rank ?? 0]['medalImagePath']! as String,
           ),
         )
       ],

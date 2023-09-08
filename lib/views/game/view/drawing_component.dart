@@ -20,6 +20,8 @@ class _DrawingComponentState extends State<DrawingComponent> {
   bool isDialogOpened(BuildContext context) =>
       ModalRoute.of(context)?.isCurrent != true;
 
+  bool isStartDialogueVisited = false;
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GameCubit>();
@@ -54,19 +56,22 @@ class _DrawingComponentState extends State<DrawingComponent> {
                         (_) => false,
                       );
                     }
-                    // if (state.sessionState?.eventType == EventType.roundStart) {
-                    //   if (!isDialogOpened(context)) {
-                    //     if (state.uid == cubit.state.sessionState?.isDrawing) {
-                    //       GameDialog.show(
-                    //         context,
-                    //         title: 'Its Your Turn!',
-                    //         subtitle: 'Word to Draw',
-                    //         body: state.sessionState?.correctAnswer ??
-                    //             'loding word...',
-                    //       );
-                    //     }
-                    //   }
-                    // }
+                    if (state.sessionState?.eventType == EventType.roundStart &&
+                        !isStartDialogueVisited) {
+                      if (!isDialogOpened(context)) {
+                        if (state.uid == cubit.state.sessionState?.isDrawing) {
+                          GameDialog.show(
+                            context,
+                            title: 'Its Your Turn!',
+                            subtitle: 'Word to Draw',
+                            body: state.sessionState?.correctAnswer ??
+                                'loding word...',
+                          ).then((value) {
+                            isStartDialogueVisited = true;
+                          });
+                        }
+                      }
+                    }
                     if (state.sessionState!.eventType == EventType.roundEnd) {
                       if (isDialogOpened(context)) {
                         return;
@@ -78,6 +83,7 @@ class _DrawingComponentState extends State<DrawingComponent> {
                         subtitle: 'The Answer was',
                       ).then((value) {
                         pointsList.clear();
+                        isStartDialogueVisited = false;
                       });
                     }
                   },
