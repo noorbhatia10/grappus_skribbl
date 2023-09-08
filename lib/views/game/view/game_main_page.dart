@@ -9,6 +9,7 @@ class GameMainPage extends StatelessWidget {
     required this.name,
     super.key,
   });
+  static const String routeName = '/game-page';
 
   final String url;
   final String name;

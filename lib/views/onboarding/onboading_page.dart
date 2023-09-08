@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:grappus_skribbl/utils/app_util.dart';
 import 'package:grappus_skribbl/views/background/base_background.dart';
 import 'package:grappus_skribbl/views/common/primary_button.dart';
+import 'package:grappus_skribbl/views/login/view/rd_login.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -59,7 +61,13 @@ class OnboardingPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 50),
                   SkribblButton(
-                    onTap: () {},
+                    onTap: () {
+                      navigateTo(
+                        context,
+                        RDLoginPage(),
+                        RDLoginPage.routeName,
+                      );
+                    },
                     text: 'Get Started!',
                   ),
                 ],
