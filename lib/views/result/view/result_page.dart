@@ -10,29 +10,6 @@ class ResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final leaderBoard = [
-      Player(
-        userId: '123',
-        name: 'Gaurav',
-        imagePath: Assets.avatar01,
-        userNameColor: AppColors.antiqueIvory.value,
-        score: 100,
-      ),
-      Player(
-        userId: 'abc',
-        name: 'Mox',
-        imagePath: Assets.avatar01,
-        userNameColor: AppColors.antiqueIvory.value,
-        score: 200,
-      ),
-      Player(
-        userId: '1234',
-        name: 'Player3',
-        imagePath: Assets.avatar01,
-        userNameColor: AppColors.antiqueIvory.value,
-        score: 300,
-      ),
-    ];
     return BaseBackground(
       child: Center(
         child: Column(
@@ -40,7 +17,7 @@ class ResultPage extends StatelessWidget {
           children: [
             Text(
               'Game Results',
-              style: context.textTheme.headline5?.copyWith(
+              style: context.textTheme.bodyLarge?.copyWith(
                 fontFamily: paytoneOne,
                 color: AppColors.pastelPink,
                 fontSize: 40,
@@ -49,60 +26,39 @@ class ResultPage extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'The winners are',
-              style: context.textTheme.headline5?.copyWith(
-                fontFamily: outFit,
+              style: context.textTheme.bodyLarge?.copyWith(
                 color: AppColors.white.withOpacity(0.7),
                 fontSize: 24,
               ),
             ),
             const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _ResultCard(
-                  player: leaderBoard[2],
-                  rank: 2,
-                ),
-                ...List.generate(
-                  leaderBoard!.length - 1 ?? 0,
-                  (index) => _ResultCard(
-                    player: leaderBoard[index],
-                    rank: index,
-                  ),
-                ),
-              ],
+            Expanded(
+              child: BlocBuilder<GameCubit, GameState>(
+                builder: (context, state) {
+                  if (state.sessionState == null) return const SizedBox();
+                  final leaderBoard = state.sessionState?.leaderboard;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if ((leaderBoard?.length ?? 0) > 2)
+                        _ResultCard(
+                          player: leaderBoard![2],
+                          rank: 3,
+                        ),
+                      ...List.generate(
+                        (leaderBoard?.length ?? 0) > 2
+                            ? (leaderBoard?.length ?? 0) - 1
+                            : leaderBoard?.length ?? 0,
+                        (index) => _ResultCard(
+                          player: leaderBoard![index],
+                          rank: index + 1,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
-            // Expanded(
-            //   child: BlocBuilder<GameCubit, GameState>(
-            //     builder: (context, state) {
-            //       if (state.sessionState == null) return const SizedBox();
-            //       final leaderBoard = state.sessionState?.leaderboard;
-            //       return Row(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: [
-            //           _ResultCard(
-            //             name: leaderBoard?.last.name ?? '',
-            //             points: leaderBoard?.last.score.toDouble() ?? 0.0,
-            //             avatar: Assets.avatar04,
-            //             rank: 2,
-            //           ),
-            //           ...List.generate(
-            //             leaderBoard!.length - 1 ?? 0,
-            //             (index) => Padding(
-            //               padding: const EdgeInsets.all(20).responsive(context),
-            //               child: _ResultCard(
-            //                 name: leaderBoard?[index].name ?? '',
-            //                 points: leaderBoard?[index].score.toDouble() ?? 0.0,
-            //                 avatar: Assets.avatar04,
-            //                 rank: index,
-            //               ),
-            //             ),
-            //           ),
-            //         ],
-            //       );
-            //     },
-            //   ),
-            // ),
             const SizedBox(height: 50),
             SkribblButton(
               onTap: () {
@@ -130,80 +86,69 @@ class _ResultCard extends StatelessWidget {
   });
 
   final Player player;
-  final int? rank;
+  final int rank;
 
-  final rankDataList = [
-    {
-      'medalImagePath': Assets.imgGoldMedal,
-      'nameTextColor': AppColors.tangerineOrange,
-    },
-    {
-      'medalImagePath': Assets.imgSilverMedal,
-      'nameTextColor': AppColors.ceruleanBlue,
-    },
-    {
-      'medalImagePath': Assets.imgBronzeMedal,
-      'nameTextColor': AppColors.goldenOrange,
-    }
-  ];
+  final rankDataMap = {
+    1: Assets.imgGoldMedal,
+    2: Assets.imgSilverMedal,
+    3: Assets.imgBronzeMedal,
+  };
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          color: AppColors.ravenBlack,
-          padding: const EdgeInsets.all(20),
-          margin: EdgeInsets.only(top: rank! > 0 ? 40 : 0),
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3),
-                  color: AppColors.backgroundBlack,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 40),
+      child: Stack(
+        children: [
+          Container(
+            color: AppColors.ravenBlack,
+            padding: const EdgeInsets.all(20),
+            margin: EdgeInsets.only(top: rank > 1 ? 40 : 0),
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3),
+                    color: AppColors.backgroundBlack,
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 30)
+                      .copyWith(top: 30),
+                  width: context.screenWidth * 0.16,
+                  height: context.screenHeight * 0.28,
+                  child: SvgPicture.asset(
+                    player.imagePath,
+                    height: 150,
+                    width: 200,
+                  ),
                 ),
-                padding: const EdgeInsets.only(
-                  left: 29,
-                  right: 29,
-                  top: 29,
+                const SizedBox(height: 24),
+                Text(
+                  player.name,
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    color: Color(player.userNameColor),
+                    fontSize: 33,
+                  ),
                 ),
-                width: context.screenWidth * 0.16,
-                height: context.screenHeight * 0.28,
-                child: SvgPicture.asset(
-                  player.imagePath,
-                  height: 150,
-                  width: 200,
+                const SizedBox(height: 10),
+                Text(
+                  '${player.score} Points',
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    color: AppColors.white.withOpacity(0.3),
+                    fontSize: 23,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                player.name,
-                style: context.textTheme.bodyLarge?.copyWith(
-                  fontFamily: outFit,
-                  color: rankDataList[rank ?? 0]['nameTextColor']! as Color,
-                  fontSize: 33,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                '${player.score} Points',
-                style: context.textTheme.bodyLarge?.copyWith(
-                  fontFamily: outFit,
-                  color: AppColors.white.withOpacity(0.3),
-                  fontSize: 23,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Positioned(
-          top: rank! > 0 ? 30 : -5,
-          right: -18,
-          child: SvgPicture.asset(
-            rankDataList[rank ?? 0]['medalImagePath']! as String,
-          ),
-        )
-      ],
+          Positioned(
+            top: rank > 1 ? 30 : -5,
+            right: -18,
+            child: SvgPicture.asset(
+              rankDataMap[rank] ?? '',
+            ),
+          )
+        ],
+      ),
     );
   }
 }
