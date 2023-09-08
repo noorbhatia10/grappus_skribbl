@@ -286,12 +286,14 @@ extension FontFamily on TextStyle {
   }
 }
 
-extension OpacityX on TextStyle? {
+extension TextOpacityX on TextStyle? {
   TextStyle? withOpacity(double value) =>
       this?.copyWith(color: this?.color?.withOpacity(value));
 }
 
-extension TextColorX on TextStyle {}
+extension TextColorX on TextStyle {
+  TextStyle? withColor(Color color) => copyWith(color: color);
+}
 
 extension TextThemeX on TextTheme {
   TextStyle get headlineDialog => const TextStyle(
