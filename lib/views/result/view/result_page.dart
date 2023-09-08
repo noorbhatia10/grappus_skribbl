@@ -1,5 +1,6 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grappus_skribbl/views/views.dart';
 
@@ -31,34 +32,37 @@ class ResultPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _ResultCard(
-                  name: 'Snarffyy',
-                  avatar: Assets.avatar01,
-                  points: 169,
-                  rank: 2,
-                ),
-                const SizedBox(width: 67),
-                _ResultCard(
-                  name: 'Snarffyy',
-                  avatar: Assets.avatar02,
-                  points: 169,
-                  rank: 0,
-                ),
-                const SizedBox(width: 67),
-                _ResultCard(
-                  name: 'Snarffyy',
-                  avatar: Assets.avatar03,
-                  points: 169,
-                  rank: 1,
-                ),
-              ],
+            Expanded(
+              child: BlocBuilder<GameCubit, GameState>(
+                builder: (context, state) {
+                  if (state.sessionState == null) return const SizedBox();
+                  final leaderBoard = state.sessionState?.leaderboard;
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: leaderBoard?.length,
+                    itemBuilder: (context, index) {
+                      return _ResultCard(
+                        name: leaderBoard?[index].name ?? '',
+                        points: leaderBoard?[index].score.toDouble() ?? 0.0,
+                        avatar: Assets.avatar04,
+                        rank: index,
+                      );
+                    },
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 50),
             SkribblButton(
-              onTap: () {},
+              onTap: () {
+                context.read<GameCubit>().close();
+                Navigator.of(context).pushAndRemoveUntil<Widget>(
+                  MaterialPageRoute(
+                    builder: (context) => const OnboardingPage(),
+                  ),
+                  (_) => false,
+                );
+              },
               text: 'Continue',
             ),
           ],

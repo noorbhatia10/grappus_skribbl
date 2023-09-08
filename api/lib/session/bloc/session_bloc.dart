@@ -311,9 +311,17 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
   }
 
   void _onGameEnded(OnGameEnded event, Emitter<SessionState> emit) {
+    final leaderboard = state.players.values.toList()
+      ..sort((a, b) => a.score.compareTo(b.score))
+      ..take(3);
     emit(
       state.copyWith(
         eventType: EventType.gameEnd,
+        messages: [],
+        players: {},
+        correctAnswer: '',
+        hiddenAnswer: '',
+        leaderboard: leaderboard,
       ),
     );
   }

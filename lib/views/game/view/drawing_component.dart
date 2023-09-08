@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grappus_skribbl/views/game/cubit/game_cubit.dart';
 import 'package:grappus_skribbl/views/game/view/game_word.dart';
+import 'package:grappus_skribbl/views/result/view/result_page.dart';
 import 'package:models/models.dart';
 
 class DrawingComponent extends StatefulWidget {
@@ -15,8 +16,10 @@ class DrawingComponent extends StatefulWidget {
 
 class _DrawingComponentState extends State<DrawingComponent> {
   late List<DrawingPoints> pointsList = <DrawingPoints>[];
+
   bool isDialogOpened(BuildContext context) =>
       ModalRoute.of(context)?.isCurrent != true;
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GameCubit>();
@@ -37,22 +40,46 @@ class _DrawingComponentState extends State<DrawingComponent> {
               children: [
                 BlocConsumer<GameCubit, GameState>(
                   listener: (context, state) {
-                    // TODO: handle this case with new dialog ui
-                    // if (state.sessionState == null) {
-                    //   return;
-                    // }
-                    // if (state.sessionState!.eventType == EventType.roundEnd) {
-                    //   if (isDialogOpened(context)) {
-                    //     return;
+                    if (state.sessionState == null) {
+                      return;
+                    }
+                    if (state.sessionState?.eventType == EventType.gameEnd) {
+                      Navigator.of(context).pushAndRemoveUntil<Widget>(
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                            value: context.read<GameCubit>(),
+                            child: const ResultPage(),
+                          ),
+                        ),
+                        (_) => false,
+                      );
+                    }
+                    // if (state.sessionState?.eventType == EventType.roundStart) {
+                    //   if (!isDialogOpened(context)) {
+                    //     if (state.uid == cubit.state.sessionState?.isDrawing) {
+                    //       GameDialog.show(
+                    //         context,
+                    //         title: 'Its Your Turn!',
+                    //         subtitle: 'Word to Draw',
+                    //         body: state.sessionState?.correctAnswer ??
+                    //             'loding word...',
+                    //       );
+                    //     }
                     //   }
-                    //   showDialog<void>(
-                    //     context: context,
-                    //     builder: (context) => BlocProvider.value(
-                    //       value: cubit,
-                    //       child: const RoundEndDialog(),
-                    //     ),
-                    //   ).then((value) => pointsList.clear());
                     // }
+                    if (state.sessionState!.eventType == EventType.roundEnd) {
+                      if (isDialogOpened(context)) {
+                        return;
+                      }
+                      GameDialog.show(
+                        context,
+                        title: 'Times Up!',
+                        body: state.sessionState?.correctAnswer ?? '',
+                        subtitle: 'The Answer was',
+                      ).then((value) {
+                        pointsList.clear();
+                      });
+                    }
                   },
                   builder: (context, state) {
                     return GameWord(
@@ -60,6 +87,7 @@ class _DrawingComponentState extends State<DrawingComponent> {
                           state.uid == cubit.state.sessionState?.isDrawing,
                       theWord: state.sessionState?.correctAnswer ??
                           'loading word...',
+                      hiddenAnswer: state.sessionState?.hiddenAnswer ?? '',
                     );
                   },
                 ),

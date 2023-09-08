@@ -60,12 +60,12 @@ class OnboardingPage extends StatelessWidget {
                   const SizedBox(height: 50),
                   SkribblButton(
                     onTap: () {
-                      GameDialog.show(
-                        context,
-                        title: 'Times Up!',
-                        subtitle: 'The Answer was',
-                        body: 'Bicycle',
-                      );
+                      // GameDialog.show(
+                      //   context,
+                      //   title: 'Times Up!',
+                      //   subtitle: 'The Answer was',
+                      //   body: 'Bicycle',
+                      // );
                     },
                     text: 'Get Started!',
                   ),

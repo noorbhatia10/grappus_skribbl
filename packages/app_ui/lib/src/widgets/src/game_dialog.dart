@@ -15,12 +15,12 @@ class GameDialog extends StatefulWidget {
   final String subtitle;
   final String body;
 
-  static void show(
+  static Future<void> show(
     BuildContext context, {
     required String title,
     required String body,
     required String subtitle,
-  }) {
+  }) async{
     showDialog<void>(
       context: context,
       useRootNavigator: false,
