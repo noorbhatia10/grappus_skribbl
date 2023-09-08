@@ -1,5 +1,6 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:grappus_skribbl/utils/app_util.dart';
 import 'package:grappus_skribbl/views/views.dart';
 
@@ -16,7 +17,16 @@ class _RDLoginPageState extends State<RDLoginPage> {
 
   final FocusNode _focusNode = FocusNode();
 
-  List<String> avatars = [];
+  List<String> avatars = [
+    Assets.avatar01,
+    Assets.avatar02,
+    Assets.avatar03,
+    Assets.avatar04,
+    Assets.avatar05,
+    Assets.avatar06,
+    Assets.avatar07,
+  ];
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +94,7 @@ class _RDLoginPageState extends State<RDLoginPage> {
                   },
                 ),
               ),
-              const SizedBox(height: 50),
+              const Spacer(),
               Text(
                 'Select your Avatar',
                 style: context.textTheme.bodyLarge?.copyWith(
@@ -93,8 +103,41 @@ class _RDLoginPageState extends State<RDLoginPage> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              const Spacer(),
-              Wrap(),
+              const SizedBox(height: 20),
+              Wrap(
+                runSpacing: 12,
+                spacing: 12,
+                children: List.generate(
+                  avatars.length,
+                  (index) => GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex = index;
+                      });
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: AppColors.backgroundBlack,
+                        borderRadius: BorderRadius.circular(3),
+                        border: Border.all(
+                          color: (selectedIndex == index)
+                              ? AppColors.butterCreamYellow
+                              : AppColors.backgroundBlack,
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SvgPicture.asset(
+                          avatars[index],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
               SkribblButton(
                 onTap: () {
                   if (_nameController.value.text.trim().isEmpty) {
