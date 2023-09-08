@@ -11,11 +11,12 @@ class Player {
   final int numOfGuesses;
   final int guessedAt;
   final bool hasCompletedDrawingRound;
-
+  final int userNameColor;
   Player({
     required this.userId,
     required this.name,
     required this.imagePath,
+    required this.userNameColor,
     this.hasCompletedDrawingRound = false,
     this.hasAnsweredCorrectly = false,
     this.score = 0,
@@ -34,6 +35,7 @@ class Player {
     int? numOfGuesses,
     int? guessedAt,
     bool? hasCompletedDrawingRound,
+    int? userNameColor,
   }) {
     return Player(
       userId: userId ?? this.userId,
@@ -46,6 +48,7 @@ class Player {
       guessedAt: guessedAt ?? this.guessedAt,
       hasCompletedDrawingRound:
           hasCompletedDrawingRound ?? this.hasCompletedDrawingRound,
+      userNameColor: userNameColor ?? this.userNameColor,
     );
   }
 
@@ -60,6 +63,7 @@ class Player {
       'numOfGuesses': numOfGuesses,
       'guessedAt': guessedAt,
       'hasCompletedDrawingRound': hasCompletedDrawingRound,
+      'userNameColor': userNameColor,
     };
   }
 
@@ -74,6 +78,7 @@ class Player {
       numOfGuesses: map['numOfGuesses'] as int,
       guessedAt: map['guessedAt'] as int,
       hasCompletedDrawingRound: map['hasCompletedDrawingRound'] as bool,
+      userNameColor: map['userNameColor'] as int,
     );
   }
 
