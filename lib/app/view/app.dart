@@ -11,17 +11,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: const AppTheme().themeData,
-      scrollBehavior: MyCustomScrollBehavior(),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      // home: const OnboardingPage(),
-      home: const GameMainPage(
-        // url: 'ws://ec2-13-51-233-255.eu-north-1.compute.amazonaws.com/ws',
-        url: 'ws://localhost:8080/ws',
-        name: 'Name',
-      ),
-    );
+        theme: const AppTheme().themeData,
+        scrollBehavior: MyCustomScrollBehavior(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        // home: const OnboardingPage(),
+        home: const OnboardingPage());
   }
 }
 
