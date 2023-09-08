@@ -13,6 +13,8 @@ dependencies:
     path: ../../api/packages/models
   player_repository:
     path: ../../api/packages/player_repository
+  services:
+    path: ../services
   web_socket_client: ^0.1.0
 
 dev_dependencies:

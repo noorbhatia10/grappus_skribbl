@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:api/session/bloc/session_bloc.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:web_socket_client/web_socket_client.dart';
 
 /// {@template game_repository}
@@ -12,6 +13,7 @@ class GameRepository {
   GameRepository({required Uri uri}) : _ws = WebSocket(uri);
 
   final WebSocket _ws;
+  final GameService _gameService = GameService();
 
   /// function to get the current session data stream
   Stream<SessionState?> get session {
@@ -33,6 +35,17 @@ class GameRepository {
   /// function to send the points to the server
   void sendPoints(DrawingPointsWrapper points) =>
       _ws.send(AddDrawingPointsEvent(data: points).encodedJson);
+
+  /// Returns a uid
+  Future<String?> getUID() async {
+    try {
+      final data = (await _gameService.connect()).data;
+      return (jsonDecode(data.toString()) as Map<String, dynamic>)['data']
+          .toString();
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   /// function to add player to the server
   void addPlayer(Player player) =>

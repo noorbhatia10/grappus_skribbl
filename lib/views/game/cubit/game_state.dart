@@ -23,3 +23,10 @@ class GameState extends Equatable {
   @override
   List<Object?> get props => [sessionState, uid];
 }
+
+class GameErrorState extends GameState {
+  final String message;
+  const GameErrorState({
+    required this.message,
+  });
+}

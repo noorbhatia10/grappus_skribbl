@@ -37,7 +37,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     emit(
       state.copyWith(
         currentPlayerId: event.player.userId,
-        eventType: EventType.connect,
+        eventType: EventType.addPlayer,
       ),
     );
     final players = <String, Player>{}
