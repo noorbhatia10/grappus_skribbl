@@ -1,7 +1,7 @@
 name: Web App
 on:
   push:
-    branches: [ fix/deploy ]
+    branches: [ develop ]
 jobs:
   build:
     name: Build Web
