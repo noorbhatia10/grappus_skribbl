@@ -24,6 +24,7 @@ class _RDLoginPageState extends State<RDLoginPage> {
     Assets.avatar05,
     Assets.avatar06,
     Assets.avatar07,
+    Assets.avatar08,
   ];
   int selectedIndex = 0;
 
@@ -148,6 +149,7 @@ class _RDLoginPageState extends State<RDLoginPage> {
                         // url: 'ws://ec2-13-51-233-255.eu-north-1.compute.amazonaws.com/ws',
                         url: 'ws://localhost:8080/ws',
                         name: _nameController.value.text,
+                        selectedImagePath: avatars[selectedIndex],
                       ),
                       GameMainPage.routeName,
                     );

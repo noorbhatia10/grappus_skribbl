@@ -42,9 +42,7 @@ class LeaderBoardComponent extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final playerKey = players.keys.toList()[index];
                     return _LeaderboardListItem(
-                      player: players[playerKey]!.copyWith(
-                        imagePath: Assets.avatar03,
-                      ),
+                      player: players[playerKey]!,
                       isDrawing: playerKey == state.sessionState?.isDrawing,
                     );
                   },
@@ -73,6 +71,8 @@ class _LeaderboardListItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
+            width: 80.toResponsiveHeight(context),
+            height: 80.toResponsiveHeight(context),
             decoration: BoxDecoration(
               color: AppColors.backgroundBlack,
               borderRadius: BorderRadius.circular(6),
@@ -81,8 +81,7 @@ class _LeaderboardListItem extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 6).copyWith(top: 10),
             child: SvgPicture.asset(
               player.imagePath,
-              width: 70.toResponsiveHeight(context),
-              height: 70.toResponsiveHeight(context),
+              fit: BoxFit.cover,
             ),
           ),
           SizedBox(width: 5.toResponsiveHeight(context)),
@@ -103,7 +102,7 @@ class _LeaderboardListItem extends StatelessWidget {
                       Text(
                         player.name,
                         style: context.textTheme.titleLarge?.copyWith(
-                          color: AppColors.butterCreamYellow,
+                          color: Color(player.userNameColor),
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),

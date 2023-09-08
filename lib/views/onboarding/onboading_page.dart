@@ -64,7 +64,7 @@ class OnboardingPage extends StatelessWidget {
                     onTap: () {
                       navigateTo(
                         context,
-                        RDLoginPage(),
+                        const RDLoginPage(),
                         RDLoginPage.routeName,
                       );
                     },

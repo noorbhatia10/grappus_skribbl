@@ -79,7 +79,9 @@ class _ChatComponentState extends State<ChatComponent> {
                                 Text(
                                   '${messages[newIndex].player.name}: ',
                                   style: context.textTheme.bodyLarge?.copyWith(
-                                    color: AppColors.goldenOrange,
+                                    color: Color(
+                                      messages[index].player.userNameColor,
+                                    ),
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -136,14 +138,15 @@ class _ChatComponentState extends State<ChatComponent> {
                 if (gameState.sessionState == null) {
                   throw Exception('null session');
                 }
-                final players2 = gameState.sessionState!.players;
+                final newPlayer = gameState.sessionState!.players;
                 context.read<GameCubit>().addChats(
                       ChatModel(
-                        player: players2[gameState.uid] ??
+                        player: newPlayer[gameState.uid] ??
                             Player(
                               name: 'err',
                               userId: 'err',
                               imagePath: 'err',
+                              userNameColor: Colors.black.value,
                             ),
                         message: _chatController.text,
                       ),

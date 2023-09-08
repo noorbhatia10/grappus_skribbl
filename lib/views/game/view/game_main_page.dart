@@ -1,3 +1,4 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_repository/game_repository.dart';
@@ -7,11 +8,13 @@ class GameMainPage extends StatelessWidget {
   const GameMainPage({
     required this.url,
     required this.name,
+    required this.selectedImagePath,
     super.key,
   });
 
   final String url;
   final String name;
+  final String selectedImagePath;
   static const String routeName = '/game-page';
 
   @override
@@ -21,9 +24,23 @@ class GameMainPage extends StatelessWidget {
         gameRepository: GameRepository(
           uri: Uri.parse(url),
         ),
-      )..connect(name),
+      )..connect(name, selectedImagePath, generateUserNameColor()),
       child: const _GameMainPageView(),
     );
+  }
+
+  int generateUserNameColor() {
+    final colorList = [
+      AppColors.antiqueIvory,
+      AppColors.goldenYellow,
+      AppColors.goldenOrange,
+      AppColors.pastelPink,
+      AppColors.ceruleanBlue,
+      AppColors.lavenderPurple,
+      AppColors.tangerineOrange,
+      AppColors.lavenderPurple,
+    ];
+    return colorList.randomItem().value;
   }
 }
 
