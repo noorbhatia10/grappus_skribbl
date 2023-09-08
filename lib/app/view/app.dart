@@ -15,7 +15,7 @@ class App extends StatelessWidget {
       scrollBehavior: MyCustomScrollBehavior(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const ResultPage(),
+      home: const OnboardingPage(),
     );
   }
 }
