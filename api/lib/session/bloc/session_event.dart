@@ -54,6 +54,13 @@ class OnRoundEnded extends SessionEvent {
   List<Object?> get props => [];
 }
 
+class OnGameEnded extends SessionEvent {
+  const OnGameEnded();
+
+  @override
+  List<Object?> get props => [];
+}
+
 class _TimerTicked extends SessionEvent {
   const _TimerTicked({required this.duration});
 

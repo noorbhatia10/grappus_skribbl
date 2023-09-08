@@ -11,7 +11,8 @@ enum EventType {
   addPlayer('__add_player__'),
   invalid('__invalid__'),
   roundStart('__round_start__'),
-  roundEnd('__round_end__');
+  roundEnd('__round_end__'),
+  gameEnd('__game_end__');
 
   const EventType(this.name);
 
