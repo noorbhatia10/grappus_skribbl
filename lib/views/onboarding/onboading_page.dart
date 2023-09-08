@@ -4,7 +4,6 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grappus_skribbl/views/background/base_background.dart';
-import 'package:grappus_skribbl/views/common/game_dialog.dart';
 import 'package:grappus_skribbl/views/common/primary_button.dart';
 
 class OnboardingPage extends StatelessWidget {
