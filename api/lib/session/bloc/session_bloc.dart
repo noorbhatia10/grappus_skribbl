@@ -173,7 +173,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
       return;
     }
 
-    // Select a random player from the players who havent drawn yet
+    /// Select a random player from the players who havent drawn yet
     final randomIndex = Random().nextInt(
       max(1, remainingPlayers.length - 1),
     );
@@ -196,6 +196,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
             ),
           ),
         ),
+        hiddenAnswer: randomWord.split('').map((e) => ' ').join(),
         correctAnswer: randomWord,
         eventType: EventType.roundStart,
       ),
@@ -207,6 +208,34 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
 
   void _onTicked(_TimerTicked event, Emitter<SessionState> emit) {
     emit(state.copyWith(remainingTime: event.duration));
+
+    /// Dont show the answer for first 10 seconds
+    if (event.duration < 51) {
+      final difference = (event.duration.toDouble()) / 10;
+
+      /// If the timer hits 50,40,30,20 s time mark
+      if ((difference is int || difference.toInt() == difference) &&
+          difference <= 5 &&
+          difference > 1) {
+        var hiddenAnswer = state.hiddenAnswer;
+
+        /// choose a random char to show from [correctAnswer]
+        final charIndex = Random().nextInt(state.correctAnswer.length - 1);
+
+        hiddenAnswer = replaceCharAt(
+          state.hiddenAnswer,
+          charIndex,
+          state.correctAnswer[charIndex],
+        );
+
+        emit(
+          state.copyWith(
+            hiddenAnswer: hiddenAnswer,
+          ),
+        );
+      }
+    }
+
     if (event.duration == 0) {
       add(const OnRoundEnded());
       return;
@@ -255,5 +284,11 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
       data: state.toJson(),
       eventType: state.eventType,
     ).encodedJson();
+  }
+
+  String replaceCharAt(String oldString, int index, String newChar) {
+    return oldString.substring(0, index) +
+        newChar +
+        oldString.substring(index + 1);
   }
 }

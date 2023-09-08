@@ -2,11 +2,16 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 
 class GameWord extends StatelessWidget {
-  const GameWord({required this.isDrawing, required this.theWord, super.key});
+  const GameWord({
+    required this.isDrawing,
+    required this.theWord,
+    required this.hiddenAnswer,
+    super.key,
+  });
 
   final bool isDrawing;
   final String theWord;
-
+  final String hiddenAnswer;
   @override
   Widget build(BuildContext context) {
     if (isDrawing) {
@@ -22,7 +27,7 @@ class GameWord extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(
-            theWord.length,
+            hiddenAnswer.length,
             (index) => Container(
               width: 20,
               alignment: Alignment.center,
@@ -34,9 +39,8 @@ class GameWord extends StatelessWidget {
                   ),
                 ),
               ),
-              //TODO(*): Add logic to hide words
               child: Text(
-                theWord.split('').toList()[index],
+                hiddenAnswer.split('').toList()[index],
                 style: context.textTheme.titleLarge,
               ),
             ),

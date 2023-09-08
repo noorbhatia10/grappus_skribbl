@@ -12,6 +12,7 @@ class SessionState extends Equatable {
     this.numOfCorrectGuesses = 0,
     this.round = 1,
     this.isDrawing = '',
+    this.hiddenAnswer = '',
   });
 
   factory SessionState.fromJson(Map<String, dynamic> json) => SessionState(
@@ -24,6 +25,7 @@ class SessionState extends Equatable {
               (k, e) => MapEntry(k, Player.fromJson(e as String)),
             ) ??
             const {},
+        hiddenAnswer: json['hiddenAnswer'].toString(),
         points: DrawingPointsWrapper.fromJson(
           json['points'] as Map<String, dynamic>,
         ),
@@ -46,6 +48,7 @@ class SessionState extends Equatable {
   final String correctAnswer;
   final int remainingTime;
   final int numOfCorrectGuesses;
+  final String hiddenAnswer;
   final int round;
   final String isDrawing;
 
@@ -56,10 +59,11 @@ class SessionState extends Equatable {
     EventType? eventType,
     List<ChatModel>? messages,
     String? correctAnswer,
-    String? isDrawing,
     int? remainingTime,
     int? numOfCorrectGuesses,
+    String? hiddenAnswer,
     int? round,
+    String? isDrawing,
   }) {
     return SessionState(
       currentPlayerId: currentPlayerId ?? this.currentPlayerId,
@@ -70,24 +74,28 @@ class SessionState extends Equatable {
       correctAnswer: correctAnswer ?? this.correctAnswer,
       remainingTime: remainingTime ?? this.remainingTime,
       numOfCorrectGuesses: numOfCorrectGuesses ?? this.numOfCorrectGuesses,
+      hiddenAnswer: hiddenAnswer ?? this.hiddenAnswer,
       round: round ?? this.round,
       isDrawing: isDrawing ?? this.isDrawing,
     );
   }
 
   @override
-  List<Object?> get props => [
-        points,
-        currentPlayerId,
-        players,
-        eventType,
-        messages,
-        correctAnswer,
-        remainingTime,
-        numOfCorrectGuesses,
-        round,
-        isDrawing,
-      ];
+  List<Object?> get props {
+    return [
+      currentPlayerId,
+      players,
+      points,
+      eventType,
+      messages,
+      correctAnswer,
+      remainingTime,
+      numOfCorrectGuesses,
+      hiddenAnswer,
+      round,
+      isDrawing,
+    ];
+  }
 
   Map<String, dynamic> toJson() => {
         'players': Map<String, Player>.from(players),
@@ -100,6 +108,7 @@ class SessionState extends Equatable {
         'numOfCorrectGuesses': numOfCorrectGuesses,
         'round': round,
         'isDrawing': isDrawing,
+        'hiddenAnswer': hiddenAnswer,
       };
 
   @override

@@ -87,6 +87,7 @@ class _GamePage extends StatelessWidget {
                     },
                     builder: (context, state) {
                       return GameWord(
+                        hiddenAnswer: state.sessionState?.hiddenAnswer ?? '',
                         isDrawing:
                             state.uid == cubit.state.sessionState?.isDrawing,
                         theWord: state.sessionState?.correctAnswer ?? '',
