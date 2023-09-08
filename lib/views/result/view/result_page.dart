@@ -3,12 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grappus_skribbl/views/views.dart';
+import 'package:models/models.dart';
 
 class ResultPage extends StatelessWidget {
   const ResultPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final leaderBoard = [
+      Player(
+        userId: '123',
+        name: 'Gaurav',
+        imagePath: Assets.avatar01,
+        userNameColor: AppColors.antiqueIvory.value,
+        score: 100,
+      ),
+      Player(
+        userId: 'abc',
+        name: 'Mox',
+        imagePath: Assets.avatar01,
+        userNameColor: AppColors.antiqueIvory.value,
+        score: 200,
+      ),
+      Player(
+        userId: '1234',
+        name: 'Player3',
+        imagePath: Assets.avatar01,
+        userNameColor: AppColors.antiqueIvory.value,
+        score: 300,
+      ),
+    ];
     return BaseBackground(
       child: Center(
         child: Column(
@@ -32,37 +56,53 @@ class ResultPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 50),
-            Expanded(
-              child: BlocBuilder<GameCubit, GameState>(
-                builder: (context, state) {
-                  if (state.sessionState == null) return const SizedBox();
-                  final leaderBoard = state.sessionState?.leaderboard;
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _ResultCard(
-                        name: leaderBoard?.last.name ?? '',
-                        points: leaderBoard?.last.score.toDouble() ?? 0.0,
-                        avatar: Assets.avatar04,
-                        rank: 2,
-                      ),
-                      ...List.generate(
-                        leaderBoard!.length - 1 ?? 0,
-                        (index) => Padding(
-                          padding: const EdgeInsets.all(20).responsive(context),
-                          child: _ResultCard(
-                            name: leaderBoard?[index].name ?? '',
-                            points: leaderBoard?[index].score.toDouble() ?? 0.0,
-                            avatar: Assets.avatar04,
-                            rank: index,
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _ResultCard(
+                  player: leaderBoard[2],
+                  rank: 2,
+                ),
+                ...List.generate(
+                  leaderBoard!.length - 1 ?? 0,
+                  (index) => _ResultCard(
+                    player: leaderBoard[index],
+                    rank: index,
+                  ),
+                ),
+              ],
             ),
+            // Expanded(
+            //   child: BlocBuilder<GameCubit, GameState>(
+            //     builder: (context, state) {
+            //       if (state.sessionState == null) return const SizedBox();
+            //       final leaderBoard = state.sessionState?.leaderboard;
+            //       return Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           _ResultCard(
+            //             name: leaderBoard?.last.name ?? '',
+            //             points: leaderBoard?.last.score.toDouble() ?? 0.0,
+            //             avatar: Assets.avatar04,
+            //             rank: 2,
+            //           ),
+            //           ...List.generate(
+            //             leaderBoard!.length - 1 ?? 0,
+            //             (index) => Padding(
+            //               padding: const EdgeInsets.all(20).responsive(context),
+            //               child: _ResultCard(
+            //                 name: leaderBoard?[index].name ?? '',
+            //                 points: leaderBoard?[index].score.toDouble() ?? 0.0,
+            //                 avatar: Assets.avatar04,
+            //                 rank: index,
+            //               ),
+            //             ),
+            //           ),
+            //         ],
+            //       );
+            //     },
+            //   ),
+            // ),
             const SizedBox(height: 50),
             SkribblButton(
               onTap: () {
@@ -85,15 +125,11 @@ class ResultPage extends StatelessWidget {
 
 class _ResultCard extends StatelessWidget {
   _ResultCard({
-    this.name,
-    this.avatar,
-    this.points,
-    this.rank,
+    required this.player,
+    required this.rank,
   });
 
-  final String? name;
-  final String? avatar;
-  final double? points;
+  final Player player;
   final int? rank;
 
   final rankDataList = [
@@ -134,15 +170,15 @@ class _ResultCard extends StatelessWidget {
                 width: context.screenWidth * 0.16,
                 height: context.screenHeight * 0.28,
                 child: SvgPicture.asset(
-                  avatar ?? '',
+                  player.imagePath,
                   height: 150,
                   width: 200,
                 ),
               ),
               const SizedBox(height: 24),
               Text(
-                name ?? '',
-                style: context.textTheme.headlineMedium?.copyWith(
+                player.name,
+                style: context.textTheme.bodyLarge?.copyWith(
                   fontFamily: outFit,
                   color: rankDataList[rank ?? 0]['nameTextColor']! as Color,
                   fontSize: 33,
@@ -150,8 +186,8 @@ class _ResultCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                '$points Points',
-                style: context.textTheme.headlineSmall?.copyWith(
+                '${player.score} Points',
+                style: context.textTheme.bodyLarge?.copyWith(
                   fontFamily: outFit,
                   color: AppColors.white.withOpacity(0.3),
                   fontSize: 23,
