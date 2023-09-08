@@ -32,32 +32,30 @@ class ResultPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 50),
-            Expanded(
-              child: BlocBuilder<GameCubit, GameState>(
-                builder: (context, state) {
-                  if (state.sessionState == null) return const SizedBox();
-                  final leaderBoard = state.sessionState?.leaderboard;
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if ((leaderBoard?.length ?? 0) > 2)
-                        _ResultCard(
-                          player: leaderBoard![2],
-                          rank: 3,
-                        ),
-                      ...List.generate(
-                        (leaderBoard?.length ?? 0) > 2
-                            ? (leaderBoard?.length ?? 0) - 1
-                            : leaderBoard?.length ?? 0,
-                        (index) => _ResultCard(
-                          player: leaderBoard![index],
-                          rank: index + 1,
-                        ),
+            BlocBuilder<GameCubit, GameState>(
+              builder: (context, state) {
+                if (state.sessionState == null) return const SizedBox();
+                final leaderBoard = state.sessionState?.leaderboard;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if ((leaderBoard?.length ?? 0) > 2)
+                      _ResultCard(
+                        player: leaderBoard![2],
+                        rank: 3,
                       ),
-                    ],
-                  );
-                },
-              ),
+                    ...List.generate(
+                      (leaderBoard?.length ?? 0) > 2
+                          ? (leaderBoard?.length ?? 0) - 1
+                          : leaderBoard?.length ?? 0,
+                      (index) => _ResultCard(
+                        player: leaderBoard![index],
+                        rank: index + 1,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
             const SizedBox(height: 50),
             SkribblButton(
