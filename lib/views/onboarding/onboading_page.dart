@@ -4,6 +4,7 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grappus_skribbl/views/background/base_background.dart';
+import 'package:grappus_skribbl/views/common/game_dialog.dart';
 import 'package:grappus_skribbl/views/common/primary_button.dart';
 
 class OnboardingPage extends StatelessWidget {
@@ -59,7 +60,14 @@ class OnboardingPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 50),
                   SkribblButton(
-                    onTap: () {},
+                    onTap: () {
+                      GameDialog.show(
+                        context,
+                        title: 'Times Up!',
+                        subtitle: 'The Answer was',
+                        body: 'Bicycle',
+                      );
+                    },
                     text: 'Get Started!',
                   ),
                 ],

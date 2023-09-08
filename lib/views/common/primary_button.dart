@@ -70,6 +70,7 @@ class _SkribblButtonState extends State<SkribblButton> {
                   style: context.textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 32,
+                    color: AppColors.black,
                   ),
                 ),
               ),

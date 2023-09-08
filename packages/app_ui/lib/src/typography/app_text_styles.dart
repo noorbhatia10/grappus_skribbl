@@ -26,11 +26,11 @@ abstract class UITextStyle {
   );
 
   /// Display 2 Text Style
-  static final TextStyle display2 = _baseTextStyle.copyWith(
-    fontSize: 57,
-    fontWeight: AppFontWeight.bold,
-    height: 1.12,
-    letterSpacing: -0.25,
+  static final TextStyle displayLarge = _baseTextStyle.copyWith(
+    fontSize: 64,
+    fontWeight: AppFontWeight.regular,
+    letterSpacing: -1,
+    height: 1,
   );
 
   /// Display 3 Text Style
@@ -62,7 +62,7 @@ abstract class UITextStyle {
   );
 
   /// Headline 4 Text Style
-  static final TextStyle headline4 = _baseTextStyle.copyWith(
+  static final TextStyle headlineMedium = _baseTextStyle.copyWith(
     fontSize: 24,
     fontWeight: AppFontWeight.semiBold,
     height: 1.33,
@@ -284,4 +284,25 @@ extension FontFamily on TextStyle {
   TextStyle get modernAntiqua {
     return copyWith(fontFamily: 'Outfit');
   }
+}
+
+extension OpacityX on TextStyle? {
+  TextStyle? withOpacity(double value) =>
+      this?.copyWith(color: this?.color?.withOpacity(value));
+}
+
+extension TextColorX on TextStyle {}
+
+extension TextThemeX on TextTheme {
+  TextStyle get headlineDialog => const TextStyle(
+        package: 'app_ui',
+        fontWeight: AppFontWeight.regular,
+        fontFamily: 'PaytoneOne',
+        decoration: TextDecoration.none,
+        textBaseline: TextBaseline.alphabetic,
+        letterSpacing: -1,
+        fontSize: 40,
+        height: .9,
+        color: AppColors.pastelPink,
+      );
 }
