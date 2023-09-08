@@ -1,12 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_repository/game_repository.dart';
-import 'package:grappus_skribbl/views/background/base_background.dart';
-import 'package:grappus_skribbl/views/common/toolbar.dart';
-import 'package:grappus_skribbl/views/game/cubit/game_cubit.dart';
-import 'package:grappus_skribbl/views/game/view/chat_component.dart';
-import 'package:grappus_skribbl/views/game/view/drawing_component.dart';
-import 'package:grappus_skribbl/views/game/view/leader_board_component.dart';
+import 'package:grappus_skribbl/views/views.dart';
 
 class GameMainPage extends StatelessWidget {
   const GameMainPage({
