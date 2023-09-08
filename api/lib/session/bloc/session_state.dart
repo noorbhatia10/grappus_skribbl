@@ -38,7 +38,7 @@ class SessionState extends Equatable {
           ),
         ),
       );
-  static const roundDuration = 6000;
+  static const roundDuration = 60;
 
   final String? currentPlayerId;
   final Map<String, Player> players;
