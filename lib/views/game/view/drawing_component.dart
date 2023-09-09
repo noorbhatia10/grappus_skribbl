@@ -46,11 +46,15 @@ class _DrawingComponentState extends State<DrawingComponent> {
                       return;
                     }
                     if (state.sessionState?.eventType == EventType.gameEnd) {
+                      final leaderBoard = state.sessionState?.leaderboard;
+                      context.read<GameCubit>().close();
                       Navigator.of(context).pushAndRemoveUntil<Widget>(
                         MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
                             value: context.read<GameCubit>(),
-                            child: const ResultPage(),
+                            child: ResultPage(
+                              leaderBoard: leaderBoard ?? [],
+                            ),
                           ),
                         ),
                         (_) => false,

@@ -7,8 +7,11 @@ import 'package:lottie/lottie.dart';
 import 'package:models/models.dart';
 
 class ResultPage extends StatefulWidget {
-  const ResultPage({super.key});
-
+  const ResultPage({
+    required this.leaderBoard,
+    super.key,
+  });
+  final List<Player> leaderBoard;
   @override
   State<ResultPage> createState() => _ResultPageState();
 }
@@ -73,30 +76,24 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
                   ),
                 ),
                 const SizedBox(height: 50),
-                BlocBuilder<GameCubit, GameState>(
-                  builder: (context, state) {
-                    if (state.sessionState == null) return const SizedBox();
-                    final leaderBoard = state.sessionState?.leaderboard;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if ((leaderBoard?.length ?? 0) > 2)
-                          _ResultCard(
-                            player: leaderBoard![2],
-                            rank: 3,
-                          ),
-                        ...List.generate(
-                          (leaderBoard?.length ?? 0) > 2
-                              ? (leaderBoard?.length ?? 0) - 1
-                              : leaderBoard?.length ?? 0,
-                          (index) => _ResultCard(
-                            player: leaderBoard![index],
-                            rank: index + 1,
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if ((widget.leaderBoard.length) > 2)
+                      _ResultCard(
+                        player: widget.leaderBoard[2],
+                        rank: 3,
+                      ),
+                    ...List.generate(
+                      (widget.leaderBoard.length) > 2
+                          ? (widget.leaderBoard.length) - 1
+                          : widget.leaderBoard.length,
+                      (index) => _ResultCard(
+                        player: widget.leaderBoard[index],
+                        rank: index + 1,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 50),
                 SkribblButton(
