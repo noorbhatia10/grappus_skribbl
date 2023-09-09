@@ -5,7 +5,7 @@ class SessionState extends Equatable {
     this.currentPlayerId,
     this.players = const {},
     this.points = const DrawingPointsWrapper(points: null, paint: null),
-    this.eventType = EventType.invalid,
+    this.eventType = EventType.initial,
     this.messages = const [],
     this.correctAnswer = '',
     this.remainingTime = roundDuration,

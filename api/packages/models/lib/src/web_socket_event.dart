@@ -6,6 +6,7 @@ import 'package:models/src/player.dart';
 
 enum EventType {
   connect('__connect__'),
+  initial('__initial__'),
   drawing('__drawing__'),
   chat('__chat__'),
   addPlayer('__add_player__'),

@@ -1,14 +1,16 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grappus_skribbl/views/views.dart';
 import 'package:lottie/lottie.dart';
 import 'package:models/models.dart';
 
 class ResultPage extends StatefulWidget {
-  const ResultPage({super.key});
-
+  const ResultPage({
+    required this.leaderBoard,
+    super.key,
+  });
+  final List<Player> leaderBoard;
   @override
   State<ResultPage> createState() => _ResultPageState();
 }
@@ -16,15 +18,16 @@ class ResultPage extends StatefulWidget {
 class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
   final celebrationAnimation = Assets.celebrationAnimtaion;
   late final AnimationController _controller;
+  var visible = true;
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(
-          const Duration(milliseconds: 500),
-        ).then((value) => Navigator.pop(context));
+        setState(() {
+          visible = false;
+        });
       }
     });
   }
@@ -39,18 +42,6 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Lottie.asset(
-          celebrationAnimation,
-          repeat: false,
-          controller: _controller,
-          onLoaded: (composition) {
-            // Configure the AnimationController with the duration of the
-            // Lottie file and start the animation.
-            _controller
-              ..duration = composition.duration
-              ..forward();
-          },
-        ),
         BaseBackground(
           child: Center(
             child: Column(
@@ -73,35 +64,28 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
                   ),
                 ),
                 const SizedBox(height: 50),
-                BlocBuilder<GameCubit, GameState>(
-                  builder: (context, state) {
-                    if (state.sessionState == null) return const SizedBox();
-                    final leaderBoard = state.sessionState?.leaderboard;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if ((leaderBoard?.length ?? 0) > 2)
-                          _ResultCard(
-                            player: leaderBoard![2],
-                            rank: 3,
-                          ),
-                        ...List.generate(
-                          (leaderBoard?.length ?? 0) > 2
-                              ? (leaderBoard?.length ?? 0) - 1
-                              : leaderBoard?.length ?? 0,
-                          (index) => _ResultCard(
-                            player: leaderBoard![index],
-                            rank: index + 1,
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if ((widget.leaderBoard.length) > 2)
+                      _ResultCard(
+                        player: widget.leaderBoard[2],
+                        rank: 3,
+                      ),
+                    ...List.generate(
+                      (widget.leaderBoard.length) > 2
+                          ? (widget.leaderBoard.length) - 1
+                          : widget.leaderBoard.length,
+                      (index) => _ResultCard(
+                        player: widget.leaderBoard[index],
+                        rank: index + 1,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 50),
                 SkribblButton(
                   onTap: () {
-                    context.read<GameCubit>().close();
                     Navigator.of(context).pushAndRemoveUntil<Widget>(
                       MaterialPageRoute(
                         builder: (context) => const OnboardingPage(),
@@ -112,6 +96,24 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
                   text: 'Continue',
                 ),
               ],
+            ),
+          ),
+        ),
+        Visibility(
+          visible: visible,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Lottie.asset(
+              celebrationAnimation,
+              repeat: false,
+              controller: _controller,
+              onLoaded: (composition) {
+                // Configure the AnimationController with the duration of the
+                // Lottie file and start the animation.
+                _controller
+                  ..duration = composition.duration
+                  ..forward();
+              },
             ),
           ),
         ),
