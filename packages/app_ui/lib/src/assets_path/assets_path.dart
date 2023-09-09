@@ -1,6 +1,6 @@
 class Assets {
   static const String imagesBasePath = 'packages/app_ui/assets/images';
-
+  static const String animtaionBasePath = 'packages/app_ui/assets/animation';
   static const String icPencil = '$imagesBasePath/ic_pencil.svg';
 
   // new images
@@ -17,4 +17,8 @@ class Assets {
   static const String imgGoldMedal = '$imagesBasePath/img_gold_medal.svg';
   static const String imgSilverMedal = '$imagesBasePath/img_silver_medal.svg';
   static const String imgBronzeMedal = '$imagesBasePath/img_bronze_medal.svg';
+
+  //animtaion
+  static const String celebrationAnimtaion =
+      '$animtaionBasePath/celebration_animation.json';
 }
