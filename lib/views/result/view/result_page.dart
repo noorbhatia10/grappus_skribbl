@@ -27,7 +27,7 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
       if (status == AnimationStatus.completed) {
         Future.delayed(
           const Duration(milliseconds: 500),
-        ).then((value) => Navigator.pop(context));
+        );
       }
     });
   }
