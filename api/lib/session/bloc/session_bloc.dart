@@ -149,12 +149,13 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     Emitter<SessionState> emit,
   ) {
     final map = Map<String, Player>.from(state.players);
-    if (state.players.isEmpty) {
-      return;
-    }
     final players = map
       ..removeWhere((key, value) => key == event.player.userId);
     emit(state.copyWith(players: players));
+    if (state.players.isEmpty) {
+      emit(const SessionState());
+      return;
+    }
     if (event.player.userId == state.isDrawing) {
       add(const OnRoundEnded());
     }
@@ -317,10 +318,6 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     emit(
       state.copyWith(
         eventType: EventType.gameEnd,
-        messages: [],
-        players: {},
-        correctAnswer: '',
-        hiddenAnswer: '',
         leaderboard: newLeaderBoard.toList(),
       ),
     );
