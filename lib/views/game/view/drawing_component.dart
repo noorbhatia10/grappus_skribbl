@@ -108,7 +108,7 @@ class _DrawingComponentState extends State<DrawingComponent> {
                       ),
                     ),
                     Text(
-                      '$remainingTime',
+                      '${remainingTime ?? 0}',
                       style: context.textTheme.bodyLarge?.copyWith(
                         fontSize: 32,
                         color: AppColors.butterCreamYellow,
