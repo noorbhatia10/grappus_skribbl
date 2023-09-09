@@ -67,6 +67,12 @@ class OnboardingPage extends StatelessWidget {
                         const RDLoginPage(),
                         RDLoginPage.routeName,
                       );
+                      // GameDialog.show(
+                      //   context,
+                      //   title: 'Times Up!',
+                      //   body: 'state' ?? '',
+                      //   subtitle: 'The Answer was',
+                      // );
                     },
                     text: 'Get Started!',
                   ),

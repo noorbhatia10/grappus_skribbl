@@ -27,145 +27,153 @@ class _DrawingComponentState extends State<DrawingComponent> {
     final cubit = context.read<GameCubit>();
     final remainingTime =
         context.watch<GameCubit>().state.sessionState?.remainingTime;
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: AppColors.ravenBlack,
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BlocConsumer<GameCubit, GameState>(
-                  listener: (context, state) {
-                    if (state.sessionState == null) {
-                      return;
-                    }
-                    if (state.sessionState?.eventType == EventType.gameEnd) {
-                      final leaderBoard = state.sessionState?.leaderboard;
-                      context.read<GameCubit>().close();
-                      Navigator.of(context).pushAndRemoveUntil<Widget>(
-                        MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: context.read<GameCubit>(),
-                            child: ResultPage(
-                              leaderBoard: leaderBoard ?? [],
+    return Stack(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: AppColors.ravenBlack,
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    BlocConsumer<GameCubit, GameState>(
+                      listener: (context, state) {
+                        if (state.sessionState == null) {
+                          return;
+                        }
+                        if (state.sessionState?.eventType ==
+                            EventType.gameEnd) {
+                          final leaderBoard = state.sessionState?.leaderboard;
+                          context.read<GameCubit>().close();
+                          Navigator.of(context).pushAndRemoveUntil<Widget>(
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                value: context.read<GameCubit>(),
+                                child: ResultPage(
+                                  leaderBoard: leaderBoard ?? [],
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        (_) => false,
-                      );
-                    }
-                    if (state.sessionState?.eventType == EventType.roundStart &&
-                        !isStartDialogueVisited) {
-                      if (!isDialogOpened(context)) {
-                        if (state.uid == cubit.state.sessionState?.isDrawing) {
+                            (_) => false,
+                          );
+                        }
+                        if (state.sessionState?.eventType ==
+                                EventType.roundStart &&
+                            !isStartDialogueVisited) {
+                          if (!isDialogOpened(context)) {
+                            if (state.uid ==
+                                cubit.state.sessionState?.isDrawing) {
+                              GameDialog.show(
+                                context,
+                                title: 'Its Your Turn!',
+                                subtitle: 'Word to Draw',
+                                body: state.sessionState?.correctAnswer ??
+                                    'loding word...',
+                              ).then((value) {
+                                isStartDialogueVisited = true;
+                              });
+                            }
+                          }
+                        }
+                        if (state.sessionState!.eventType ==
+                            EventType.roundEnd) {
+                          if (isDialogOpened(context)) {
+                            return;
+                          }
                           GameDialog.show(
                             context,
-                            title: 'Its Your Turn!',
-                            subtitle: 'Word to Draw',
-                            body: state.sessionState?.correctAnswer ??
-                                'loding word...',
+                            title: 'Times Up!',
+                            body: state.sessionState?.correctAnswer ?? '',
+                            subtitle: 'The Answer was',
                           ).then((value) {
-                            isStartDialogueVisited = true;
+                            pointsList.clear();
+                            isStartDialogueVisited = false;
                           });
                         }
-                      }
-                    }
-                    if (state.sessionState!.eventType == EventType.roundEnd) {
-                      if (isDialogOpened(context)) {
-                        return;
-                      }
-                      GameDialog.show(
-                        context,
-                        title: 'Times Up!',
-                        body: state.sessionState?.correctAnswer ?? '',
-                        subtitle: 'The Answer was',
-                      ).then((value) {
-                        pointsList.clear();
-                        isStartDialogueVisited = false;
-                      });
-                    }
-                  },
-                  builder: (context, state) {
-                    return GameWord(
-                      isDrawing:
-                          state.uid == cubit.state.sessionState?.isDrawing,
-                      theWord: state.sessionState?.correctAnswer ??
-                          'loading word...',
-                      hiddenAnswer: state.sessionState?.hiddenAnswer ?? '',
-                    );
-                  },
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Time: ',
-                      style: context.textTheme.bodyLarge?.copyWith(
-                        fontSize: 32,
-                        color: AppColors.pastelPink,
-                        fontFamily: 'PaytoneOne',
-                      ),
+                      },
+                      builder: (context, state) {
+                        return GameWord(
+                          isDrawing:
+                              state.uid == cubit.state.sessionState?.isDrawing,
+                          theWord: state.sessionState?.correctAnswer ??
+                              'loading word...',
+                          hiddenAnswer: state.sessionState?.hiddenAnswer ?? '',
+                        );
+                      },
                     ),
-                    Text(
-                      '${remainingTime ?? 0}',
-                      style: context.textTheme.bodyLarge?.copyWith(
-                        fontSize: 32,
-                        color: AppColors.butterCreamYellow,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          'Time: ',
+                          style: context.textTheme.bodyLarge?.copyWith(
+                            fontSize: 32,
+                            color: AppColors.pastelPink,
+                            fontFamily: 'PaytoneOne',
+                          ),
+                        ),
+                        Text(
+                          '${remainingTime ?? 0}',
+                          style: context.textTheme.bodyLarge?.copyWith(
+                            fontSize: 32,
+                            color: AppColors.butterCreamYellow,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Card(
-              color: AppColors.backgroundBlack,
-              surfaceTintColor: AppColors.white,
-              child: IgnorePointer(
-                ignoring:
-                    cubit.state.uid != cubit.state.sessionState?.isDrawing,
-                child: GestureDetector(
-                  onPanUpdate: (details) => _handlePanUpdate(
-                    context,
-                    details,
-                    cubit,
-                  ),
-                  onPanStart: (details) => _handlePanStart(
-                    context,
-                    details,
-                    cubit,
-                  ),
-                  onPanEnd: (_) => _handlePanEnd(
-                    cubit,
-                  ),
-                  child: BlocBuilder<GameCubit, GameState>(
-                    builder: (context, state) {
-                      final sessionState = state.sessionState;
-                      if (sessionState != null) {
-                        final newDrawingPoint =
-                            sessionState.points.toDrawingPoints();
-                        pointsList.add(newDrawingPoint);
-                      }
-                      return RepaintBoundary(
-                        child: CustomPaint(
-                          size: Size.infinite,
-                          painter: DrawingPainter(pointsList: pointsList),
-                        ),
-                      );
-                    },
+              ),
+              Expanded(
+                child: Card(
+                  color: AppColors.backgroundBlack,
+                  surfaceTintColor: AppColors.white,
+                  child: IgnorePointer(
+                    ignoring:
+                        cubit.state.uid != cubit.state.sessionState?.isDrawing,
+                    child: GestureDetector(
+                      onPanUpdate: (details) => _handlePanUpdate(
+                        context,
+                        details,
+                        cubit,
+                      ),
+                      onPanStart: (details) => _handlePanStart(
+                        context,
+                        details,
+                        cubit,
+                      ),
+                      onPanEnd: (_) => _handlePanEnd(
+                        cubit,
+                      ),
+                      child: BlocBuilder<GameCubit, GameState>(
+                        builder: (context, state) {
+                          final sessionState = state.sessionState;
+                          if (sessionState != null) {
+                            final newDrawingPoint =
+                                sessionState.points.toDrawingPoints();
+                            pointsList.add(newDrawingPoint);
+                          }
+                          return RepaintBoundary(
+                            child: CustomPaint(
+                              size: Size.infinite,
+                              painter: DrawingPainter(pointsList: pointsList),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

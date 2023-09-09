@@ -35,7 +35,7 @@ class LeaderBoardComponent extends StatelessWidget {
               builder: (context, state) {
                 final sessionState = state.sessionState;
                 if (sessionState == null) {
-                  return const SizedBox();
+                  return const SizedBox.expand();
                 }
                 final players = sessionState.players;
                 return ListView.builder(
@@ -99,21 +99,25 @@ class _LeaderboardListItem extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        player.name,
-                        style: context.textTheme.titleLarge?.copyWith(
-                          color: Color(player.userNameColor),
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Text(
+                          player.name,
+                          style: context.textTheme.titleLarge?.copyWith(
+                            color: Color(player.userNameColor),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       SizedBox(height: 10.toResponsiveHeight(context)),
-                      Text(
-                        '${player.score} Points',
-                        style: context.textTheme.titleLarge?.copyWith(
-                          color: AppColors.antiqueIvory.withOpacity(0.3),
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Text(
+                          '${player.score} Points',
+                          style: context.textTheme.titleLarge?.copyWith(
+                            color: AppColors.antiqueIvory.withOpacity(0.3),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
