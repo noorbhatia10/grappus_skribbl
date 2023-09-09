@@ -145,15 +145,16 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     return baseDrawingPoints + bonusPointsPerGuess * numOfCorrectGuesses;
   }
 
-  void _onPlayerDisconnect(
+  Future<void> _onPlayerDisconnect(
     OnPlayerDisconnect event,
     Emitter<SessionState> emit,
-  ) {
+  ) async{
     final map = Map<String, Player>.from(state.players);
     final players = map
       ..removeWhere((key, value) => key == event.player.userId);
     emit(state.copyWith(players: players));
     if (state.players.isEmpty) {
+      await _tickerSub?.cancel();
       emit(const SessionState());
       return;
     }
