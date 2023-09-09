@@ -61,6 +61,7 @@ class GameCubit extends Cubit<GameState> {
 
   @override
   Future<void> close() async {
+    emit(const GameState());
     await _sessionStateSub?.cancel();
     _gameRepository.close();
     return super.close();
