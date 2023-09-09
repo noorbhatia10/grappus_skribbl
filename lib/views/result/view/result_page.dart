@@ -1,6 +1,5 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grappus_skribbl/views/views.dart';
 import 'package:lottie/lottie.dart';
@@ -19,15 +18,16 @@ class ResultPage extends StatefulWidget {
 class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
   final celebrationAnimation = Assets.celebrationAnimtaion;
   late final AnimationController _controller;
+  var visible = true;
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(
-          const Duration(milliseconds: 500),
-        );
+        setState(() {
+          visible = false;
+        });
       }
     });
   }
@@ -42,18 +42,6 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Lottie.asset(
-          celebrationAnimation,
-          repeat: false,
-          controller: _controller,
-          onLoaded: (composition) {
-            // Configure the AnimationController with the duration of the
-            // Lottie file and start the animation.
-            _controller
-              ..duration = composition.duration
-              ..forward();
-          },
-        ),
         BaseBackground(
           child: Center(
             child: Column(
@@ -98,7 +86,6 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
                 const SizedBox(height: 50),
                 SkribblButton(
                   onTap: () {
-                    context.read<GameCubit>().close();
                     Navigator.of(context).pushAndRemoveUntil<Widget>(
                       MaterialPageRoute(
                         builder: (context) => const OnboardingPage(),
@@ -109,6 +96,24 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
                   text: 'Continue',
                 ),
               ],
+            ),
+          ),
+        ),
+        Visibility(
+          visible: visible,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Lottie.asset(
+              celebrationAnimation,
+              repeat: false,
+              controller: _controller,
+              onLoaded: (composition) {
+                // Configure the AnimationController with the duration of the
+                // Lottie file and start the animation.
+                _controller
+                  ..duration = composition.duration
+                  ..forward();
+              },
             ),
           ),
         ),
