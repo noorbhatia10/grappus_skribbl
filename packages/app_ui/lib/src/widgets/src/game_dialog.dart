@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app_ui/app_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GameDialog extends StatefulWidget {
@@ -20,7 +21,8 @@ class GameDialog extends StatefulWidget {
     required String title,
     required String body,
     required String subtitle,
-  }) async{
+  }) async {
+    // ignore: unawaited_futures
     showDialog<void>(
       context: context,
       useRootNavigator: false,

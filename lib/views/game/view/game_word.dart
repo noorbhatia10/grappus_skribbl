@@ -37,12 +37,15 @@ class GameWord extends StatelessWidget {
     }
     return Row(
       children: [
-        Text(
-          'Hint: ',
-          style: context.textTheme.bodyLarge?.copyWith(
-            fontSize: 32,
-            color: AppColors.pastelPink,
-            fontFamily: 'PaytoneOne',
+        Visibility(
+          visible: hiddenAnswer.isNotEmpty,
+          child: Text(
+            'Hint: ',
+            style: context.textTheme.bodyLarge?.copyWith(
+              fontSize: 32,
+              color: AppColors.pastelPink,
+              fontFamily: 'PaytoneOne',
+            ),
           ),
         ),
         Row(
