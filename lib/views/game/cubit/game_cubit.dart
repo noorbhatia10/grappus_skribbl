@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_repository/game_repository.dart';
 import 'package:models/models.dart';
+import 'package:uuid/uuid.dart';
 
 part 'game_state.dart';
 
@@ -23,10 +24,12 @@ class GameCubit extends Cubit<GameState> {
     });
 
     try {
-      final uid = await _gameRepository.getUID();
-      if (uid == null) {
-        throw Exception('Null UID');
-      }
+      // final uid = await _gameRepository.getUID();
+      final uid = const Uuid().v4();
+      // if (uid == null) {
+      //   print('not getting uid');
+      //   throw Exception('Null UID');
+      // }
       emit(state.copyWith(uid: uid));
 
       final player = Player(
