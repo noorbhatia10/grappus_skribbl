@@ -75,6 +75,7 @@ class _ChatComponentState extends State<ChatComponent> {
                             padding:
                                 const EdgeInsets.all(8).responsive(context),
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   '${messages[newIndex].player.name}: ',
@@ -86,18 +87,23 @@ class _ChatComponentState extends State<ChatComponent> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text(
-                                  messages[newIndex].player.hasAnsweredCorrectly
-                                      ? 'Guessed the Answer!'
-                                      : messages[newIndex].message,
-                                  style: context.textTheme.bodyLarge?.copyWith(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: messages[newIndex]
+                                Expanded(
+                                  child: Text(
+                                    messages[newIndex]
                                             .player
                                             .hasAnsweredCorrectly
-                                        ? AppColors.emeraldGreen
-                                        : AppColors.butterCreamYellow,
+                                        ? 'Guessed the Answer!'
+                                        : messages[newIndex].message,
+                                    style:
+                                        context.textTheme.bodyLarge?.copyWith(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: messages[newIndex]
+                                              .player
+                                              .hasAnsweredCorrectly
+                                          ? AppColors.emeraldGreen
+                                          : AppColors.butterCreamYellow,
+                                    ),
                                   ),
                                 ),
                               ],
