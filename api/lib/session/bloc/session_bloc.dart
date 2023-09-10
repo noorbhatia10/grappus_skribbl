@@ -53,7 +53,6 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
         currentPlayerId: null,
       ),
     );
-    print('players uid: ${state.players.values.toList()}');
     if (state.players.length == 2 && state.correctAnswer.isEmpty) {
       add(const OnRoundStarted());
     }

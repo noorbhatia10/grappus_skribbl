@@ -90,37 +90,34 @@ class _LeaderboardListItem extends StatelessWidget {
           SizedBox(width: 5.toResponsiveHeight(context)),
           Expanded(
             child: Container(
-              height: 80.toResponsiveHeight(context),
               decoration: BoxDecoration(
                 color: AppColors.backgroundBlack,
                 borderRadius: BorderRadius.circular(6),
               ),
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.symmetric(horizontal: 12)
+                  .copyWith(top: 15, bottom: 12)
+                  .responsive(context),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Text(
-                          player.name,
-                          style: context.textTheme.titleLarge?.copyWith(
-                            color: Color(player.userNameColor),
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      Text(
+                        player.name,
+                        style: context.textTheme.titleLarge?.copyWith(
+                          color: Color(player.userNameColor),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 10.toResponsiveHeight(context)),
-                      Expanded(
-                        child: Text(
-                          '${player.score} ${l10n.pointsLabel}',
-                          style: context.textTheme.titleLarge?.copyWith(
-                            color: AppColors.antiqueIvory.withOpacity(0.3),
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      Text(
+                        '${player.score} ${l10n.pointsLabel}',
+                        style: context.textTheme.titleLarge?.copyWith(
+                          color: AppColors.antiqueIvory.withOpacity(0.3),
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
