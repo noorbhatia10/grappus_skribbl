@@ -204,4 +204,30 @@ abstract class AppColors {
   static const Color midnightBlue = Color(0xFF100017);
 
   static const Color darkCharcoalGrey = Color(0xFF1D1B20);
+
+  // new colors
+
+  static const Color butterCreamYellow = Color(0xFFF9F4DA);
+
+  static const Color antiqueIvory = Color(0xFFF6F1D7);
+
+  static const Color goldenYellow = Color(0xFFF9B729);
+
+  static const Color pastelPink = Color(0xFFF38BA3);
+
+  static const Color goldenOrange = Color(0xFFFCBA29);
+
+  static const Color ceruleanBlue = Color(0xFF11B5E5);
+
+  static const Color tangerineOrange = Color(0xFFFC7427);
+
+  static const Color lavenderPurple = Color(0xFF7A5EA7);
+
+  static const Color emeraldGreen = Color(0xFF10A95B);
+
+  static const Color charcoalGrey = Color(0xFF1E1E1E);
+
+  static const Color ravenBlack = Color(0xFF231F20);
+
+  static const Color backgroundBlack = Color(0xFF0F0D0E);
 }

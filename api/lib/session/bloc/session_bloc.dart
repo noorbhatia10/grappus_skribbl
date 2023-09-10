@@ -53,6 +53,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
         currentPlayerId: null,
       ),
     );
+    print('players uid: ${state.players.values.toList()}');
     if (state.players.length == 2 && state.correctAnswer.isEmpty) {
       add(const OnRoundStarted());
     }
@@ -144,17 +145,19 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     return baseDrawingPoints + bonusPointsPerGuess * numOfCorrectGuesses;
   }
 
-  void _onPlayerDisconnect(
+  Future<void> _onPlayerDisconnect(
     OnPlayerDisconnect event,
     Emitter<SessionState> emit,
-  ) {
-    final map = state.players;
-    if (state.players.isEmpty) {
-      return;
-    }
+  ) async {
+    final map = Map<String, Player>.from(state.players);
     final players = map
       ..removeWhere((key, value) => key == event.player.userId);
     emit(state.copyWith(players: players));
+    if (state.players.isEmpty) {
+      await _tickerSub?.cancel();
+      emit(const SessionState());
+      return;
+    }
     if (event.player.userId == state.isDrawing) {
       add(const OnRoundEnded());
     }
@@ -291,7 +294,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     }
 
     await Future.delayed(
-      const Duration(seconds: 5),
+      const Duration(seconds: 3),
       () => add(const OnRoundStarted()),
     );
   }
@@ -311,9 +314,12 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
   }
 
   void _onGameEnded(OnGameEnded event, Emitter<SessionState> emit) {
+    final leaderboard = state.players.values.toList()
+      ..sort((a, b) => b.score.compareTo(a.score));
     emit(
       state.copyWith(
         eventType: EventType.gameEnd,
+        leaderboard: leaderboard.take(3).toList(),
       ),
     );
   }

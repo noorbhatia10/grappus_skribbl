@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:api/session/bloc/session_bloc.dart';
-import 'package:app_ui/app_ui.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_repository/game_repository.dart';
@@ -18,21 +17,27 @@ class GameCubit extends Cubit<GameState> {
   final GameRepository _gameRepository;
   StreamSubscription<SessionState?>? _sessionStateSub;
 
-  Future<void> connect(String name) async {
+  Future<void> connect(String name, String imagePath, int userNameColor) async {
     _sessionStateSub = _gameRepository.session.listen((sessionState) {
       emit(state.copyWith(sessionState: sessionState));
     });
 
-    final imagePath = Assets().getRandomImage();
-
     try {
       final uid = await _gameRepository.getUID();
+
       if (uid == null) {
         throw Exception('Null UID');
       }
+
       emit(state.copyWith(uid: uid));
 
-      final player = Player(userId: uid, name: name, imagePath: imagePath);
+      final player = Player(
+        userId: uid,
+        name: name,
+        imagePath: imagePath,
+        userNameColor: userNameColor,
+      );
+
       await addPlayer(player);
     } on Exception catch (e) {
       emit(GameErrorState(message: e.toString()));

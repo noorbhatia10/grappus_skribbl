@@ -1,6 +1,7 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grappus_skribbl/l10n/l10n.dart';
 import 'package:grappus_skribbl/views/game/cubit/game_cubit.dart';
 import 'package:models/models.dart';
 
@@ -26,110 +27,117 @@ class _ChatComponentState extends State<ChatComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SizedBox(
-            width: 300.toResponsiveWidth(context),
-            child: Card(
-              color: AppColors.lightPurple,
-              surfaceTintColor: AppColors.lightPurple,
-              elevation: 10,
-              child: BlocBuilder<GameCubit, GameState>(
-                bloc: context.read<GameCubit>(),
-                builder: (context, state) {
-                  final sessionState = state.sessionState;
-                  if (sessionState == null) {
-                    return const SizedBox();
-                  }
-                  final messages = sessionState.messages;
-                  return ListView.builder(
-                    reverse: true,
-                    controller: _scrollController,
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      final newIndex = messages.length - index - 1;
-
-                      final isMessageCorrectAnswer =
-                          messages[newIndex].message ==
-                                  sessionState.correctAnswer ||
-                              messages[newIndex].player.hasAnsweredCorrectly;
-
-                      final currentPlayer =
-                          state.sessionState!.players[state.uid];
-
-                      return isMessageCorrectAnswer &&
-                              (!currentPlayer!.hasAnsweredCorrectly)
-                          ? const SizedBox()
-                          : Container(
-                              padding:
-                                  const EdgeInsets.all(8).responsive(context),
-                              color:
-                                  messages[newIndex].player.hasAnsweredCorrectly
-                                      ? Colors.green
-                                      : AppColors.lightPurple,
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    messages[newIndex].player.imagePath,
-                                    width: 45.toResponsiveWidth(context),
-                                    height: 45.toResponsiveHeight(context),
-                                  ),
-                                  SizedBox(width: 5.toResponsiveWidth(context)),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        messages[newIndex].player.name,
-                                        style: context.textTheme.bodyLarge
-                                            ?.copyWith(
-                                          color: AppColors.midnightBlue,
-                                        ),
-                                      ),
-                                      Text(
-                                        messages[newIndex]
-                                                .player
-                                                .hasAnsweredCorrectly
-                                            ? '${messages[newIndex].player.name} has guessed the correct word'
-                                            : messages[newIndex].message,
-                                        style: context.textTheme.bodySmall
-                                            ?.copyWith(
-                                          color: AppColors.midnightBlue,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                    },
-                  );
-                },
-              ),
+    final l10n = context.l10n;
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        color: AppColors.ravenBlack,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.answersLabel,
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: AppColors.pastelPink,
+              fontFamily: paytoneOne,
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-        SizedBox(
-          height: 5.toResponsiveHeight(context),
-        ),
-        SizedBox(
-          width: 300.toResponsiveWidth(context),
-          height: 48.toResponsiveHeight(context),
-          child: Card(
-            color: AppColors.lightPurple,
-            surfaceTintColor: AppColors.lightPurple,
-            elevation: 10,
+          SizedBox(height: 14.toResponsiveHeight(context)),
+          Expanded(
+            child: BlocBuilder<GameCubit, GameState>(
+              bloc: context.read<GameCubit>(),
+              builder: (context, state) {
+                final sessionState = state.sessionState;
+                if (sessionState == null) {
+                  return const SizedBox();
+                }
+                final messages = sessionState.messages;
+                return ListView.builder(
+                  reverse: true,
+                  controller: _scrollController,
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final newIndex = messages.length - index - 1;
+
+                    final isMessageCorrectAnswer = messages[newIndex].message ==
+                            sessionState.correctAnswer ||
+                        messages[newIndex].player.hasAnsweredCorrectly;
+
+                    final currentPlayer =
+                        state.sessionState!.players[state.uid];
+
+                    return isMessageCorrectAnswer &&
+                            (!currentPlayer!.hasAnsweredCorrectly)
+                        ? const SizedBox()
+                        : Container(
+                            padding:
+                                const EdgeInsets.all(8).responsive(context),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${messages[newIndex].player.name}: ',
+                                  style: context.textTheme.bodyLarge?.copyWith(
+                                    color: Color(
+                                      messages[index].player.userNameColor,
+                                    ),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    messages[newIndex]
+                                            .player
+                                            .hasAnsweredCorrectly
+                                        ? l10n.guessedTheAnswerLabel
+                                        : messages[newIndex].message,
+                                    style:
+                                        context.textTheme.bodyLarge?.copyWith(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: messages[newIndex]
+                                              .player
+                                              .hasAnsweredCorrectly
+                                          ? AppColors.emeraldGreen
+                                          : AppColors.butterCreamYellow,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                  },
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 10.toResponsiveHeight(context)),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.backgroundBlack,
+              borderRadius: BorderRadius.circular(6),
+            ),
             child: TextField(
               style: context.textTheme.bodyLarge?.copyWith(
-                color: AppColors.darkCharcoalGrey,
+                color: AppColors.butterCreamYellow,
               ),
               focusNode: _focusNode,
               controller: _chatController,
               decoration: InputDecoration(
-                hintText: 'Enter your guess...',
+                hintText: l10n.answerHereLabel,
                 filled: false,
+                hintStyle: context.textTheme.bodyLarge?.copyWith(
+                  color: AppColors.butterCreamYellow.withOpacity(0.3),
+                ),
                 suffixText: '${_chatController.value.text.length}',
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
               ),
               onChanged: (value) => setState(() {}),
               onSubmitted: (value) {
@@ -138,14 +146,15 @@ class _ChatComponentState extends State<ChatComponent> {
                 if (gameState.sessionState == null) {
                   throw Exception('null session');
                 }
-                final players2 = gameState.sessionState!.players;
+                final newPlayer = gameState.sessionState!.players;
                 context.read<GameCubit>().addChats(
                       ChatModel(
-                        player: players2[gameState.uid] ??
+                        player: newPlayer[gameState.uid] ??
                             Player(
                               name: 'err',
                               userId: 'err',
                               imagePath: 'err',
+                              userNameColor: Colors.black.value,
                             ),
                         message: _chatController.text,
                       ),
@@ -155,8 +164,8 @@ class _ChatComponentState extends State<ChatComponent> {
               },
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

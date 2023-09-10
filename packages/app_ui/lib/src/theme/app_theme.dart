@@ -1,4 +1,5 @@
 import 'package:app_ui/app_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -33,11 +34,15 @@ class AppTheme {
       tabBarTheme: _tabBarTheme,
       bottomNavigationBarTheme: _bottomAppBarTheme,
       chipTheme: _chipTheme,
+      typography: Typography.material2021(
+        platform: defaultTargetPlatform,
+        colorScheme: _colorScheme,
+      ),
     );
   }
 
   ColorScheme get _colorScheme {
-    return ColorScheme.light(
+    return ColorScheme.dark(
       secondary: AppColors.secondary2,
       background: _backgroundColor,
     );
@@ -115,10 +120,10 @@ class AppTheme {
 
   /// The UI text theme based on [UITextStyle].
   static final uiTextTheme = TextTheme(
-    displayLarge: UITextStyle.headline1,
+    displayLarge: UITextStyle.displayLarge,
     displayMedium: UITextStyle.headline2,
     displaySmall: UITextStyle.headline3,
-    headlineMedium: UITextStyle.headline4,
+    headlineMedium: UITextStyle.headlineMedium,
     headlineSmall: UITextStyle.headline5,
     titleLarge: UITextStyle.headline6,
     titleMedium: UITextStyle.subtitle1,
@@ -128,10 +133,6 @@ class AppTheme {
     labelLarge: UITextStyle.button,
     bodySmall: UITextStyle.caption,
     labelSmall: UITextStyle.overline,
-  ).apply(
-    bodyColor: AppColors.black,
-    displayColor: AppColors.black,
-    decorationColor: AppColors.black,
   );
 
   InputDecorationTheme get _inputDecorationTheme {

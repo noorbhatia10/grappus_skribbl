@@ -8,8 +8,6 @@ environment:
 
 
 dependencies:
-  flutter:
-    sdk: flutter
   models:
     path: ../models
 

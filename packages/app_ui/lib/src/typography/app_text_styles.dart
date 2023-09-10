@@ -9,25 +9,28 @@ import 'package:flutter/material.dart';
 ///
 /// The default app's [TextTheme] is [AppTheme.uiTextTheme].
 ///
-/// Use [ContentThemeOverrideBuilder] to override the default [TextTheme]
+/// Use `ContentThemeOverrideBuilder` to override the default [TextTheme]
 /// to [AppTheme.contentTextTheme].
+
+const String paytoneOne = 'PaytoneOne';
+const String outFit = 'Outfit';
 
 /// UI Text Style Definitions
 abstract class UITextStyle {
   static const _baseTextStyle = TextStyle(
     package: 'app_ui',
     fontWeight: AppFontWeight.regular,
-    fontFamily: 'OpenSans',
+    fontFamily: outFit,
     decoration: TextDecoration.none,
     textBaseline: TextBaseline.alphabetic,
   );
 
   /// Display 2 Text Style
-  static final TextStyle display2 = _baseTextStyle.copyWith(
-    fontSize: 57,
-    fontWeight: AppFontWeight.bold,
-    height: 1.12,
-    letterSpacing: -0.25,
+  static final TextStyle displayLarge = _baseTextStyle.copyWith(
+    fontSize: 64,
+    fontWeight: AppFontWeight.regular,
+    letterSpacing: -1,
+    height: 1,
   );
 
   /// Display 3 Text Style
@@ -59,7 +62,7 @@ abstract class UITextStyle {
   );
 
   /// Headline 4 Text Style
-  static final TextStyle headline4 = _baseTextStyle.copyWith(
+  static final TextStyle headlineMedium = _baseTextStyle.copyWith(
     fontSize: 24,
     fontWeight: AppFontWeight.semiBold,
     height: 1.33,
@@ -141,7 +144,7 @@ abstract class ContentTextStyle {
   static const _baseTextStyle = TextStyle(
     package: 'app_ui',
     fontWeight: AppFontWeight.regular,
-    fontFamily: 'OpenSans',
+    fontFamily: outFit,
     decoration: TextDecoration.none,
     textBaseline: TextBaseline.alphabetic,
   );
@@ -241,7 +244,7 @@ abstract class ContentTextStyle {
 
   /// Button Text Style
   static final TextStyle button = _baseTextStyle.copyWith(
-    fontFamily: 'OpenSans',
+    fontFamily: outFit,
     fontSize: 14,
     fontWeight: AppFontWeight.medium,
     height: 1.42,
@@ -250,7 +253,7 @@ abstract class ContentTextStyle {
 
   /// Caption Text Style
   static final TextStyle caption = _baseTextStyle.copyWith(
-    fontFamily: 'OpenSans',
+    fontFamily: outFit,
     fontSize: 12,
     height: 1.33,
     letterSpacing: 0.4,
@@ -258,7 +261,7 @@ abstract class ContentTextStyle {
 
   /// Overline Text Style
   static final TextStyle overline = _baseTextStyle.copyWith(
-    fontFamily: 'OpenSans',
+    fontFamily: outFit,
     fontWeight: AppFontWeight.semiBold,
     fontSize: 12,
     height: 1.33,
@@ -267,7 +270,7 @@ abstract class ContentTextStyle {
 
   /// Label Small Text Style
   static final TextStyle labelSmall = _baseTextStyle.copyWith(
-    fontFamily: 'OpenSans',
+    fontFamily: outFit,
     fontSize: 11,
     height: 1.45,
     letterSpacing: 0.5,
@@ -277,6 +280,29 @@ abstract class ContentTextStyle {
 ///
 extension FontFamily on TextStyle {
   TextStyle get modernAntiqua {
-    return copyWith(fontFamily: 'OpenSans');
+    return copyWith(fontFamily: outFit);
   }
+}
+
+extension TextOpacityX on TextStyle? {
+  TextStyle? withOpacity(double value) =>
+      this?.copyWith(color: this?.color?.withOpacity(value));
+}
+
+extension TextColorX on TextStyle {
+  TextStyle? withColor(Color color) => copyWith(color: color);
+}
+
+extension TextThemeX on TextTheme {
+  TextStyle get headlineDialog => const TextStyle(
+        package: 'app_ui',
+        fontWeight: AppFontWeight.regular,
+        fontFamily: 'PaytoneOne',
+        decoration: TextDecoration.none,
+        textBaseline: TextBaseline.alphabetic,
+        letterSpacing: -1,
+        fontSize: 40,
+        height: .9,
+        color: AppColors.pastelPink,
+      );
 }

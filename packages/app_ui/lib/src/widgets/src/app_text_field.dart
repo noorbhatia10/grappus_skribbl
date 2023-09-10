@@ -156,7 +156,7 @@ class CurvedTextField extends StatelessWidget {
 
   final TextEditingController? controller;
   final EdgeInsets? margin;
-  final Function(String value)? onSubmitted;
+  final ValueSetter<String>? onSubmitted;
   final String? labelText;
   final TextStyle? labelTextStyle;
   final TextStyle? hintTextStyle;

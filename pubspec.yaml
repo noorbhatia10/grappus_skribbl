@@ -22,11 +22,13 @@ dependencies:
   game_repository:
     path: packages/game_repository
   intl: ^0.18.0
+  lottie: ^2.6.0
   models:
     path: api/packages/models
   player_repository:
     path: api/packages/player_repository
   uuid: ^3.0.7
+
 
 dev_dependencies:
   bloc_test: ^9.1.2

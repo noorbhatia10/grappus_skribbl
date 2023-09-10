@@ -1,5 +1,6 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:grappus_skribbl/l10n/l10n.dart';
 
 class GameWord extends StatelessWidget {
   const GameWord({
@@ -14,16 +15,41 @@ class GameWord extends StatelessWidget {
   final String hiddenAnswer;
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     if (isDrawing) {
-      return Text(
-        theWord,
-        style: context.textTheme.headlineMedium?.copyWith(
-          color: AppColors.indigo,
-        ),
+      return Row(
+        children: [
+          Text(
+            l10n.wordLabel,
+            style: context.textTheme.bodyLarge?.copyWith(
+              fontSize: 32,
+              color: AppColors.pastelPink,
+              fontFamily: paytoneOne,
+            ),
+          ),
+          Text(
+            theWord,
+            style: context.textTheme.bodyLarge?.copyWith(
+              fontSize: 32,
+              color: AppColors.butterCreamYellow,
+            ),
+          ),
+        ],
       );
     }
     return Row(
       children: [
+        Visibility(
+          visible: hiddenAnswer.isNotEmpty,
+          child: Text(
+            l10n.hintLabel,
+            style: context.textTheme.bodyLarge?.copyWith(
+              fontSize: 32,
+              color: AppColors.pastelPink,
+              fontFamily: paytoneOne,
+            ),
+          ),
+        ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(
@@ -35,19 +61,28 @@ class GameWord extends StatelessWidget {
               decoration: const BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: AppColors.highEmphasisSurface,
+                    color: AppColors.butterCreamYellow,
                   ),
                 ),
               ),
               child: Text(
                 hiddenAnswer.split('').toList()[index],
-                style: context.textTheme.titleLarge,
+                style: context.textTheme.bodyLarge?.copyWith(
+                  fontSize: 32,
+                  color: AppColors.butterCreamYellow,
+                ),
               ),
             ),
           ),
         ),
         SizedBox(width: 10.toResponsiveWidth(context)),
-        Text('${theWord.length}'),
+        Text(
+          theWord.isEmpty ? '' : '${theWord.length}',
+          style: context.textTheme.bodyLarge?.copyWith(
+            fontSize: 32,
+            color: AppColors.butterCreamYellow,
+          ),
+        ),
       ],
     );
   }

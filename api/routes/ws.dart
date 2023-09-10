@@ -10,7 +10,12 @@ import 'package:models/models.dart';
 Future<Response> onRequest(RequestContext context) async {
   final handler = webSocketHandler((channel, protocol) {
     final sessionBloc = context.read<SessionBloc>()..subscribe(channel);
-    var player = Player(userId: '', name: '', imagePath: '');
+    var player = Player(
+      userId: '',
+      name: '',
+      imagePath: '',
+      userNameColor: 0xff000000,
+    );
     channel.stream.listen(
       (data) {
         try {

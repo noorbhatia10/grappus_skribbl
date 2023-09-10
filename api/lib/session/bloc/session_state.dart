@@ -5,7 +5,7 @@ class SessionState extends Equatable {
     this.currentPlayerId,
     this.players = const {},
     this.points = const DrawingPointsWrapper(points: null, paint: null),
-    this.eventType = EventType.invalid,
+    this.eventType = EventType.initial,
     this.messages = const [],
     this.correctAnswer = '',
     this.remainingTime = roundDuration,
@@ -13,6 +13,7 @@ class SessionState extends Equatable {
     this.round = 1,
     this.isDrawing = '',
     this.hiddenAnswer = '',
+    this.leaderboard = const [],
   });
 
   factory SessionState.fromJson(Map<String, dynamic> json) => SessionState(
@@ -37,6 +38,11 @@ class SessionState extends Equatable {
             (x) => ChatModel.fromMap(x as Map<String, dynamic>),
           ),
         ),
+        leaderboard: List<Player>.from(
+          (json['leaderboard'] as List<dynamic>).map<Player>(
+            (x) => Player.fromMap(x as Map<String, dynamic>),
+          ),
+        ),
       );
   static const roundDuration = 60;
 
@@ -51,6 +57,7 @@ class SessionState extends Equatable {
   final String hiddenAnswer;
   final int round;
   final String isDrawing;
+  final List<Player> leaderboard;
 
   SessionState copyWith({
     String? currentPlayerId,
@@ -64,6 +71,7 @@ class SessionState extends Equatable {
     String? hiddenAnswer,
     int? round,
     String? isDrawing,
+    List<Player>? leaderboard,
   }) {
     return SessionState(
       currentPlayerId: currentPlayerId ?? this.currentPlayerId,
@@ -77,6 +85,7 @@ class SessionState extends Equatable {
       hiddenAnswer: hiddenAnswer ?? this.hiddenAnswer,
       round: round ?? this.round,
       isDrawing: isDrawing ?? this.isDrawing,
+      leaderboard: leaderboard ?? this.leaderboard,
     );
   }
 
@@ -93,6 +102,7 @@ class SessionState extends Equatable {
       numOfCorrectGuesses,
       hiddenAnswer,
       round,
+      leaderboard,
       isDrawing,
     ];
   }
@@ -109,6 +119,7 @@ class SessionState extends Equatable {
         'round': round,
         'isDrawing': isDrawing,
         'hiddenAnswer': hiddenAnswer,
+        'leaderboard': leaderboard.map((players) => players.toMap()).toList(),
       };
 
   @override
