@@ -1,6 +1,7 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:grappus_skribbl/l10n/l10n.dart';
 import 'package:grappus_skribbl/views/views.dart';
 import 'package:lottie/lottie.dart';
 import 'package:models/models.dart';
@@ -18,16 +19,14 @@ class ResultPage extends StatefulWidget {
 class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
   final celebrationAnimation = Assets.celebrationAnimtaion;
   late final AnimationController _controller;
-  var visible = true;
+  final ValueNotifier<bool> visibleNotifier = ValueNotifier<bool>(true);
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        setState(() {
-          visible = false;
-        });
+        visibleNotifier.value = false;
       }
     });
   }
@@ -40,6 +39,7 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Stack(
       children: [
         BaseBackground(
@@ -48,7 +48,7 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Game Results',
+                  l10n.gameResultsTitle,
                   style: context.textTheme.bodyLarge?.copyWith(
                     fontFamily: paytoneOne,
                     color: AppColors.pastelPink,
@@ -57,7 +57,7 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'The winners are',
+                  l10n.theWinnersAreLabel,
                   style: context.textTheme.bodyLarge?.copyWith(
                     color: AppColors.white.withOpacity(0.7),
                     fontSize: 24,
@@ -86,29 +86,32 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
                 const SizedBox(height: 50),
                 SkribblButton(
                   onTap: () => context.pushReplacement(const OnboardingPage()),
-                  text: 'Continue',
+                  text: l10n.continueLabel,
                 ),
               ],
             ),
           ),
         ),
-        Visibility(
-          visible: visible,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Lottie.asset(
-              celebrationAnimation,
-              repeat: false,
-              controller: _controller,
-              onLoaded: (composition) {
-                // Configure the AnimationController with the duration of the
-                // Lottie file and start the animation.
-                _controller
-                  ..duration = composition.duration
-                  ..forward();
-              },
-            ),
-          ),
+        ValueListenableBuilder<bool>(
+          valueListenable: visibleNotifier,
+          builder: (context, isVisible, child) {
+            return Visibility(
+              visible: isVisible,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Lottie.asset(
+                  celebrationAnimation,
+                  repeat: false,
+                  controller: _controller,
+                  onLoaded: (composition) {
+                    _controller
+                      ..duration = composition.duration
+                      ..forward();
+                  },
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -132,6 +135,7 @@ class _ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 40),
       child: Stack(
@@ -167,7 +171,7 @@ class _ResultCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  '${player.score} Points',
+                  '${player.score} ${l10n.pointsLabel}',
                   style: context.textTheme.bodyLarge?.copyWith(
                     color: AppColors.white.withOpacity(0.3),
                     fontSize: 23,

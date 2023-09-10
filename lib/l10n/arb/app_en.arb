@@ -17,5 +17,8 @@
     "timeLabel": "Time: ",
     "leaderboardLabel": "Leaderboard",
     "pointsLabel": "Points",
-    "answersLabel": "Answers"
+    "answersLabel": "Answers",
+    "gameResultsTitle": "Game Results",
+    "theWinnersAreLabel": "The winners are",
+    "continueLabel": "Continue"
 }
