@@ -24,7 +24,7 @@ class LeaderBoardComponent extends StatelessWidget {
             'Leaderboard',
             style: context.textTheme.bodyMedium?.copyWith(
               color: AppColors.pastelPink,
-              fontFamily: 'PaytoneOne',
+              fontFamily: paytoneOne,
               fontSize: 32,
               fontWeight: FontWeight.bold,
             ),

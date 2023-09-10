@@ -52,7 +52,7 @@ class _RDLoginPageState extends State<RDLoginPage> {
                 style: context.textTheme.bodyLarge?.copyWith(
                   fontSize: 40,
                   color: AppColors.pastelPink,
-                  fontFamily: 'PaytoneOne',
+                  fontFamily: paytoneOne,
                 ),
               ),
               const SizedBox(height: 20),

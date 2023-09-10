@@ -114,7 +114,7 @@ class _DrawingComponentState extends State<DrawingComponent> {
                           style: context.textTheme.bodyLarge?.copyWith(
                             fontSize: 32,
                             color: AppColors.pastelPink,
-                            fontFamily: 'PaytoneOne',
+                            fontFamily: paytoneOne,
                           ),
                         ),
                         Text(

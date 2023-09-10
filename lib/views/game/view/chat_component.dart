@@ -39,7 +39,7 @@ class _ChatComponentState extends State<ChatComponent> {
             'Answers',
             style: context.textTheme.bodyMedium?.copyWith(
               color: AppColors.pastelPink,
-              fontFamily: 'PaytoneOne',
+              fontFamily: paytoneOne,
               fontSize: 32,
               fontWeight: FontWeight.bold,
             ),

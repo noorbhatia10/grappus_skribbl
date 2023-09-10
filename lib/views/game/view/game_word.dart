@@ -22,7 +22,7 @@ class GameWord extends StatelessWidget {
             style: context.textTheme.bodyLarge?.copyWith(
               fontSize: 32,
               color: AppColors.pastelPink,
-              fontFamily: 'PaytoneOne',
+              fontFamily: paytoneOne,
             ),
           ),
           Text(
@@ -44,7 +44,7 @@ class GameWord extends StatelessWidget {
             style: context.textTheme.bodyLarge?.copyWith(
               fontSize: 32,
               color: AppColors.pastelPink,
-              fontFamily: 'PaytoneOne',
+              fontFamily: paytoneOne,
             ),
           ),
         ),
