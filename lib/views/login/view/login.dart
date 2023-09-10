@@ -1,19 +1,18 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:grappus_skribbl/utils/app_utils.dart';
 import 'package:grappus_skribbl/views/views.dart';
 import 'package:services/services.dart';
 
-class RDLoginPage extends StatefulWidget {
-  const RDLoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
   static const String routeName = '/rd-login';
 
   @override
-  State<RDLoginPage> createState() => _RDLoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RDLoginPageState extends State<RDLoginPage> {
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _nameController = TextEditingController();
 
   final FocusNode _focusNode = FocusNode();
@@ -144,8 +143,7 @@ class _RDLoginPageState extends State<RDLoginPage> {
                   if (_nameController.value.text.trim().isEmpty) {
                     context.showSnackBar(message: 'Enter Name');
                   } else {
-                    navigateTo(
-                      context,
+                    context.pushNamedReplacement(
                       GameMainPage(
                         url: Endpoints.webSocketUrl,
                         name: _nameController.value.text,

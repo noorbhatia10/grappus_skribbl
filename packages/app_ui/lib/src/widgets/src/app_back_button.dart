@@ -1,3 +1,4 @@
+import 'package:app_ui/src/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
 /// {@template app_back_button}
@@ -21,7 +22,7 @@ class AppBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () => Navigator.of(context).pop(),
+      onPressed: () => context.pop(),
       icon: const Icon(Icons.chevron_left),
     );
   }

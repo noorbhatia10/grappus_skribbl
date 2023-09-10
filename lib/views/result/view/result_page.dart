@@ -85,14 +85,7 @@ class _ResultPageState extends State<ResultPage> with TickerProviderStateMixin {
                 ),
                 const SizedBox(height: 50),
                 SkribblButton(
-                  onTap: () {
-                    Navigator.of(context).pushAndRemoveUntil<Widget>(
-                      MaterialPageRoute(
-                        builder: (context) => const OnboardingPage(),
-                      ),
-                      (_) => false,
-                    );
-                  },
+                  onTap: () => context.pushReplacement(const OnboardingPage()),
                   text: 'Continue',
                 ),
               ],

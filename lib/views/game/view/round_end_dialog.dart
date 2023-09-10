@@ -62,7 +62,7 @@ class _RoundEndDialogState extends State<RoundEndDialog> {
         if (remainingSeconds == 0 &&
             state.sessionState!.eventType == EventType.roundStart) {
           _tickerSub.cancel();
-          Navigator.of(context).pop();
+          context.pop();
         }
       },
     );

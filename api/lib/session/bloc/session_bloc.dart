@@ -148,7 +148,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
   Future<void> _onPlayerDisconnect(
     OnPlayerDisconnect event,
     Emitter<SessionState> emit,
-  ) async{
+  ) async {
     final map = Map<String, Player>.from(state.players);
     final players = map
       ..removeWhere((key, value) => key == event.player.userId);
@@ -316,11 +316,10 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
   void _onGameEnded(OnGameEnded event, Emitter<SessionState> emit) {
     final leaderboard = state.players.values.toList()
       ..sort((a, b) => b.score.compareTo(a.score));
-    final newLeaderBoard = leaderboard.take(3);
     emit(
       state.copyWith(
         eventType: EventType.gameEnd,
-        leaderboard: newLeaderBoard.toList(),
+        leaderboard: leaderboard.take(3).toList(),
       ),
     );
   }
