@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
+
 class Endpoints {
   static const bool shouldLocalHost = true;
 
   static String get baseUrl =>
-      shouldLocalHost ? localhostBaseUrl : serverHostUrl;
+      kDebugMode ? localhostBaseUrl : serverHostUrl;
 
   static String get webSocketUrl =>
-      shouldLocalHost ? localhostWebStockUrl : serverWebscoketUrl;
+      kDebugMode ? localhostWebStockUrl : serverWebscoketUrl;
 
   static String localhostBaseUrl = 'http://localhost:8080';
   static String serverHostUrl =
