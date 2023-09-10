@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grappus_skribbl/l10n/l10n.dart';
 import 'package:grappus_skribbl/views/game/cubit/game_cubit.dart';
 import 'package:grappus_skribbl/views/game/view/game_word.dart';
 import 'package:grappus_skribbl/views/result/view/result_page.dart';
@@ -27,6 +28,7 @@ class _DrawingComponentState extends State<DrawingComponent> {
     final cubit = context.read<GameCubit>();
     final remainingTime =
         context.watch<GameCubit>().state.sessionState?.remainingTime;
+    final l10n = context.l10n;
     return Stack(
       children: [
         Container(
@@ -65,10 +67,10 @@ class _DrawingComponentState extends State<DrawingComponent> {
                                 cubit.state.sessionState?.isDrawing) {
                               GameDialog.show(
                                 context,
-                                title: 'Its Your Turn!',
-                                subtitle: 'Word to Draw',
+                                title: l10n.itsYourTurnLabel,
+                                subtitle: l10n.wordToDrawLabel,
                                 body: state.sessionState?.correctAnswer ??
-                                    'loding word...',
+                                    l10n.wordLoadingLabel,
                               ).then((value) {
                                 isStartDialogueVisited = true;
                               });
@@ -82,9 +84,10 @@ class _DrawingComponentState extends State<DrawingComponent> {
                           }
                           GameDialog.show(
                             context,
-                            title: 'Times Up!',
-                            body: state.sessionState?.correctAnswer ?? '',
-                            subtitle: 'The Answer was',
+                            title: l10n.timesUpLabel,
+                            body: state.sessionState?.correctAnswer ??
+                                l10n.wordLoadingLabel,
+                            subtitle: l10n.theAnswerWasLabel,
                           ).then((value) {
                             pointsList.clear();
                             isStartDialogueVisited = false;
@@ -96,7 +99,7 @@ class _DrawingComponentState extends State<DrawingComponent> {
                           isDrawing:
                               state.uid == cubit.state.sessionState?.isDrawing,
                           theWord: state.sessionState?.correctAnswer ??
-                              'loading word...',
+                              l10n.wordLoadingLabel,
                           hiddenAnswer: state.sessionState?.hiddenAnswer ?? '',
                         );
                       },
@@ -104,7 +107,7 @@ class _DrawingComponentState extends State<DrawingComponent> {
                     Row(
                       children: [
                         Text(
-                          'Time: ',
+                          l10n.timeLabel,
                           style: context.textTheme.bodyLarge?.copyWith(
                             fontSize: 32,
                             color: AppColors.pastelPink,

@@ -2,6 +2,7 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:grappus_skribbl/l10n/l10n.dart';
 import 'package:grappus_skribbl/views/game/cubit/game_cubit.dart';
 import 'package:models/models.dart';
 
@@ -10,6 +11,7 @@ class LeaderBoardComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Container(
       padding: const EdgeInsets.all(20).copyWith(bottom: 0),
       margin: const EdgeInsets.only(bottom: 30),
@@ -21,7 +23,7 @@ class LeaderBoardComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Leaderboard',
+            l10n.leaderboardLabel,
             style: context.textTheme.bodyMedium?.copyWith(
               color: AppColors.pastelPink,
               fontFamily: paytoneOne,
@@ -65,6 +67,7 @@ class _LeaderboardListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.only(right: 8, bottom: 8).responsive(context),
       child: Row(
@@ -112,7 +115,7 @@ class _LeaderboardListItem extends StatelessWidget {
                       SizedBox(height: 10.toResponsiveHeight(context)),
                       Expanded(
                         child: Text(
-                          '${player.score} Points',
+                          '${player.score} ${l10n.pointsLabel}',
                           style: context.textTheme.titleLarge?.copyWith(
                             color: AppColors.antiqueIvory.withOpacity(0.3),
                             fontSize: 14,

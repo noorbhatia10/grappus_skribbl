@@ -1,6 +1,7 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grappus_skribbl/l10n/l10n.dart';
 import 'package:grappus_skribbl/views/game/cubit/game_cubit.dart';
 import 'package:models/models.dart';
 
@@ -26,6 +27,7 @@ class _ChatComponentState extends State<ChatComponent> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -36,7 +38,7 @@ class _ChatComponentState extends State<ChatComponent> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Answers',
+            l10n.answersLabel,
             style: context.textTheme.bodyMedium?.copyWith(
               color: AppColors.pastelPink,
               fontFamily: paytoneOne,
@@ -92,7 +94,7 @@ class _ChatComponentState extends State<ChatComponent> {
                                     messages[newIndex]
                                             .player
                                             .hasAnsweredCorrectly
-                                        ? 'Guessed the Answer!'
+                                        ? l10n.guessedTheAnswerLabel
                                         : messages[newIndex].message,
                                     style:
                                         context.textTheme.bodyLarge?.copyWith(
@@ -127,7 +129,7 @@ class _ChatComponentState extends State<ChatComponent> {
               focusNode: _focusNode,
               controller: _chatController,
               decoration: InputDecoration(
-                hintText: 'Answer here',
+                hintText: l10n.answerHereLabel,
                 filled: false,
                 hintStyle: context.textTheme.bodyLarge?.copyWith(
                   color: AppColors.butterCreamYellow.withOpacity(0.3),

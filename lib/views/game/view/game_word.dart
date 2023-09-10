@@ -1,5 +1,6 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:grappus_skribbl/l10n/l10n.dart';
 
 class GameWord extends StatelessWidget {
   const GameWord({
@@ -14,11 +15,12 @@ class GameWord extends StatelessWidget {
   final String hiddenAnswer;
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     if (isDrawing) {
       return Row(
         children: [
           Text(
-            'Word: ',
+            l10n.wordLabel,
             style: context.textTheme.bodyLarge?.copyWith(
               fontSize: 32,
               color: AppColors.pastelPink,
@@ -40,7 +42,7 @@ class GameWord extends StatelessWidget {
         Visibility(
           visible: hiddenAnswer.isNotEmpty,
           child: Text(
-            'Hint: ',
+            l10n.hintLabel,
             style: context.textTheme.bodyLarge?.copyWith(
               fontSize: 32,
               color: AppColors.pastelPink,

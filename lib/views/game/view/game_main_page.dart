@@ -2,6 +2,7 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_repository/game_repository.dart';
+import 'package:grappus_skribbl/l10n/l10n.dart';
 import 'package:grappus_skribbl/views/views.dart';
 
 class GameMainPage extends StatelessWidget {
@@ -49,10 +50,11 @@ class _GameMainPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BaseBackground(
       child: Column(
         children: [
-          const ToolBar(),
+          ToolBar(toolBarTitle: l10n.graptoonsTitle),
           Expanded(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 60)
