@@ -7,8 +7,13 @@ class GameService {
       responseType: ResponseType.json,
       headers: {Headers.contentTypeHeader: 'application/json'}));
 
-  Future<Response> connect() async {
-    var future = await _dioClient.get('/connect');
+  Future<Response> connect({
+    required String name,
+    required String image,
+    required int color,
+  }) async {
+    var future = await _dioClient
+        .post('/connect', data: {'name': name, 'image': image, 'color': color});
     return future;
   }
 }

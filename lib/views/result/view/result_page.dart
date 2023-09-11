@@ -186,7 +186,7 @@ class _ResultCard extends StatelessWidget {
             child: SvgPicture.asset(
               rankDataMap[rank] ?? '',
             ),
-          )
+          ),
         ],
       ),
     );

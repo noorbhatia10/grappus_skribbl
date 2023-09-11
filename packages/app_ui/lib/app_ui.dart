@@ -1,5 +1,3 @@
-library app_ui;
-
 export 'src/assets_path/assets_path.dart';
 export 'src/colors/app_colors.dart';
 export 'src/extensions/extensions.dart';

@@ -142,14 +142,15 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     Emitter<SessionState> emit,
   ) async {
     final map = Map<String, Player>.from(state.players);
-    final players = map
-      ..removeWhere((key, value) => key == event.player.userId);
-    emit(state.copyWith(players: players));
     if (state.players.isEmpty) {
       await _tickerSub?.cancel();
       emit(const SessionState());
       return;
     }
+    final players = map
+      ..removeWhere((key, value) => key == event.player.userId);
+    emit(state.copyWith(players: players));
+
     if (event.player.userId == state.isDrawing) {
       add(const OnRoundEnded());
     }
@@ -312,6 +313,12 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
       state.copyWith(
         eventType: EventType.gameEnd,
         leaderboard: leaderboard.take(3).toList(),
+        players: {},
+        numOfCorrectGuesses: 0,
+        correctAnswer: '',
+        hiddenAnswer: '',
+        messages: [],
+        points: const DrawingPointsWrapper(points: null, paint: null),
       ),
     );
   }

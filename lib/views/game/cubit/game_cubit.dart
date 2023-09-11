@@ -23,32 +23,19 @@ class GameCubit extends Cubit<GameState> {
     });
 
     try {
-      final uid = await _gameRepository.getUID();
+      final uid = await _gameRepository.connect(
+        name: name,
+        image: imagePath,
+        color: userNameColor,
+      );
 
       if (uid == null) {
         throw Exception('Null UID');
       }
 
       emit(state.copyWith(uid: uid));
-
-      final player = Player(
-        userId: uid,
-        name: name,
-        imagePath: imagePath,
-        userNameColor: userNameColor,
-      );
-
-      await addPlayer(player);
     } on Exception catch (e) {
       emit(GameErrorState(message: e.toString()));
-      addError(e, StackTrace.current);
-    }
-  }
-
-  Future<void> addPlayer(Player player) async {
-    try {
-      _gameRepository.addPlayer(player);
-    } catch (e) {
       addError(e, StackTrace.current);
     }
   }
