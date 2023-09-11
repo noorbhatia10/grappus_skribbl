@@ -37,19 +37,21 @@ class GameRepository {
       _ws.send(AddDrawingPointsEvent(data: points).encodedJson);
 
   /// Returns a uid
-  Future<String?> getUID() async {
+  Future<String?> connect({
+    required String name,
+    required String image,
+    required int color,
+  }) async {
     try {
-      final data = (await _gameService.connect()).data;
+      final data =
+          (await _gameService.connect(name: name, image: image, color: color))
+              .data;
       return (jsonDecode(data.toString()) as Map<String, dynamic>)['data']
           .toString();
     } catch (e) {
       rethrow;
     }
   }
-
-  /// function to add player to the server
-  void addPlayer(Player player) =>
-      _ws.send(AddPlayerEvent(data: player).encodedJson);
 
   /// function to send the chats to the server
   void sendChat(ChatModel chat) {

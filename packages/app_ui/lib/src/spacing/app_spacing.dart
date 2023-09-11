@@ -1,4 +1,5 @@
 /// Default Spacing in App UI.
+library;
 
 abstract class AppSpacing {
   /// The default unit of spacing

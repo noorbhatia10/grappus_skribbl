@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 class AppButton extends StatelessWidget {
   /// {@macro app_button}
   const AppButton._({
-    super.key,
     required this.child,
+    super.key,
     this.onPressed,
     Color? buttonColor,
     Color? disabledButtonColor,
@@ -34,11 +34,11 @@ class AppButton extends StatelessWidget {
 
   /// Filled black button.
   const AppButton.black({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -51,11 +51,11 @@ class AppButton extends StatelessWidget {
 
   /// Filled blue dress button.
   const AppButton.blueDress({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -68,11 +68,11 @@ class AppButton extends StatelessWidget {
 
   /// Filled crystal blue button.
   const AppButton.blueberry({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -85,11 +85,11 @@ class AppButton extends StatelessWidget {
 
   /// Filled red wine button.
   const AppButton.redWine({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -102,12 +102,12 @@ class AppButton extends StatelessWidget {
 
   /// Filled secondary button.
   const AppButton.secondary({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
     Color? disabledButtonColor,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -124,11 +124,11 @@ class AppButton extends StatelessWidget {
 
   /// Filled dark aqua button.
   const AppButton.darkAqua({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -141,11 +141,11 @@ class AppButton extends StatelessWidget {
 
   /// Filled marigold button.
   const AppButton.marigold({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -158,11 +158,11 @@ class AppButton extends StatelessWidget {
 
   /// Outlined white button.
   const AppButton.outlinedWhite({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -178,11 +178,11 @@ class AppButton extends StatelessWidget {
 
   /// Outlined transparent dark aqua button.
   const AppButton.outlinedTransparentDarkAqua({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -198,11 +198,11 @@ class AppButton extends StatelessWidget {
 
   /// Outlined transparent white button.
   const AppButton.outlinedTransparentWhite({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -218,11 +218,11 @@ class AppButton extends StatelessWidget {
 
   /// Filled transparent dark aqua button.
   const AppButton.transparentDarkAqua({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -235,11 +235,11 @@ class AppButton extends StatelessWidget {
 
   /// Filled transparent white button.
   const AppButton.transparentWhite({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
     TextStyle? textStyle,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -254,10 +254,10 @@ class AppButton extends StatelessWidget {
 
   /// Filled small red wine blue button.
   const AppButton.smallRedWine({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -272,10 +272,10 @@ class AppButton extends StatelessWidget {
 
   /// Filled small transparent button.
   const AppButton.smallDarkAqua({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -290,10 +290,10 @@ class AppButton extends StatelessWidget {
 
   /// Filled small transparent button.
   const AppButton.smallTransparent({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,
@@ -308,10 +308,10 @@ class AppButton extends StatelessWidget {
 
   /// Filled small transparent button.
   const AppButton.smallOutlineTransparent({
+    required Widget child,
     Key? key,
     VoidCallback? onPressed,
     double? elevation,
-    required Widget child,
   }) : this._(
           key: key,
           onPressed: onPressed,

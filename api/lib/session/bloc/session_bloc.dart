@@ -312,6 +312,12 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
       state.copyWith(
         eventType: EventType.gameEnd,
         leaderboard: leaderboard.take(3).toList(),
+        players: {},
+        numOfCorrectGuesses: 0,
+        correctAnswer: '',
+        hiddenAnswer: '',
+        messages: [],
+        points: const DrawingPointsWrapper(points: null, paint: null),
       ),
     );
   }
