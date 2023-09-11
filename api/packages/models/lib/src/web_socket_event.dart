@@ -10,6 +10,8 @@ enum EventType {
   drawing('__drawing__'),
   chat('__chat__'),
   addPlayer('__add_player__'),
+  disconnect('__disconnect__'),
+
   invalid('__invalid__'),
   roundStart('__round_start__'),
   roundEnd('__round_end__'),
@@ -75,5 +77,20 @@ class AddPlayerEvent extends WebSocketEvent<Player> {
   @override
   Map<String, dynamic> toJson() {
     return {'eventType': eventType.name, 'data': data.toMap()};
+  }
+}
+
+class DisconnectPlayerEvent extends WebSocketEvent<String> {
+  DisconnectPlayerEvent({
+    required super.data,
+    super.eventType = EventType.disconnect,
+  });
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'eventType': eventType.name,
+      'data': {'uid': data},
+    };
   }
 }

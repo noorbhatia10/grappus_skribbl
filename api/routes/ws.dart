@@ -55,6 +55,9 @@ Future<Response> onRequest(RequestContext context) async {
             case AddPlayerEvent:
               player = (websocketEvent as AddPlayerEvent).data;
               sessionBloc.add(OnPlayerAdded(player));
+            case DisconnectPlayerEvent:
+              final uid = (websocketEvent as DisconnectPlayerEvent).data;
+              sessionBloc.add(OnPlayerDisconnect(uid));
           }
         } catch (e) {
           channel.sink.add(
@@ -69,9 +72,10 @@ Future<Response> onRequest(RequestContext context) async {
         }
       },
       onDone: () {
-        sessionBloc
-          ..add(OnPlayerDisconnect(player))
-          ..unsubscribe(channel);
+        // print('Player to disconnect: ${player.name}');
+        // sessionBloc
+        //   ..add(OnPlayerDisconnect(player))
+        //   ..unsubscribe(channel);
       },
     );
   });

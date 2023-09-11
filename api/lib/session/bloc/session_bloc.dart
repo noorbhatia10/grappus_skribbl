@@ -142,16 +142,16 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     Emitter<SessionState> emit,
   ) async {
     final map = Map<String, Player>.from(state.players);
-    if (state.players.isEmpty) {
+
+    final players = map..removeWhere((key, value) => key == event.uid);
+    if (players.isEmpty) {
       await _tickerSub?.cancel();
       emit(const SessionState());
       return;
     }
-    final players = map
-      ..removeWhere((key, value) => key == event.player.userId);
     emit(state.copyWith(players: players));
 
-    if (event.player.userId == state.isDrawing) {
+    if (event.uid == state.isDrawing) {
       add(const OnRoundEnded());
     }
   }
@@ -163,6 +163,12 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     await _tickerSub?.cancel();
 
     final players = state.players;
+
+    if (players.values.length < 2 && players.values.isNotEmpty) {
+      await _tickerSub?.cancel();
+      emit(SessionState(players: players));
+      return;
+    }
 
     var currentRound = state.round;
 
