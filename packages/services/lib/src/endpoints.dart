@@ -15,5 +15,5 @@ class Endpoints {
 
   static String localhostWebStockUrl = 'ws://localhost:8080/ws';
   static const String serverWebscoketUrl =
-      'ws://graptoons-api.rpsite.top/ws';
+      'wss://graptoons-api.rpsite.top/ws';
 }
