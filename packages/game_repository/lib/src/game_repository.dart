@@ -62,5 +62,9 @@ class GameRepository {
   Stream<ConnectionState> get connection => _ws.connection;
 
   /// function to close the connection
-  void close() => _ws.close();
+  void close(String uid) {
+    _ws
+      ..send(DisconnectPlayerEvent(data: uid).encodedJson)
+      ..close();
+  }
 }
