@@ -13,4 +13,4 @@ jobs:
         with:
           webRenderer: canvaskit
           customArgs: --target lib/main_development.dart
-          baseHref: /grappus_skribbl/
+        
