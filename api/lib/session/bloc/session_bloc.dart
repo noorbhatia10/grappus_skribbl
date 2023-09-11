@@ -35,13 +35,6 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
   }
 
   void _onPlayerAdded(OnPlayerAdded event, Emitter<SessionState> emit) {
-    // emit(
-    //   state.copyWith(
-    //     currentPlayerId: event.player.userId,
-    //     eventType: EventType.addPlayer,
-    //   ),
-    // );
-
     final players = <String, Player>{}
       ..addAll(state.players)
       ..putIfAbsent(event.player.userId, () => event.player);
