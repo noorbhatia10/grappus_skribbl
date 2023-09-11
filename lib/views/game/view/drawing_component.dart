@@ -52,7 +52,9 @@ class _DrawingComponentState extends State<DrawingComponent> {
                         if (state.sessionState?.eventType ==
                             EventType.gameEnd) {
                           final leaderBoard = state.sessionState?.leaderboard;
-                          context.read<GameCubit>().close();
+                          context.read<GameCubit>()
+                            ..endGame()
+                            ..close();
                           context.pushReplacement(
                             ResultPage(
                               leaderBoard: leaderBoard ?? [],

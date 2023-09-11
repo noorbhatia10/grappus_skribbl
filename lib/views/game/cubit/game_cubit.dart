@@ -58,6 +58,8 @@ class GameCubit extends Cubit<GameState> {
 
   Future<void> addChats(ChatModel chat) async => _gameRepository.sendChat(chat);
 
+  void endGame() => emit(const GameState());
+
   @override
   Future<void> close() async {
     await _sessionStateSub?.cancel();

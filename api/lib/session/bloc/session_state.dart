@@ -2,7 +2,6 @@ part of 'session_bloc.dart';
 
 class SessionState extends Equatable {
   const SessionState({
-    this.currentPlayerId,
     this.players = const {},
     this.points = const DrawingPointsWrapper(points: null, paint: null),
     this.eventType = EventType.initial,
@@ -17,7 +16,6 @@ class SessionState extends Equatable {
   });
 
   factory SessionState.fromJson(Map<String, dynamic> json) => SessionState(
-        currentPlayerId: json['currentPlayerId'] as String,
         isDrawing: json['isDrawing'] as String,
         numOfCorrectGuesses: json['numOfCorrectGuesses'] as int,
         remainingTime: json['secondsPassed'] as int,
@@ -46,7 +44,6 @@ class SessionState extends Equatable {
       );
   static const roundDuration = 60;
 
-  final String? currentPlayerId;
   final Map<String, Player> players;
   final DrawingPointsWrapper points;
   final EventType eventType;
@@ -60,7 +57,6 @@ class SessionState extends Equatable {
   final List<Player> leaderboard;
 
   SessionState copyWith({
-    String? currentPlayerId,
     Map<String, Player>? players,
     DrawingPointsWrapper? points,
     EventType? eventType,
@@ -74,7 +70,6 @@ class SessionState extends Equatable {
     List<Player>? leaderboard,
   }) {
     return SessionState(
-      currentPlayerId: currentPlayerId ?? this.currentPlayerId,
       players: players ?? this.players,
       points: points ?? this.points,
       eventType: eventType ?? this.eventType,
@@ -92,7 +87,6 @@ class SessionState extends Equatable {
   @override
   List<Object?> get props {
     return [
-      currentPlayerId,
       players,
       points,
       eventType,
@@ -109,7 +103,6 @@ class SessionState extends Equatable {
 
   Map<String, dynamic> toJson() => {
         'players': Map<String, Player>.from(players),
-        'currentPlayerId': currentPlayerId,
         'points': points.toJson(),
         'eventType': eventType.toJson(),
         'messages': messages.map((x) => x.toMap()).toList(),

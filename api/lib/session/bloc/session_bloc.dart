@@ -35,12 +35,13 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
   }
 
   void _onPlayerAdded(OnPlayerAdded event, Emitter<SessionState> emit) {
-    emit(
-      state.copyWith(
-        currentPlayerId: event.player.userId,
-        eventType: EventType.addPlayer,
-      ),
-    );
+    // emit(
+    //   state.copyWith(
+    //     currentPlayerId: event.player.userId,
+    //     eventType: EventType.addPlayer,
+    //   ),
+    // );
+
     final players = <String, Player>{}
       ..addAll(state.players)
       ..putIfAbsent(event.player.userId, () => event.player);
@@ -49,10 +50,9 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
         players: players,
         eventType: EventType.addPlayer,
         points: state.points,
-        // ignore: avoid_redundant_argument_values
-        currentPlayerId: null,
       ),
     );
+
     if (state.players.length == 2 && state.correctAnswer.isEmpty) {
       add(const OnRoundStarted());
     }

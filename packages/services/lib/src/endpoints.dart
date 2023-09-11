@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class Endpoints {
-  static const bool shouldLocalHost = true;
+  static const bool shouldLocalHost = false;
 
   static String get baseUrl =>
       kDebugMode ? localhostBaseUrl : serverHostUrl;
