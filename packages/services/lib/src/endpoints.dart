@@ -11,9 +11,9 @@ class Endpoints {
 
   static String localhostBaseUrl = 'http://localhost:8080';
   static String serverHostUrl =
-      'https://graptoons-api.rpsite.top/';
+      'https://api.graptoons.fun/';
 
   static String localhostWebStockUrl = 'ws://localhost:8080/ws';
   static const String serverWebscoketUrl =
-      'wss://graptoons-api.rpsite.top/ws';
+      'wss://api.graptoons.fun/ws';
 }
