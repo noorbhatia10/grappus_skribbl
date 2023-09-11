@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,7 @@ class DrawingComponent extends StatefulWidget {
 
 class _DrawingComponentState extends State<DrawingComponent> {
   late List<DrawingPoints> pointsList = <DrawingPoints>[];
+  late List<DrawingPoints> localPointsList = <DrawingPoints>[];
 
   bool isDialogOpened(BuildContext context) =>
       ModalRoute.of(context)?.isCurrent != true;
@@ -81,6 +83,7 @@ class _DrawingComponentState extends State<DrawingComponent> {
                         }
                         if (state.sessionState!.eventType ==
                             EventType.roundEnd) {
+                          localPointsList.clear();
                           if (isDialogOpened(context)) {
                             return;
                           }
@@ -150,6 +153,7 @@ class _DrawingComponentState extends State<DrawingComponent> {
                         cubit,
                       ),
                       child: BlocBuilder<GameCubit, GameState>(
+                        buildWhen: (a,b) => a.sessionState?.isDrawing != b.uid,
                         builder: (context, state) {
                           final sessionState = state.sessionState;
                           if (sessionState != null) {
@@ -160,7 +164,12 @@ class _DrawingComponentState extends State<DrawingComponent> {
                           return RepaintBoundary(
                             child: CustomPaint(
                               size: Size.infinite,
-                              painter: DrawingPainter(pointsList: pointsList),
+                              painter: DrawingPainter(
+                                pointsList:
+                                    state.sessionState?.isDrawing == state.uid
+                                        ? localPointsList
+                                        : pointsList,
+                              ),
                             ),
                           );
                         },
@@ -183,6 +192,19 @@ class _DrawingComponentState extends State<DrawingComponent> {
   ) {
     final renderBox = context.findRenderObject() as RenderBox?;
     final globalToLocal = renderBox?.globalToLocal(details.globalPosition);
+    if (cubit.state.uid == cubit.state.sessionState?.isDrawing) {
+      setState(() {
+        localPointsList.add(
+          DrawingPointsWrapper(
+            points: OffsetWrapper(
+              dx: globalToLocal!.dx - 27.toResponsiveWidth(context),
+              dy: globalToLocal.dy - 73.toResponsiveHeight(context),
+            ),
+            paint: const PaintWrapper(isAntiAlias: true, strokeWidth: 2),
+          ).toDrawingPoints(),
+        );
+      });
+    }
     cubit.addPoints(
       DrawingPointsWrapper(
         points: OffsetWrapper(
@@ -201,6 +223,19 @@ class _DrawingComponentState extends State<DrawingComponent> {
   ) {
     final renderBox = context.findRenderObject() as RenderBox?;
     final globalToLocal = renderBox?.globalToLocal(details.globalPosition);
+    if (cubit.state.uid == cubit.state.sessionState?.isDrawing) {
+      setState(() {
+        localPointsList.add(
+          DrawingPointsWrapper(
+            points: OffsetWrapper(
+              dx: globalToLocal!.dx - 27.toResponsiveWidth(context),
+              dy: globalToLocal.dy - 73.toResponsiveHeight(context),
+            ),
+            paint: const PaintWrapper(isAntiAlias: true, strokeWidth: 2),
+          ).toDrawingPoints(),
+        );
+      });
+    }
     cubit.addPoints(
       DrawingPointsWrapper(
         points: OffsetWrapper(
@@ -215,6 +250,16 @@ class _DrawingComponentState extends State<DrawingComponent> {
   void _handlePanEnd(
     GameCubit cubit,
   ) {
+    if (cubit.state.uid == cubit.state.sessionState?.isDrawing) {
+      setState(() {
+        localPointsList.add(
+          const DrawingPointsWrapper(
+            points: null,
+            paint: null,
+          ).toDrawingPoints(),
+        );
+      });
+    }
     cubit.addPoints(
       const DrawingPointsWrapper(
         points: null,
