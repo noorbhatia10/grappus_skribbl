@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class Endpoints {
-  static const bool shouldLocalHost = true;
+  static const bool shouldLocalHost = false;
 
   static String get baseUrl =>
       kDebugMode ? localhostBaseUrl : serverHostUrl;
@@ -11,9 +11,9 @@ class Endpoints {
 
   static String localhostBaseUrl = 'http://localhost:8080';
   static String serverHostUrl =
-      'http://ec2-13-51-233-255.eu-north-1.compute.amazonaws.com';
+      'https://api.graptoons.fun/';
 
   static String localhostWebStockUrl = 'ws://localhost:8080/ws';
   static const String serverWebscoketUrl =
-      'ws://ec2-13-51-233-255.eu-north-1.compute.amazonaws.com/ws';
+      'wss://api.graptoons.fun/ws';
 }
