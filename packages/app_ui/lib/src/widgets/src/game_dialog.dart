@@ -63,10 +63,12 @@ class _GameDialogState extends State<GameDialog> {
             Text(
               widget.title,
               style: context.textTheme.headlineDialog,
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
             Text(
               widget.subtitle,
+              textAlign: TextAlign.center,
               style: context.textTheme.headlineMedium
                   .withOpacity(.7)
                   ?.copyWith(fontWeight: FontWeight.normal),
@@ -74,6 +76,7 @@ class _GameDialogState extends State<GameDialog> {
             const SizedBox(height: 12),
             Text(
               widget.body,
+              textAlign: TextAlign.center,
               style: context.textTheme.displayLarge?.copyWith(height: .8),
             ),
             const SizedBox(height: 55),
