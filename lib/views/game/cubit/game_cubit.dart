@@ -23,7 +23,7 @@ class GameCubit extends Cubit<GameState> {
       emit(state.copyWith(sessionState: sessionState));
       if (state.sessionState?.eventType == EventType.chat) {
         final message = state.sessionState?.message;
-        if (message != null && message.player.userId != state.uid) {
+        if (message != null && message.playerUid != state.uid) {
           addChatsToLocal(message);
         }
       }

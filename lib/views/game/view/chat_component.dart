@@ -52,6 +52,7 @@ class _ChatComponentState extends State<ChatComponent> {
               buildWhen: (prev, curr) => prev.sessionState != curr.sessionState,
               builder: (context, state) {
                 final sessionState = state.sessionState;
+                final players = sessionState?.players ?? {};
                 if (sessionState == null) {
                   return const SizedBox();
                 }
@@ -67,7 +68,8 @@ class _ChatComponentState extends State<ChatComponent> {
                       final isMessageCorrectAnswer =
                           messages[newIndex].message ==
                                   sessionState.correctAnswer ||
-                              messages[newIndex].player.hasAnsweredCorrectly;
+                              players[messages[newIndex].playerUid]!
+                                  .hasAnsweredCorrectly;
 
                       final currentPlayer =
                           state.sessionState!.players[state.uid];
@@ -82,11 +84,13 @@ class _ChatComponentState extends State<ChatComponent> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${messages[newIndex].player.name}: ',
+                                    '''${players[messages[newIndex].playerUid]?.name}: ''',
                                     style:
                                         context.textTheme.bodyLarge?.copyWith(
                                       color: Color(
-                                        messages[index].player.userNameColor,
+                                        players[messages[index].playerUid]
+                                                ?.userNameColor ??
+                                            0xff000000,
                                       ),
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -94,18 +98,19 @@ class _ChatComponentState extends State<ChatComponent> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      messages[newIndex]
-                                              .player
-                                              .hasAnsweredCorrectly
+                                      players[messages[newIndex].playerUid]
+                                                  ?.hasAnsweredCorrectly ??
+                                              false
                                           ? l10n.guessedTheAnswerLabel
                                           : messages[newIndex].message,
                                       style:
                                           context.textTheme.bodyLarge?.copyWith(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
-                                        color: messages[newIndex]
-                                                .player
-                                                .hasAnsweredCorrectly
+                                        color: players[messages[newIndex]
+                                                        .playerUid]
+                                                    ?.hasAnsweredCorrectly ??
+                                                false
                                             ? AppColors.emeraldGreen
                                             : AppColors.butterCreamYellow,
                                       ),
@@ -159,13 +164,7 @@ class _ChatComponentState extends State<ChatComponent> {
                   throw Exception('Player not in game:${gameState.uid}');
                 }
                 final chatModel = ChatModel(
-                  player: newPlayer[gameState.uid] ??
-                      Player(
-                        name: 'err',
-                        userId: 'err',
-                        imagePath: 'err',
-                        userNameColor: Colors.black.value,
-                      ),
+                  playerUid: gameState.uid ?? '',
                   message: _chatController.text,
                 );
                 context.read<GameCubit>()
