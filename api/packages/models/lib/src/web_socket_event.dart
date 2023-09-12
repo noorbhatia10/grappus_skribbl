@@ -11,7 +11,7 @@ enum EventType {
   chat('__chat__'),
   addPlayer('__add_player__'),
   disconnect('__disconnect__'),
-
+  timerUpdate('__timerUpdate__'),
   invalid('__invalid__'),
   roundStart('__round_start__'),
   roundEnd('__round_end__'),

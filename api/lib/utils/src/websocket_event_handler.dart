@@ -27,6 +27,7 @@ class WebSocketEventHandler {
       case EventType.roundEnd:
       case EventType.gameEnd:
       case EventType.initial:
+      case EventType.timerUpdate:
       case EventType.disconnect:
         return DisconnectPlayerEvent(
           data: data['uid'].toString(),

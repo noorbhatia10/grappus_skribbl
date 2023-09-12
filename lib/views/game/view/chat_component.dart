@@ -49,70 +49,75 @@ class _ChatComponentState extends State<ChatComponent> {
           SizedBox(height: 14.toResponsiveHeight(context)),
           Expanded(
             child: BlocBuilder<GameCubit, GameState>(
-              bloc: context.read<GameCubit>(),
+              buildWhen: (prev, curr) => prev.sessionState != curr.sessionState,
               builder: (context, state) {
                 final sessionState = state.sessionState;
                 if (sessionState == null) {
                   return const SizedBox();
                 }
-                final messages = sessionState.messages;
-                return ListView.builder(
-                  reverse: true,
-                  controller: _scrollController,
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final newIndex = messages.length - index - 1;
+                final messages = state.messages;
+                if (messages != null) {
+                  return ListView.builder(
+                    reverse: true,
+                    controller: _scrollController,
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final newIndex = messages.length - index - 1;
 
-                    final isMessageCorrectAnswer = messages[newIndex].message ==
-                            sessionState.correctAnswer ||
-                        messages[newIndex].player.hasAnsweredCorrectly;
+                      final isMessageCorrectAnswer =
+                          messages[newIndex].message ==
+                                  sessionState.correctAnswer ||
+                              messages[newIndex].player.hasAnsweredCorrectly;
 
-                    final currentPlayer =
-                        state.sessionState!.players[state.uid];
+                      final currentPlayer =
+                          state.sessionState!.players[state.uid];
 
-                    return isMessageCorrectAnswer &&
-                            (!currentPlayer!.hasAnsweredCorrectly)
-                        ? const SizedBox()
-                        : Container(
-                            padding:
-                                const EdgeInsets.all(8).responsive(context),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${messages[newIndex].player.name}: ',
-                                  style: context.textTheme.bodyLarge?.copyWith(
-                                    color: Color(
-                                      messages[index].player.userNameColor,
-                                    ),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    messages[newIndex]
-                                            .player
-                                            .hasAnsweredCorrectly
-                                        ? l10n.guessedTheAnswerLabel
-                                        : messages[newIndex].message,
+                      return isMessageCorrectAnswer &&
+                              (!currentPlayer!.hasAnsweredCorrectly)
+                          ? const SizedBox()
+                          : Container(
+                              padding:
+                                  const EdgeInsets.all(8).responsive(context),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${messages[newIndex].player.name}: ',
                                     style:
                                         context.textTheme.bodyLarge?.copyWith(
+                                      color: Color(
+                                        messages[index].player.userNameColor,
+                                      ),
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
-                                      color: messages[newIndex]
-                                              .player
-                                              .hasAnsweredCorrectly
-                                          ? AppColors.emeraldGreen
-                                          : AppColors.butterCreamYellow,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                  },
-                );
+                                  Expanded(
+                                    child: Text(
+                                      messages[newIndex]
+                                              .player
+                                              .hasAnsweredCorrectly
+                                          ? l10n.guessedTheAnswerLabel
+                                          : messages[newIndex].message,
+                                      style:
+                                          context.textTheme.bodyLarge?.copyWith(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: messages[newIndex]
+                                                .player
+                                                .hasAnsweredCorrectly
+                                            ? AppColors.emeraldGreen
+                                            : AppColors.butterCreamYellow,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                    },
+                  );
+                }
+                return const SizedBox();
               },
             ),
           ),
@@ -142,6 +147,9 @@ class _ChatComponentState extends State<ChatComponent> {
               onChanged: (value) => setState(() {}),
               onSubmitted: (value) {
                 setState(() {});
+                if (_chatController.value.text.isEmpty) {
+                  return;
+                }
                 final gameState = context.read<GameCubit>().state;
                 if (gameState.sessionState == null) {
                   throw Exception('null session');
@@ -150,18 +158,19 @@ class _ChatComponentState extends State<ChatComponent> {
                 if (newPlayer[gameState.uid] == null) {
                   throw Exception('Player not in game:${gameState.uid}');
                 }
-                context.read<GameCubit>().addChats(
-                      ChatModel(
-                        player: newPlayer[gameState.uid] ??
-                            Player(
-                              name: 'err',
-                              userId: 'err',
-                              imagePath: 'err',
-                              userNameColor: Colors.black.value,
-                            ),
-                        message: _chatController.text,
+                final chatModel = ChatModel(
+                  player: newPlayer[gameState.uid] ??
+                      Player(
+                        name: 'err',
+                        userId: 'err',
+                        imagePath: 'err',
+                        userNameColor: Colors.black.value,
                       ),
-                    );
+                  message: _chatController.text,
+                );
+                context.read<GameCubit>()
+                  ..addChatsToLocal(chatModel)
+                  ..addChats(chatModel);
                 _chatController.clear();
                 FocusScope.of(context).requestFocus(_focusNode);
               },

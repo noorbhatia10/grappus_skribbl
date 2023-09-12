@@ -5,7 +5,7 @@ class SessionState extends Equatable {
     this.players = const {},
     this.points = const DrawingPointsWrapper(points: null, paint: null),
     this.eventType = EventType.initial,
-    this.messages = const [],
+    this.message,
     this.correctAnswer = '',
     this.remainingTime = roundDuration,
     this.numOfCorrectGuesses = 0,
@@ -31,11 +31,9 @@ class SessionState extends Equatable {
         correctAnswer: json['correctAnswer'].toString(),
         eventType:
             EventType.fromJson(json['eventType'] as Map<String, dynamic>),
-        messages: List<ChatModel>.from(
-          (json['messages'] as List<dynamic>).map<ChatModel>(
-            (x) => ChatModel.fromMap(x as Map<String, dynamic>),
-          ),
-        ),
+        message: json['message'] != null
+            ? ChatModel.fromJson(json['message'] as String)
+            : null,
         leaderboard: List<Player>.from(
           (json['leaderboard'] as List<dynamic>).map<Player>(
             (x) => Player.fromMap(x as Map<String, dynamic>),
@@ -47,7 +45,7 @@ class SessionState extends Equatable {
   final Map<String, Player> players;
   final DrawingPointsWrapper points;
   final EventType eventType;
-  final List<ChatModel> messages;
+  final ChatModel? message;
   final String correctAnswer;
   final int remainingTime;
   final int numOfCorrectGuesses;
@@ -60,7 +58,7 @@ class SessionState extends Equatable {
     Map<String, Player>? players,
     DrawingPointsWrapper? points,
     EventType? eventType,
-    List<ChatModel>? messages,
+    ChatModel? message,
     String? correctAnswer,
     int? remainingTime,
     int? numOfCorrectGuesses,
@@ -73,7 +71,7 @@ class SessionState extends Equatable {
       players: players ?? this.players,
       points: points ?? this.points,
       eventType: eventType ?? this.eventType,
-      messages: messages ?? this.messages,
+      message: message ?? this.message,
       correctAnswer: correctAnswer ?? this.correctAnswer,
       remainingTime: remainingTime ?? this.remainingTime,
       numOfCorrectGuesses: numOfCorrectGuesses ?? this.numOfCorrectGuesses,
@@ -90,7 +88,7 @@ class SessionState extends Equatable {
       players,
       points,
       eventType,
-      messages,
+      message,
       correctAnswer,
       remainingTime,
       numOfCorrectGuesses,
@@ -105,7 +103,7 @@ class SessionState extends Equatable {
         'players': Map<String, Player>.from(players),
         'points': points.toJson(),
         'eventType': eventType.toJson(),
-        'messages': messages.map((x) => x.toMap()).toList(),
+        'message': message?.toJson(),
         'correctAnswer': correctAnswer,
         'secondsPassed': remainingTime,
         'numOfCorrectGuesses': numOfCorrectGuesses,
