@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:models/src/chat_model.dart';
 import 'package:models/src/drawing_points.dart';
-import 'package:models/src/player.dart';
 
 enum EventType {
   connect('__connect__'),
