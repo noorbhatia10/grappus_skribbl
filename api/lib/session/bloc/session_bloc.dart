@@ -59,15 +59,14 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
 
   void _onMessageSent(OnMessageSent event, Emitter<SessionState> emit) {
     final players = state.players;
-    var guesses = players[event.chat.player.userId]?.numOfGuesses ?? 0;
+    var guesses = players[event.chat.playerUid]?.numOfGuesses ?? 0;
 
     final isCorrectAnswer = _checkIfMessageIsCorrectAnswer(event);
     if (isCorrectAnswer) {
-      if (event.chat.player.userId == state.isDrawing) {
+      if (event.chat.playerUid == state.isDrawing) {
         return;
       }
-      players[event.chat.player.userId] =
-          players[event.chat.player.userId]!.copyWith(
+      players[event.chat.playerUid] = players[event.chat.playerUid]!.copyWith(
         hasAnsweredCorrectly: true,
         numOfGuesses: ++guesses,
         guessedAt: state.remainingTime,
@@ -75,12 +74,6 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
       var correctGuesses = state.numOfCorrectGuesses;
       emit(
         state.copyWith(
-          messages: [
-            ...state.messages,
-            event.chat.copyWith(
-              player: event.chat.player.copyWith(hasAnsweredCorrectly: true),
-            ),
-          ],
           players: players,
           eventType: EventType.chat,
           numOfCorrectGuesses: ++correctGuesses,
@@ -97,10 +90,10 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
 
       return;
     }
-    players[event.chat.player.userId]?.copyWith(numOfGuesses: ++guesses);
+    players[event.chat.playerUid]?.copyWith(numOfGuesses: ++guesses);
     emit(
       state.copyWith(
-        messages: [...state.messages, event.chat],
+        message: event.chat,
         eventType: EventType.chat,
         players: players,
       ),
@@ -175,7 +168,6 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
         .where((id) => !state.players[id]!.hasCompletedDrawingRound)
         .toList();
 
-    emit(state.copyWith(messages: <ChatModel>[]));
     if (remainingPlayers.isEmpty) {
       return;
     }
@@ -214,7 +206,12 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
   }
 
   void _onTicked(_TimerTicked event, Emitter<SessionState> emit) {
-    emit(state.copyWith(remainingTime: event.duration));
+    emit(
+      state.copyWith(
+        remainingTime: event.duration,
+        eventType: EventType.timerUpdate,
+      ),
+    );
 
     /// Dont show the answer for first 10 seconds
     if (event.duration < 51) {
@@ -238,6 +235,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
         emit(
           state.copyWith(
             hiddenAnswer: hiddenAnswer,
+            eventType: EventType.timerUpdate,
           ),
         );
       }
@@ -254,12 +252,14 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     Emitter<SessionState> emit,
   ) async {
     await _tickerSub?.cancel();
-    emit(state.copyWith(messages: <ChatModel>[]));
 
     final players = <String, Player>{}..addAll(state.players);
     players.forEach((key, value) {
       final prevScore = value.score;
       players[key] = value.copyWith(
+        hasAnsweredCorrectly: false,
+        numOfGuesses: 0,
+        guessedAt: -1,
         score: prevScore +
             _calculateScore(
               key == state.isDrawing,
@@ -322,7 +322,6 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
         numOfCorrectGuesses: 0,
         correctAnswer: '',
         hiddenAnswer: '',
-        messages: [],
         points: const DrawingPointsWrapper(points: null, paint: null),
       ),
     );

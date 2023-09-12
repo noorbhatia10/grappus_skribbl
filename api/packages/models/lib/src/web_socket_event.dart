@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:models/src/chat_model.dart';
 import 'package:models/src/drawing_points.dart';
-import 'package:models/src/player.dart';
 
 enum EventType {
   connect('__connect__'),
@@ -11,7 +10,7 @@ enum EventType {
   chat('__chat__'),
   addPlayer('__add_player__'),
   disconnect('__disconnect__'),
-
+  timerUpdate('__timerUpdate__'),
   invalid('__invalid__'),
   roundStart('__round_start__'),
   roundEnd('__round_end__'),

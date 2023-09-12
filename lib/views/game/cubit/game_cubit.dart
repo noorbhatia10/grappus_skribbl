@@ -21,6 +21,12 @@ class GameCubit extends Cubit<GameState> {
   Future<void> connect(String name, String imagePath, int userNameColor) async {
     _sessionStateSub = _gameRepository.session.listen((sessionState) {
       emit(state.copyWith(sessionState: sessionState));
+      if (state.sessionState?.eventType == EventType.chat) {
+        final message = state.sessionState?.message;
+        if (message != null && message.playerUid != state.uid) {
+          addChatsToLocal(message);
+        }
+      }
     });
 
     try {
@@ -48,6 +54,9 @@ class GameCubit extends Cubit<GameState> {
       _gameRepository.sendPoints(points);
 
   Future<void> addChats(ChatModel chat) async => _gameRepository.sendChat(chat);
+
+  void addChatsToLocal(ChatModel chatModel) =>
+      emit(state.copyWith(messages: [...?state.messages, chatModel]));
 
   void endGame() => emit(const GameState());
 
