@@ -46,9 +46,6 @@ Future<Response> onRequest(RequestContext context) async {
               final chatModel = (websocketEvent as AddToChatEvent).data;
               sessionBloc.add(OnMessageSent(chatModel));
 
-            // case AddPlayerEvent:
-            //   player = (websocketEvent as AddPlayerEvent).data;
-            //   sessionBloc.add(OnPlayerAdded(player));
             case DisconnectPlayerEvent:
               final uid = (websocketEvent as DisconnectPlayerEvent).data;
               sessionBloc.add(OnPlayerDisconnect(uid));
@@ -66,10 +63,6 @@ Future<Response> onRequest(RequestContext context) async {
         }
       },
       onDone: () {
-        // print('Player to disconnect: ${player.name}');
-        // sessionBloc
-        //   ..add(OnPlayerDisconnect(player))
-        //   ..unsubscribe(channel);
       },
     );
   });
