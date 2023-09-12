@@ -10,12 +10,6 @@ import 'package:models/models.dart';
 Future<Response> onRequest(RequestContext context) async {
   final handler = webSocketHandler((channel, protocol) {
     final sessionBloc = context.read<SessionBloc>()..subscribe(channel);
-    var player = Player(
-      userId: '',
-      name: '',
-      imagePath: '',
-      userNameColor: 0xff000000,
-    );
     channel.stream.listen(
       (data) {
         try {
@@ -52,9 +46,9 @@ Future<Response> onRequest(RequestContext context) async {
               final chatModel = (websocketEvent as AddToChatEvent).data;
               sessionBloc.add(OnMessageSent(chatModel));
 
-            case AddPlayerEvent:
-              player = (websocketEvent as AddPlayerEvent).data;
-              sessionBloc.add(OnPlayerAdded(player));
+            // case AddPlayerEvent:
+            //   player = (websocketEvent as AddPlayerEvent).data;
+            //   sessionBloc.add(OnPlayerAdded(player));
             case DisconnectPlayerEvent:
               final uid = (websocketEvent as DisconnectPlayerEvent).data;
               sessionBloc.add(OnPlayerDisconnect(uid));

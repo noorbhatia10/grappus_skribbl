@@ -142,7 +142,6 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     Emitter<SessionState> emit,
   ) async {
     final map = Map<String, Player>.from(state.players);
-
     final players = map..removeWhere((key, value) => key == event.uid);
     if (players.isEmpty) {
       await _tickerSub?.cancel();

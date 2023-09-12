@@ -152,7 +152,8 @@ class _DrawingComponentState extends State<DrawingComponent> {
                       child: BlocBuilder<GameCubit, GameState>(
                         builder: (context, state) {
                           final sessionState = state.sessionState;
-                          if (sessionState != null) {
+                          if (sessionState != null &&
+                              sessionState.isDrawing != state.uid) {
                             final newDrawingPoint =
                                 sessionState.points.toDrawingPoints();
                             pointsList.add(newDrawingPoint);
@@ -183,14 +184,18 @@ class _DrawingComponentState extends State<DrawingComponent> {
   ) {
     final renderBox = context.findRenderObject() as RenderBox?;
     final globalToLocal = renderBox?.globalToLocal(details.globalPosition);
-    cubit.addPoints(
-      DrawingPointsWrapper(
-        points: OffsetWrapper(
-          dx: globalToLocal!.dx - 27.toResponsiveWidth(context),
-          dy: globalToLocal.dy - 73.toResponsiveHeight(context),
-        ),
-        paint: const PaintWrapper(isAntiAlias: true, strokeWidth: 2),
+    final drawingPoints = DrawingPointsWrapper(
+      points: OffsetWrapper(
+        dx: globalToLocal!.dx - 27.toResponsiveWidth(context),
+        dy: globalToLocal.dy - 73.toResponsiveHeight(context),
       ),
+      paint: const PaintWrapper(isAntiAlias: true, strokeWidth: 2),
+    );
+    if (cubit.state.sessionState?.isDrawing == cubit.state.uid) {
+      pointsList.add(drawingPoints.toDrawingPoints());
+    }
+    cubit.addPoints(
+      drawingPoints,
     );
   }
 
@@ -201,25 +206,33 @@ class _DrawingComponentState extends State<DrawingComponent> {
   ) {
     final renderBox = context.findRenderObject() as RenderBox?;
     final globalToLocal = renderBox?.globalToLocal(details.globalPosition);
-    cubit.addPoints(
-      DrawingPointsWrapper(
-        points: OffsetWrapper(
-          dx: globalToLocal!.dx - 27.toResponsiveWidth(context),
-          dy: globalToLocal.dy - 73.toResponsiveHeight(context),
-        ),
-        paint: const PaintWrapper(isAntiAlias: true, strokeWidth: 2),
+    final drawingPoints = DrawingPointsWrapper(
+      points: OffsetWrapper(
+        dx: globalToLocal!.dx - 27.toResponsiveWidth(context),
+        dy: globalToLocal.dy - 73.toResponsiveHeight(context),
       ),
+      paint: const PaintWrapper(isAntiAlias: true, strokeWidth: 2),
+    );
+    if (cubit.state.sessionState?.isDrawing == cubit.state.uid) {
+      pointsList.add(drawingPoints.toDrawingPoints());
+    }
+    cubit.addPoints(
+      drawingPoints,
     );
   }
 
   void _handlePanEnd(
     GameCubit cubit,
   ) {
+    const drawingPoints = DrawingPointsWrapper(
+      points: null,
+      paint: null,
+    );
+    if (cubit.state.sessionState?.isDrawing == cubit.state.uid) {
+      pointsList.add(drawingPoints.toDrawingPoints());
+    }
     cubit.addPoints(
-      const DrawingPointsWrapper(
-        points: null,
-        paint: null,
-      ),
+      drawingPoints,
     );
   }
 }
