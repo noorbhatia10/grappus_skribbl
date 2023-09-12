@@ -65,18 +65,22 @@ class _DrawingComponentState extends State<DrawingComponent> {
                                 EventType.roundStart &&
                             !isStartDialogueVisited) {
                           if (!isDialogOpened(context)) {
-                            if (state.uid ==
-                                cubit.state.sessionState?.isDrawing) {
-                              GameDialog.show(
-                                context,
-                                title: l10n.itsYourTurnLabel,
-                                subtitle: l10n.wordToDrawLabel,
-                                body: state.sessionState?.correctAnswer ??
-                                    l10n.wordLoadingLabel,
-                              ).then((value) {
-                                isStartDialogueVisited = true;
-                              });
-                            }
+                            GameDialog.show(
+                              context,
+                              title: state.sessionState!.isDrawing == state.uid
+                                  ? l10n.itsYourTurnLabel
+                                  : '${state.sessionState!.players[state.sessionState!.isDrawing]?.name} is drawing',
+                              subtitle:
+                                  state.sessionState!.isDrawing != state.uid
+                                      ? 'Try to guess the word'
+                                      : l10n.wordToDrawLabel,
+                              body: state.sessionState!.isDrawing != state.uid
+                                  ? 'Good luck mate!!'
+                                  : state.sessionState?.correctAnswer ??
+                                      l10n.wordLoadingLabel,
+                            ).then((value) {
+                              isStartDialogueVisited = true;
+                            });
                           }
                         }
                         if (state.sessionState!.eventType ==
@@ -86,7 +90,9 @@ class _DrawingComponentState extends State<DrawingComponent> {
                           }
                           GameDialog.show(
                             context,
-                            title: l10n.timesUpLabel,
+                            title: state.sessionState!.remainingTime > 0
+                                ? 'Everybody guessed the correct word'
+                                : l10n.timesUpLabel,
                             body: state.sessionState?.correctAnswer ??
                                 l10n.wordLoadingLabel,
                             subtitle: l10n.theAnswerWasLabel,
