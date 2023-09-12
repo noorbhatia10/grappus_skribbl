@@ -68,18 +68,6 @@ class AddToChatEvent extends WebSocketEvent<ChatModel> {
   }
 }
 
-class AddPlayerEvent extends WebSocketEvent<Player> {
-  AddPlayerEvent({
-    required super.data,
-    super.eventType = EventType.addPlayer,
-  });
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {'eventType': eventType.name, 'data': data.toMap()};
-  }
-}
-
 class DisconnectPlayerEvent extends WebSocketEvent<String> {
   DisconnectPlayerEvent({
     required super.data,
