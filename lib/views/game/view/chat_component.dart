@@ -66,59 +66,42 @@ class _ChatComponentState extends State<ChatComponent> {
                       final newIndex = messages.length - index - 1;
 
                       final isMessageCorrectAnswer =
-                          messages[newIndex].message ==
-                                  sessionState.correctAnswer ||
-                              players[messages[newIndex].playerUid]!
-                                  .hasAnsweredCorrectly;
+                          messages[newIndex].isCorrectWord;
 
-                      final currentPlayer =
-                          state.sessionState!.players[state.uid];
-
-                      return isMessageCorrectAnswer &&
-                              (!currentPlayer!.hasAnsweredCorrectly)
-                          ? const SizedBox()
-                          : Container(
-                              padding:
-                                  const EdgeInsets.all(8).responsive(context),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '''${players[messages[newIndex].playerUid]?.name}: ''',
-                                    style:
-                                        context.textTheme.bodyLarge?.copyWith(
-                                      color: Color(
-                                        players[messages[index].playerUid]
-                                                ?.userNameColor ??
-                                            0xff000000,
-                                      ),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      players[messages[newIndex].playerUid]
-                                                  ?.hasAnsweredCorrectly ??
-                                              false
-                                          ? l10n.guessedTheAnswerLabel
-                                          : messages[newIndex].message,
-                                      style:
-                                          context.textTheme.bodyLarge?.copyWith(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: players[messages[newIndex]
-                                                        .playerUid]
-                                                    ?.hasAnsweredCorrectly ??
-                                                false
-                                            ? AppColors.emeraldGreen
-                                            : AppColors.butterCreamYellow,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                      return Container(
+                        padding: const EdgeInsets.all(8).responsive(context),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '''${players[messages[newIndex].playerUid]?.name}: ''',
+                              style: context.textTheme.bodyLarge?.copyWith(
+                                color: Color(
+                                  players[messages[newIndex].playerUid]
+                                          ?.userNameColor ??
+                                      0xff000000,
+                                ),
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
-                            );
+                            ),
+                            Expanded(
+                              child: Text(
+                                isMessageCorrectAnswer
+                                    ? l10n.guessedTheAnswerLabel
+                                    : messages[newIndex].message,
+                                style: context.textTheme.bodyLarge?.copyWith(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: isMessageCorrectAnswer
+                                      ? AppColors.emeraldGreen
+                                      : AppColors.butterCreamYellow,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                     },
                   );
                 }
@@ -159,19 +142,27 @@ class _ChatComponentState extends State<ChatComponent> {
                 if (gameState.sessionState == null) {
                   throw Exception('null session');
                 }
-                final newPlayer = gameState.sessionState!.players;
-                if (newPlayer[gameState.uid] == null) {
-                  throw Exception('Player not in game:${gameState.uid}');
-                }
+                final isCorrectWord =
+                    _chatController.text.trim().toLowerCase() ==
+                            gameState.sessionState?.correctAnswer
+                                .trim()
+                                .toLowerCase() &&
+                        !gameState.sessionState!.players[gameState.uid]!
+                            .hasAnsweredCorrectly;
                 final chatModel = ChatModel(
                   playerUid: gameState.uid ?? '',
                   message: _chatController.text,
+                  isCorrectWord: isCorrectWord,
                 );
-                context.read<GameCubit>()
-                  ..addChatsToLocal(chatModel)
-                  ..addChats(chatModel);
+                context.read<GameCubit>().addChatsToLocal(chatModel);
                 _chatController.clear();
                 FocusScope.of(context).requestFocus(_focusNode);
+                if (gameState.sessionState?.isDrawing == gameState.uid ||
+                    gameState.sessionState!.players[gameState.uid]!
+                        .hasAnsweredCorrectly) {
+                  return;
+                }
+                context.read<GameCubit>().addChats(chatModel);
               },
             ),
           ),

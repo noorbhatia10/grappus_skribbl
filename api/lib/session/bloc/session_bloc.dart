@@ -63,9 +63,6 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
 
     final isCorrectAnswer = _checkIfMessageIsCorrectAnswer(event);
     if (isCorrectAnswer) {
-      if (event.chat.playerUid == state.isDrawing) {
-        return;
-      }
       players[event.chat.playerUid] = players[event.chat.playerUid]!.copyWith(
         hasAnsweredCorrectly: true,
         numOfGuesses: ++guesses,
@@ -77,6 +74,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
           players: players,
           eventType: EventType.chat,
           numOfCorrectGuesses: ++correctGuesses,
+          message: event.chat,
         ),
       );
 
