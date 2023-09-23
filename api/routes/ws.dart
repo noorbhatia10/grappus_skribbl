@@ -6,10 +6,16 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_web_socket/dart_frog_web_socket.dart';
 import 'package:models/models.dart';
 
+final Map<String, WebSocketChannel> webSocketChannels = {};
+
 /// Websocket Handler
 Future<Response> onRequest(RequestContext context) async {
+  final roomId = context.request.uri.queryParameters['room_id'];
   final handler = webSocketHandler((channel, protocol) {
     final sessionBloc = context.read<SessionBloc>()..subscribe(channel);
+    print('WebSocket connection opened with id: $roomId');
+    // Store the WebSocket channel in the map
+    webSocketChannels[roomId ?? 'common'] = channel;
     channel.stream.listen(
       (data) {
         try {
@@ -63,6 +69,7 @@ Future<Response> onRequest(RequestContext context) async {
         }
       },
       onDone: () {
+        webSocketChannels.remove(roomId ?? 'common');
       },
     );
   });
