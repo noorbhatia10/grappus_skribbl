@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grappus_skribbl/l10n/l10n.dart';
+import 'package:grappus_skribbl/views/onboarding/cubit/onboarding_cubit.dart';
 import 'package:grappus_skribbl/views/views.dart';
 
 class App extends StatelessWidget {
@@ -15,7 +17,10 @@ class App extends StatelessWidget {
       scrollBehavior: MyCustomScrollBehavior(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const OnboardingPage(),
+      home: BlocProvider(
+        create: (context) => OnboardingCubit(),
+        child: const OnboardingPage(),
+      ),
     );
   }
 }

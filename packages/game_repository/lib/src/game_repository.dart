@@ -11,7 +11,6 @@ import 'package:web_socket_client/web_socket_client.dart';
 class GameRepository {
   /// {@macro game_repository}
   GameRepository({required Uri uri}) : _ws = WebSocket(uri);
-
   final WebSocket _ws;
   final GameService _gameService = GameService();
 

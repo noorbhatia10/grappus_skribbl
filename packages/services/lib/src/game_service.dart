@@ -16,4 +16,9 @@ class GameService {
         .post('/connect', data: {'name': name, 'image': image, 'color': color});
     return future;
   }
+
+  Future<Response> createRoom() async {
+    var result = await _dioClient.post('/create_room');
+    return result;
+  }
 }

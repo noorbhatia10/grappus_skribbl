@@ -5,9 +5,12 @@ import 'package:grappus_skribbl/views/views.dart';
 import 'package:services/services.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-  static const String routeName = '/rd-login';
-
+  const LoginPage({
+    super.key,
+    this.roomId = 'common',
+  });
+  static String routeName(String id) => '/rd-login/$id';
+  final String roomId;
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -145,7 +148,9 @@ class _LoginPageState extends State<LoginPage> {
                   } else {
                     context.pushNamedReplacement(
                       GameMainPage(
-                        url: Endpoints.webSocketUrl,
+                        // url: Endpoints.webSocketUrl,
+                        url:
+                            'ws://localhost:8080/ws?room_id=49299be7-050d-4135-b59b-ab09f0c4141f',
                         name: _nameController.value.text,
                         selectedImagePath: avatars[selectedIndex],
                       ),

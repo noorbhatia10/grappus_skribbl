@@ -5,12 +5,13 @@ class SkribblButton extends StatefulWidget {
   const SkribblButton({
     required this.text,
     required this.onTap,
+    this.isLoading = false,
     super.key,
   });
 
   final String text;
   final VoidCallback onTap;
-
+  final bool isLoading;
   @override
   State<SkribblButton> createState() => _SkribblButtonState();
 }
@@ -31,10 +32,10 @@ class _SkribblButtonState extends State<SkribblButton> {
       width: width,
       child: InkWell(
         onTap: () async {
-          widget.onTap();
           setState(() => _isPressed = true);
           await Future<void>.delayed(const Duration(milliseconds: 300));
           setState(() => _isPressed = false);
+          widget.onTap();
         },
         child: Stack(
           children: [
@@ -65,14 +66,18 @@ class _SkribblButtonState extends State<SkribblButton> {
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(width: 2, color: AppColors.charcoalGrey),
                 ),
-                child: Text(
-                  widget.text,
-                  style: context.textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 32,
-                    color: AppColors.black,
-                  ),
-                ),
+                child: widget.isLoading
+                    ? const CircularProgressIndicator(
+                        color: AppColors.butterCreamYellow,
+                      )
+                    : Text(
+                        widget.text,
+                        style: context.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 32,
+                          color: AppColors.black,
+                        ),
+                      ),
               ),
             ),
           ],

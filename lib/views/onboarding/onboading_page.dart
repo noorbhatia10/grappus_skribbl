@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:grappus_skribbl/views/onboarding/cubit/onboarding_cubit.dart';
 import 'package:grappus_skribbl/views/views.dart';
 
 class OnboardingPage extends StatelessWidget {
@@ -57,12 +59,81 @@ class OnboardingPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 50),
-                  SkribblButton(
-                    onTap: () => context.pushNamed(
-                      const LoginPage(),
-                      LoginPage.routeName,
-                    ),
-                    text: 'Get Started!',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SkribblButton(
+                        onTap: () => context.pushNamed(
+                          const LoginPage(),
+                          LoginPage.routeName('common'),
+                        ),
+                        text: 'Get Started!',
+                      ),
+                      const SizedBox(width: 20),
+                      BlocConsumer<OnboardingCubit, OnboardingState>(
+                        listenWhen: (a, b) => a.uniqueRoomId != b.uniqueRoomId,
+                        listener: (context, state) {
+                          if (state.uniqueRoomId.isNotNullOrEmpty) {
+                            showModalBottomSheet<Widget>(
+                              context: context,
+                              builder: (context) {
+                                return Material(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 20.0,
+                                      horizontal: 20.0,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        SelectableText(
+                                          'Room has been created with ID: ${state.uniqueRoomId}',
+                                          style: context.textTheme.bodyLarge
+                                              ?.copyWith(
+                                            color: AppColors.backgroundBlack,
+                                            fontSize: 40,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SkribblButton(
+                                          text: 'Copy',
+                                          onTap: () {
+                                            // todo: write copy link function here
+                                            context
+                                              ..pop()
+                                              ..pushNamed(
+                                                LoginPage(
+                                                  roomId: state.uniqueRoomId ??
+                                                      'common',
+                                                ),
+                                                LoginPage.routeName(
+                                                  state.uniqueRoomId ??
+                                                      'common',
+                                                ),
+                                              );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          return SkribblButton(
+                            onTap: () {
+                              // hit api to create unique ID
+                              context
+                                  .read<OnboardingCubit>()
+                                  .createRoomSession();
+                            },
+                            text: 'Create Room',
+                            isLoading: state.isLoading ?? false,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
