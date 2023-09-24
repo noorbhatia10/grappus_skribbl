@@ -35,20 +35,16 @@ class LeaderBoardComponent extends StatelessWidget {
           Expanded(
             child: BlocBuilder<GameCubit, GameState>(
               builder: (context, state) {
-                final sessionState = state.sessionState;
-                if (sessionState == null) {
-                  return const SizedBox.expand();
-                }
-                final players = sessionState.players;
+                final players = state.players;
                 return ListView.builder(
                   itemBuilder: (context, index) {
-                    final playerKey = players.keys.toList()[index];
+                    final playerKey = players?.keys.toList()[index];
                     return _LeaderboardListItem(
-                      player: players[playerKey]!,
-                      isDrawing: playerKey == state.sessionState?.isDrawing,
+                      player: players![playerKey]!,
+                      isDrawing: playerKey == state.currentDrawingPlayerId,
                     );
                   },
-                  itemCount: players.length,
+                  itemCount: players?.length,
                 );
               },
             ),

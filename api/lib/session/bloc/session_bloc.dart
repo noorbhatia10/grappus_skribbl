@@ -298,7 +298,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
   @override
   Object toMessage(SessionState state) {
     return WebSocketResponse(
-      data: state.toJson(),
+      data: _responseData(state.eventType),
       eventType: state.eventType,
     ).encodedJson();
   }
@@ -324,4 +324,57 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
       ),
     );
   }
+
+  Map<String, dynamic> _responseData(EventType eventType) {
+    switch (eventType) {
+      case EventType.timerUpdate:
+        return {'remainingTime': state.remainingTime};
+      case EventType.addPlayer:
+        return {'players': Map<String, Player>.from(state.players)};
+      case EventType.roundStart:
+        return {
+          'round': state.round,
+          'isDrawing': state.isDrawing,
+          'hiddenAnswer': state.hiddenAnswer,
+          'correctAnswer': state.correctAnswer,
+        };
+      case EventType.roundEnd:
+        return {
+          'players': Map<String, Player>.from(state.players),
+        };
+      case EventType.gameEnd:
+        return {
+          'leaderBoard':
+              state.leaderboard.map((players) => players.toMap()).toList(),
+        };
+
+      case EventType.drawing:
+        return {'points': state.points.toJson()};
+      case EventType.chat:
+        return {'message': state.message?.toMap() ?? {}};
+      case EventType.invalid:
+      case EventType.connect:
+      case EventType.initial:
+      case EventType.disconnect:
+        return {};
+    }
+  }
 }
+// round: ++currentRound,
+// isDrawing: currentDrawingPlayerID,
+// points: const DrawingPointsWrapper(points: null, paint: null),
+// hiddenAnswer: randomWord.split('').map((e) => ' ').join(),
+// correctAnswer: randomWord,
+// eventType: EventType.roundStart,
+
+// 'players': Map<String, Player>.from(players),
+// 'points': points.toJson(),
+// 'eventType': eventType.toJson(),
+// 'message': message?.toJson(),
+// 'correctAnswer': correctAnswer,
+// 'secondsPassed': remainingTime,
+// 'numOfCorrectGuesses': numOfCorrectGuesses,
+// 'round': round,
+// 'isDrawing': isDrawing,
+// 'hiddenAnswer': hiddenAnswer,
+// 'leaderboard': leaderboard.map((players) => players.toMap()).toList(),

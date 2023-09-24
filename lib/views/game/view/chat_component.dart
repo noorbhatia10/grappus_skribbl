@@ -49,14 +49,13 @@ class _ChatComponentState extends State<ChatComponent> {
           SizedBox(height: 14.toResponsiveHeight(context)),
           Expanded(
             child: BlocBuilder<GameCubit, GameState>(
-              buildWhen: (prev, curr) => prev.sessionState != curr.sessionState,
+              buildWhen: (prev, curr) => prev.chats != curr.chats,
               builder: (context, state) {
-                final sessionState = state.sessionState;
-                final players = sessionState?.players ?? {};
-                if (sessionState == null) {
+                final players = state.players ?? {};
+                if (players.isEmpty) {
                   return const SizedBox();
                 }
-                final messages = state.messages;
+                final messages = state.chats;
                 if (messages != null) {
                   return ListView.builder(
                     reverse: true,
@@ -139,26 +138,22 @@ class _ChatComponentState extends State<ChatComponent> {
                   return;
                 }
                 final gameState = context.read<GameCubit>().state;
-                if (gameState.sessionState == null) {
-                  throw Exception('null session');
-                }
                 final isCorrectWord =
                     _chatController.text.trim().toLowerCase() ==
-                            gameState.sessionState?.correctAnswer
-                                .trim()
-                                .toLowerCase() &&
-                        !gameState.sessionState!.players[gameState.uid]!
+                            gameState.correctAnswer?.trim().toLowerCase() &&
+                        !gameState.players![gameState.currentPlayerUid]!
                             .hasAnsweredCorrectly;
                 final chatModel = ChatModel(
-                  playerUid: gameState.uid ?? '',
+                  playerUid: gameState.currentPlayerUid ?? '',
                   message: _chatController.text,
                   isCorrectWord: isCorrectWord,
                 );
                 context.read<GameCubit>().addChatsToLocal(chatModel);
                 _chatController.clear();
                 FocusScope.of(context).requestFocus(_focusNode);
-                if (gameState.sessionState?.isDrawing == gameState.uid ||
-                    gameState.sessionState!.players[gameState.uid]!
+                if (gameState.currentDrawingPlayerId ==
+                        gameState.currentPlayerUid ||
+                    gameState.players![gameState.currentPlayerUid]!
                         .hasAnsweredCorrectly) {
                   return;
                 }

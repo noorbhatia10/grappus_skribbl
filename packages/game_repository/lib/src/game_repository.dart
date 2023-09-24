@@ -16,20 +16,22 @@ class GameRepository {
   final GameService _gameService = GameService();
 
   /// function to get the current session data stream
-  Stream<SessionState?> get session {
-    return _ws.messages.cast<String>().map(
-      (event) {
-        final map = jsonDecode(event) as Map<String, dynamic>;
-        if (map['eventType'] == null) {
-          return null;
-        }
-        final response = WebSocketResponse.fromMap(map);
-        if (response.eventType != EventType.invalid) {
-          return SessionState.fromJson(response.data);
-        }
-        return null;
-      },
-    );
+  // Stream<SessionState?> get session {
+  //   return _ws.messages.cast<String>().map(
+  //     (event) {
+  //       final map = jsonDecode(event) as Map<String, dynamic>;
+  //       final response = WebSocketResponse.fromMap(map);
+  //       return SessionState.fromJson(response.data);
+  //     },
+  //   );
+  // }
+
+  Stream<WebSocketResponse> get response {
+    return _ws.messages.cast<String>().map((event) {
+      final map = jsonDecode(event) as Map<String, dynamic>;
+      final response = WebSocketResponse.fromMap(map);
+      return response;
+    });
   }
 
   /// function to send the points to the server

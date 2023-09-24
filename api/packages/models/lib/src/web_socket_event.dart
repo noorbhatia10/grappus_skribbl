@@ -4,26 +4,26 @@ import 'package:models/src/chat_model.dart';
 import 'package:models/src/drawing_points.dart';
 
 enum EventType {
-  connect('__connect__'),
-  initial('__initial__'),
-  drawing('__drawing__'),
-  chat('__chat__'),
-  addPlayer('__add_player__'),
-  disconnect('__disconnect__'),
-  timerUpdate('__timerUpdate__'),
-  invalid('__invalid__'),
-  roundStart('__round_start__'),
-  roundEnd('__round_end__'),
-  gameEnd('__game_end__');
+  connect(0),
+  initial(1),
+  drawing(2),
+  chat(3),
+  addPlayer(4),
+  disconnect(5),
+  timerUpdate(6),
+  invalid(7),
+  roundStart(8),
+  roundEnd(9),
+  gameEnd(10);
 
-  const EventType(this.name);
+  const EventType(this.type);
 
   factory EventType.fromJson(Map<String, dynamic> json) => EventType.values
-      .firstWhere((element) => element.name == json['eventType']);
-  final String name;
+      .firstWhere((element) => element.type == json['eventType']);
+  final int type;
 
   Map<String, dynamic> toJson() {
-    return {'eventType': name};
+    return {'eventType': type};
   }
 }
 

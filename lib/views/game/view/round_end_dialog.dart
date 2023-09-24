@@ -42,7 +42,7 @@ class _RoundEndDialogState extends State<RoundEndDialog> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Correct Answer:${state.sessionState?.correctAnswer ?? ''}',
+                  'Correct Answer:${state.correctAnswer ?? ''}',
                 ),
                 const SizedBox(
                   height: 10,
@@ -56,11 +56,8 @@ class _RoundEndDialogState extends State<RoundEndDialog> {
         ),
       ),
       listener: (context, state) {
-        if (state.sessionState == null) {
-          return;
-        }
         if (remainingSeconds == 0 &&
-            state.sessionState!.eventType == EventType.roundStart) {
+            state.eventType == EventType.roundStart) {
           _tickerSub.cancel();
           context.pop();
         }
