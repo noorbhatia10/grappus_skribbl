@@ -12,6 +12,7 @@ class Player {
   final int guessedAt;
   final bool hasCompletedDrawingRound;
   final int userNameColor;
+
   Player({
     required this.userId,
     required this.name,
@@ -52,7 +53,7 @@ class Player {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'userId': userId,
       'name': name,
@@ -67,7 +68,7 @@ class Player {
     };
   }
 
-  factory Player.fromMap(Map<String, dynamic> map) {
+  factory Player.fromJson(Map<String, dynamic> map) {
     return Player(
       userId: map['userId'] as String,
       name: map['name'] as String,
@@ -82,13 +83,6 @@ class Player {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory Player.fromJson(String source) =>
-      Player.fromMap(json.decode(source) as Map<String, dynamic>);
-
   @override
-  String toString() {
-    return jsonEncode(toJson());
-  }
+  String toString() => jsonEncode(toJson());
 }

@@ -19,41 +19,41 @@ class GameCubit extends Cubit<GameState> {
   StreamSubscription<SessionState?>? _sessionStateSub;
 
   Future<void> connect(String name, String imagePath, int userNameColor) async {
-    _sessionStateSub = _gameRepository.session.listen((sessionState) {
-      emit(state.copyWith(sessionState: sessionState));
-      if (state.sessionState?.eventType == EventType.chat) {
-        final message = state.sessionState?.message;
-        if (message != null && message.playerUid != state.uid) {
-          addChatsToLocal(message);
-        }
-      }
-    });
+    // _sessionStateSub = _gameRepository.session.listen((sessionState) {
+    //   emit(state.copyWith(sessionState: sessionState));
+    //   if (state.sessionState?.eventType == EventType.chat) {
+    //     final message = state.sessionState?.message;
+    //     if (message != null && message.playerUid != state.uid) {
+    //       addChatsToLocal(message);
+    //     }
+    //   }
+    // });
 
-    try {
-      final uid = await _gameRepository.connect(
-        name: name,
-        image: imagePath,
-        color: userNameColor,
-      );
-
-      if (uid == null) {
-        throw Exception('Null UID');
-      }
-      emit(state.copyWith(uid: uid));
-
-      html.window.onBeforeUnload.listen((event) async {
-        await close();
-      });
-    } on Exception catch (e) {
-      emit(GameErrorState(message: e.toString()));
-      addError(e, StackTrace.current);
-    }
+    // try {
+    //   final uid = await _gameRepository.connect(
+    //     name: name,
+    //     image: imagePath,
+    //     color: userNameColor,
+    //   );
+    //
+    //   if (uid == null) {
+    //     throw Exception('Null UID');
+    //   }
+    //   emit(state.copyWith(uid: uid));
+    //
+    //   html.window.onBeforeUnload.listen((event) async {
+    //     await close();
+    //   });
+    // } on Exception catch (e) {
+    //   emit(GameErrorState(message: e.toString()));
+    //   addError(e, StackTrace.current);
+    // }
   }
 
-  Future<void> addPoints(DrawingPointsWrapper points) async =>
-      _gameRepository.sendPoints(points);
+  // Future<void> addPoints(DrawingPointsWrapper points) async =>
+      // _gameRepository.sendPoints(points);
 
-  Future<void> addChats(ChatModel chat) async => _gameRepository.sendChat(chat);
+  // Future<void> addChats(ChatModel chat) async => _gameRepository.sendChat(chat);
 
   void addChatsToLocal(ChatModel chatModel) =>
       emit(state.copyWith(messages: [...?state.messages, chatModel]));

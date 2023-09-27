@@ -2,30 +2,28 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_repository/game_repository.dart';
+import 'package:grappus_skribbl/di/service_locator.dart';
 import 'package:grappus_skribbl/l10n/l10n.dart';
+import 'package:grappus_skribbl/views/game/bloc/game_bloc.dart';
 import 'package:grappus_skribbl/views/views.dart';
 
 class GameMainPage extends StatelessWidget {
   const GameMainPage({
-    required this.url,
-    required this.name,
-    required this.selectedImagePath,
+    required this.playerUid,
     super.key,
   });
 
-  final String url;
-  final String name;
-  final String selectedImagePath;
+  final String playerUid;
   static const String routeName = '/game-page';
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GameCubit(
-        gameRepository: GameRepository(
-          uri: Uri.parse(url),
-        ),
-      )..connect(name, selectedImagePath, generateUserNameColor()),
+    return BlocProvider<GameBloc>(
+      create: (context) => GameBloc(
+        gameRepository: getIt<GameRepository>(),
+      )
+        ..add(const ConnectGame())
+        ..add(AddPlayer(playerUid: playerUid)),
       child: const _GameMainPageView(),
     );
   }

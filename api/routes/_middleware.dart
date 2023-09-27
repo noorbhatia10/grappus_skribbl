@@ -1,14 +1,17 @@
 import 'package:api/session/bloc/session_bloc.dart';
+import 'package:api/session/chat_bloc/chat_bloc.dart';
+import 'package:api/session/points_bloc/points_bloc.dart';
+import 'package:api/session/round_bloc/round_bloc.dart';
 import 'package:api/utils/src/ticker.dart';
 import 'package:dart_frog/dart_frog.dart';
 
 import '../headers/headers.dart';
 
-final _sessionBloc = SessionBloc(const Ticker());
-
 Handler middleware(Handler handler) {
   return handler
       .use(requestLogger())
-      .use(provider<SessionBloc>((context) => _sessionBloc))
+      .use(provider<RoundBloc>((context) => RoundBloc(ticker: const Ticker())))
+      .use(provider<ChatBloc>((context) => ChatBloc()))
+      .use(provider<PointsBloc>((context) => PointsBloc()))
       .use(corsHeaders());
 }

@@ -60,7 +60,7 @@ class OnboardingPage extends StatelessWidget {
                   SkribblButton(
                     onTap: () => context.pushNamed(
                       const LoginPage(),
-                      LoginPage.routeName,
+                      LoginPageView.routeName,
                     ),
                     text: 'Get Started!',
                   ),

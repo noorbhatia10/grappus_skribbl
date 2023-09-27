@@ -15,18 +15,16 @@ class WebSocketResponse {
     this.message,
   });
 
-  String encodedJson() {
-    return jsonEncode(
-      {
-        'status': status,
-        'data': data,
-        'eventType': eventType.name,
-        'message': message,
-      },
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      'status': status,
+      'data': data,
+      'eventType': eventType,
+      'message': message,
+    };
   }
 
-  factory WebSocketResponse.fromMap(Map<String, dynamic> map) {
+  factory WebSocketResponse.fromJson(Map<String, dynamic> map) {
     return WebSocketResponse(
       status: map['status'].toString(),
       data: map['data'] as Map<String, dynamic>,
@@ -36,5 +34,10 @@ class WebSocketResponse {
         orElse: () => EventType.invalid,
       ),
     );
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
   }
 }

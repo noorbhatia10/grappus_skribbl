@@ -10,52 +10,88 @@ import 'package:web_socket_client/web_socket_client.dart';
 /// {@endtemplate}
 class GameRepository {
   /// {@macro game_repository}
-  GameRepository({required Uri uri}) : _ws = WebSocket(uri);
+  GameRepository();
 
-  final WebSocket _ws;
-  final GameService _gameService = GameService();
+  final WebSocket _ws = WebSocket(Uri.parse(Endpoints.baseUrl));
 
   /// function to get the current session data stream
-  Stream<SessionState?> get session {
-    return _ws.messages.cast<String>().map(
-      (event) {
-        final map = jsonDecode(event) as Map<String, dynamic>;
-        if (map['eventType'] == null) {
-          return null;
-        }
-        final response = WebSocketResponse.fromMap(map);
-        if (response.eventType != EventType.invalid) {
-          return SessionState.fromJson(response.data);
-        }
+
+  Stream<ChatModel?> get messageStream {
+    return _ws.messages.cast<String>().map((event) {
+      final map = jsonDecode(event) as Map<String, dynamic>;
+      if (map['eventType'] == null || map['data'] == null) {
         return null;
-      },
-    );
+      }
+      final response = WebSocketResponse.fromJson(map);
+      if (response.eventType == EventType.chat) {
+        print('incoming chat data: ${ChatModel.fromJson(
+          response.data['messages'] as Map<String, dynamic>,
+        )}');
+        return ChatModel.fromJson(
+          response.data['messages'] as Map<String, dynamic>,
+        );
+      }
+    });
   }
 
-  /// function to send the points to the server
-  void sendPoints(DrawingPointsWrapper points) =>
-      _ws.send(AddDrawingPointsEvent(data: points).encodedJson);
+  Stream<DrawingPointsWrapper?> get pointsStream {
+    return _ws.messages.cast<String>().map((event) {
+      final map = jsonDecode(event) as Map<String, dynamic>;
+      if (map['eventType'] == null || map['data'] == null) {
+        return null;
+      }
+      final response = WebSocketResponse.fromJson(map);
+      if (response.eventType == EventType.drawing) {
+        return DrawingPointsWrapper.fromJson(
+          response.data['drawingPoints'] as Map<String, dynamic>,
+        );
+      }
+    });
+  }
 
-  /// Returns a uid
-  Future<String?> connect({
-    required String name,
-    required String image,
-    required int color,
-  }) async {
+  Stream<Map<String, dynamic>?> get roundStream {
+    return _ws.messages.cast<String>().map((event) {
+      final map = jsonDecode(event) as Map<String, dynamic>;
+      if (map['eventType'] == null || map['data'] == null) {
+        return null;
+      }
+      final response = WebSocketResponse.fromJson(map);
+      if (response.eventType == EventType.addPlayer ||
+          response.eventType == EventType.roundStart ||
+          response.eventType == EventType.roundEnd ||
+          response.eventType == EventType.gameEnd) {
+        print('incoming data: ${RoundModel.fromJson(
+          response.data['roundData'] as Map<String, dynamic>,
+        )}');
+        return response.data['roundData'] as Map<String, dynamic>;
+      }
+    });
+  }
+
+  void sendPoints(DrawingPointsWrapper points) => _ws.send(
+        WebSocketEvent(
+          eventType: EventType.drawing,
+          data: points.toJson(),
+        ).toString(),
+      );
+
+  void addPlayer(Player player) {
+    print(
+        'data is sent from client: ${WebSocketEvent(eventType: EventType.addPlayer, data: player.toJson())}');
     try {
-      final data =
-          (await _gameService.connect(name: name, image: image, color: color))
-              .data;
-      return (jsonDecode(data.toString()) as Map<String, dynamic>)['data']
-          .toString();
+      _ws.send(
+        WebSocketEvent(eventType: EventType.addPlayer, data: player.toJson())
+            .toString(),
+      );
     } catch (e) {
-      rethrow;
+      print('error is: $e');
     }
   }
 
-  /// function to send the chats to the server
   void sendChat(ChatModel chat) {
-    _ws.send(AddToChatEvent(data: chat).encodedJson);
+    _ws.send(
+      WebSocketEvent(eventType: EventType.chat, data: chat.toJson()).toString(),
+    );
   }
 
   /// function to get the connection
@@ -63,8 +99,6 @@ class GameRepository {
 
   /// function to close the connection
   void close(String uid) {
-    _ws
-      ..send(DisconnectPlayerEvent(data: uid).encodedJson)
-      ..close();
+    _ws.close();
   }
 }

@@ -300,7 +300,7 @@ class SessionBloc extends BroadcastBloc<SessionEvent, SessionState> {
     return WebSocketResponse(
       data: state.toJson(),
       eventType: state.eventType,
-    ).encodedJson();
+    ).toString();
   }
 
   String replaceCharAt(String oldString, int index, String newChar) {

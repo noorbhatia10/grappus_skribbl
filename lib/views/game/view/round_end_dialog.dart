@@ -4,7 +4,7 @@ import 'package:api/utils/src/ticker.dart';
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grappus_skribbl/views/game/cubit/game_cubit.dart';
+import 'package:grappus_skribbl/views/game/bloc/game_bloc.dart';
 import 'package:models/models.dart';
 
 class RoundEndDialog extends StatefulWidget {
@@ -32,7 +32,7 @@ class _RoundEndDialogState extends State<RoundEndDialog> {
   @override
   Widget build(BuildContext context) {
     // TODO: Improve UI for this dialog
-    return BlocConsumer<GameCubit, GameState>(
+    return BlocConsumer<GameBloc, GameState>(
       builder: (context, state) => Center(
         child: Card(
           child: Container(
@@ -42,7 +42,7 @@ class _RoundEndDialogState extends State<RoundEndDialog> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Correct Answer:${state.sessionState?.correctAnswer ?? ''}',
+                  'Correct Answer:${state.correctAnswer ?? ''}',
                 ),
                 const SizedBox(
                   height: 10,
@@ -56,11 +56,8 @@ class _RoundEndDialogState extends State<RoundEndDialog> {
         ),
       ),
       listener: (context, state) {
-        if (state.sessionState == null) {
-          return;
-        }
         if (remainingSeconds == 0 &&
-            state.sessionState!.eventType == EventType.roundStart) {
+            state.eventType == EventType.roundStart) {
           _tickerSub.cancel();
           context.pop();
         }

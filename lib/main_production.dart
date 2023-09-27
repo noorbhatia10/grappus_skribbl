@@ -1,6 +1,9 @@
 import 'package:grappus_skribbl/app/app.dart';
 import 'package:grappus_skribbl/bootstrap.dart';
 
-void main() {
-  bootstrap(() => const App());
+import 'di/service_locator.dart';
+
+Future<void> main() async {
+  await setUpServiceLocator();
+  await bootstrap(() => const App());
 }

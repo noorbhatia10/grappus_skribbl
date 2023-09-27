@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:models/models.dart';
 import 'package:models/src/chat_model.dart';
 import 'package:models/src/drawing_points.dart';
 
@@ -27,57 +28,85 @@ enum EventType {
   }
 }
 
-abstract class WebSocketEvent<T> {
+class WebSocketEvent {
   WebSocketEvent({
     required this.eventType,
     required this.data,
   });
 
-  final T data;
+  factory WebSocketEvent.fromJson(
+    Map<String, dynamic> jsonData,
+  ) {
+    try {
+      final eventTypeName = jsonData['eventType'];
+      final data = jsonData['data'] as Map<String, dynamic>;
+      final eventType = EventType.values.firstWhere(
+        (element) => element.name == eventTypeName,
+        orElse: () => EventType.invalid,
+      );
+      return WebSocketEvent(
+        eventType: eventType,
+        data: data,
+      );
+    } catch (e) {
+      print('$e');
+      rethrow;
+    }
+  }
+
+  final Map<String, dynamic> data;
   final EventType eventType;
 
   Map<String, dynamic> toJson() {
-    throw UnimplementedError();
+    return {'eventType': eventType.name, 'data': data};
   }
-
-  String get encodedJson => jsonEncode(toJson());
-}
-
-class AddDrawingPointsEvent extends WebSocketEvent<DrawingPointsWrapper> {
-  AddDrawingPointsEvent({
-    required super.data,
-    super.eventType = EventType.drawing,
-  });
 
   @override
-  Map<String, dynamic> toJson() {
-    return {'eventType': eventType.name, 'data': data.toJson()};
-  }
+  String toString() => jsonEncode(toJson());
 }
 
-class AddToChatEvent extends WebSocketEvent<ChatModel> {
-  AddToChatEvent({
-    required super.data,
-    super.eventType = EventType.chat,
-  });
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {'eventType': eventType.name, 'data': data.toMap()};
-  }
-}
-
-class DisconnectPlayerEvent extends WebSocketEvent<String> {
-  DisconnectPlayerEvent({
-    required super.data,
-    super.eventType = EventType.disconnect,
-  });
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'eventType': eventType.name,
-      'data': {'uid': data},
-    };
-  }
-}
+// class AddDrawingPointsEvent extends WebSocketEvent<DrawingPointsWrapper> {
+//   AddDrawingPointsEvent({
+//     required super.data,
+//     super.eventType = EventType.drawing,
+//   });
+//
+//   @override
+//   Map<String, dynamic> toJson() {
+//     return {'eventType': eventType.name, 'data': data.toJson()};
+//   }
+// }
+//
+// class AddToChatEvent extends WebSocketEvent<ChatModel> {
+//   AddToChatEvent({
+//     required super.data,
+//     super.eventType = EventType.chat,
+//   });
+//
+//   @override
+//   Map<String, dynamic> toJson() {
+//     return {'eventType': eventType.name, 'data': data.toJson()};
+//   }
+// }
+//
+// class AddPlayerEvent extends WebSocketEvent<Player> {
+//   AddPlayerEvent({
+//     required super.data,
+//     super.eventType = EventType.addPlayer,
+//   });
+// }
+//
+// class DisconnectPlayerEvent extends WebSocketEvent<String> {
+//   DisconnectPlayerEvent({
+//     required super.data,
+//     super.eventType = EventType.disconnect,
+//   });
+//
+//   @override
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'eventType': eventType.name,
+//       'data': {'uid': data},
+//     };
+//   }
+// }

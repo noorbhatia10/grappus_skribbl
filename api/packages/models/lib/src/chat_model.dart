@@ -8,7 +8,7 @@ class ChatModel {
     required this.isCorrectWord,
   });
 
-  factory ChatModel.fromMap(Map<String, dynamic> map) {
+  factory ChatModel.fromJson(Map<String, dynamic> map) {
     return ChatModel(
       playerUid: map['playerUid'] as String,
       message: map['message'] as String,
@@ -16,13 +16,11 @@ class ChatModel {
     );
   }
 
-  factory ChatModel.fromJson(String source) =>
-      ChatModel.fromMap(json.decode(source) as Map<String, dynamic>);
   final String playerUid;
   final String message;
   final bool isCorrectWord;
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'playerUid': playerUid,
       'message': message,
@@ -30,7 +28,8 @@ class ChatModel {
     };
   }
 
-  String toJson() => json.encode(toMap());
+  @override
+  String toString() => json.encode(toJson());
 
   ChatModel copyWith({
     String? playerUid,

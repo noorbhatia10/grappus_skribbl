@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:api/session/bloc/session_bloc.dart';
 import 'package:dart_frog/dart_frog.dart';
-import 'package:models/models.dart';
 import 'package:uuid/uuid.dart';
 
 Future<Response> onRequest(RequestContext context) async {
@@ -34,17 +32,6 @@ Future<Response> onRequest(RequestContext context) async {
       ),
     );
   }
-  context.read<SessionBloc>().add(
-        OnPlayerAdded(
-          Player(
-            userId: uid,
-            name: name,
-            imagePath: image,
-            userNameColor: color,
-          ),
-        ),
-      );
-
   return Response(
     body: jsonEncode({'status': 'success', 'data': uid}),
   );

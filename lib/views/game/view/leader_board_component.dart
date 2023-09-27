@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grappus_skribbl/l10n/l10n.dart';
-import 'package:grappus_skribbl/views/game/cubit/game_cubit.dart';
+import 'package:grappus_skribbl/views/game/bloc/game_bloc.dart';
 import 'package:models/models.dart';
 
 class LeaderBoardComponent extends StatelessWidget {
@@ -33,19 +33,15 @@ class LeaderBoardComponent extends StatelessWidget {
           ),
           SizedBox(height: 14.toResponsiveHeight(context)),
           Expanded(
-            child: BlocBuilder<GameCubit, GameState>(
+            child: BlocBuilder<GameBloc, GameState>(
               builder: (context, state) {
-                final sessionState = state.sessionState;
-                if (sessionState == null) {
-                  return const SizedBox.expand();
-                }
-                final players = sessionState.players;
+                final players = state.players;
                 return ListView.builder(
                   itemBuilder: (context, index) {
-                    final playerKey = players.keys.toList()[index];
                     return _LeaderboardListItem(
-                      player: players[playerKey]!,
-                      isDrawing: playerKey == state.sessionState?.isDrawing,
+                      player: players[index],
+                      isDrawing: players[index].userId ==
+                          state.currentDrawingPlayerUid,
                     );
                   },
                   itemCount: players.length,

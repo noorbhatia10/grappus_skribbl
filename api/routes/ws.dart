@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:api/session/bloc/session_bloc.dart';
-import 'package:api/utils/utils.dart';
+import 'package:api/session/chat_bloc/chat_bloc.dart';
+import 'package:api/session/points_bloc/points_bloc.dart';
+import 'package:api/session/round_bloc/round_bloc.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_web_socket/dart_frog_web_socket.dart';
 import 'package:models/models.dart';
@@ -9,9 +10,13 @@ import 'package:models/models.dart';
 /// Websocket Handler
 Future<Response> onRequest(RequestContext context) async {
   final handler = webSocketHandler((channel, protocol) {
-    final sessionBloc = context.read<SessionBloc>()..subscribe(channel);
+    final chatBloc = context.read<ChatBloc>()..subscribe(channel);
+    final pointsBloc = context.read<PointsBloc>()..subscribe(channel);
+    final roundBloc = context.read<RoundBloc>()..subscribe(channel);
+
     channel.stream.listen(
       (data) {
+        print('data is :$data');
         try {
           if (data == null || data.toString().isEmpty) {
             channel.sink.add(
@@ -22,6 +27,28 @@ Future<Response> onRequest(RequestContext context) async {
 
             return;
           }
+
+          // For Postman Testing
+          /*
+          if (data.toString() == 'chat checking') {
+            final chat = ChatModel(
+                playerUid: 'asfasdf',
+                message: data.toString(),
+                isCorrectWord: false);
+            chatBloc.add(AddMessage(message: chat));
+            return;
+          }
+
+          if(data.toString() == 'start'){
+            roundBloc.add(const OnRoundStarted());
+            return;
+          }
+          if(data.toString() == 'stop'){
+            roundBloc.add(const OnGameEnded());
+            return;
+          }
+
+          */
           final jsonData = jsonDecode(data.toString());
           if (jsonData is! Map<String, dynamic>) {
             channel.sink.add(
@@ -31,39 +58,42 @@ Future<Response> onRequest(RequestContext context) async {
             );
             return;
           }
-          final websocketEvent =
-              WebSocketEventHandler.handleWebSocketEvent(jsonData);
-          if (websocketEvent == null) {
-            return;
+
+          final websocketEvent = WebSocketEvent.fromJson(jsonData);
+
+          print('websocket data is: ${websocketEvent.data}');
+          if (websocketEvent.eventType == EventType.addPlayer) {
+            final player = Player.fromJson(websocketEvent.data);
+            print('adding player');
+            roundBloc.add(AddPlayer(player: player));
           }
-          switch (websocketEvent.runtimeType) {
-            case AddDrawingPointsEvent:
-              final receivedPoints =
-                  (websocketEvent as AddDrawingPointsEvent).data;
-              sessionBloc.add(OnPointsAdded(receivedPoints));
 
-            case AddToChatEvent:
-              final chatModel = (websocketEvent as AddToChatEvent).data;
-              sessionBloc.add(OnMessageSent(chatModel));
+          if (websocketEvent.eventType == EventType.drawing) {
+            final drawingPoints =
+                DrawingPointsWrapper.fromJson(websocketEvent.data);
+            pointsBloc.add(OnPointsAdded(points: drawingPoints));
+            channel.sink.add(pointsBloc.state.toString());
+          }
 
-            case DisconnectPlayerEvent:
-              final uid = (websocketEvent as DisconnectPlayerEvent).data;
-              sessionBloc.add(OnPlayerDisconnect(uid));
+          if (websocketEvent.eventType == EventType.chat) {
+            final chats = ChatModel.fromJson(websocketEvent.data);
+            chatBloc.add(AddMessage(message: chats));
+            channel.sink.add(chatBloc.state.toString());
           }
         } catch (e) {
+          print('Error is: $e');
           channel.sink.add(
             WebSocketResponse(
               data: {},
               status: 'error',
               eventType: EventType.invalid,
               message: e.toString(),
-            ).encodedJson(),
+            ).toString(),
           );
           rethrow;
         }
       },
-      onDone: () {
-      },
+      onDone: () {},
     );
   });
   return handler(context);

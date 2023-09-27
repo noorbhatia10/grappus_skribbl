@@ -21,7 +21,7 @@ class SessionState extends Equatable {
         remainingTime: json['secondsPassed'] as int,
         round: json['round'] as int,
         players: (json['players'] as Map<String, dynamic>?)?.map(
-              (k, e) => MapEntry(k, Player.fromJson(e as String)),
+              (k, e) => MapEntry(k, Player.fromJson(e as Map<String,dynamic>)),
             ) ??
             const {},
         hiddenAnswer: json['hiddenAnswer'].toString(),
@@ -32,11 +32,11 @@ class SessionState extends Equatable {
         eventType:
             EventType.fromJson(json['eventType'] as Map<String, dynamic>),
         message: json['message'] != null
-            ? ChatModel.fromJson(json['message'] as String)
+            ? ChatModel.fromJson(json['message'] as Map<String,dynamic>)
             : null,
         leaderboard: List<Player>.from(
           (json['leaderboard'] as List<dynamic>).map<Player>(
-            (x) => Player.fromMap(x as Map<String, dynamic>),
+            (x) => Player.fromJson(x as Map<String, dynamic>),
           ),
         ),
       );
@@ -110,7 +110,7 @@ class SessionState extends Equatable {
         'round': round,
         'isDrawing': isDrawing,
         'hiddenAnswer': hiddenAnswer,
-        'leaderboard': leaderboard.map((players) => players.toMap()).toList(),
+        'leaderboard': leaderboard.map((players) => players.toJson()).toList(),
       };
 
   @override
