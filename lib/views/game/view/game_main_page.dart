@@ -27,20 +27,6 @@ class GameMainPage extends StatelessWidget {
       child: const _GameMainPageView(),
     );
   }
-
-  int generateUserNameColor() {
-    final colorList = [
-      AppColors.antiqueIvory,
-      AppColors.goldenYellow,
-      AppColors.goldenOrange,
-      AppColors.pastelPink,
-      AppColors.ceruleanBlue,
-      AppColors.lavenderPurple,
-      AppColors.tangerineOrange,
-      AppColors.lavenderPurple,
-    ];
-    return colorList.randomItem().value;
-  }
 }
 
 class _GameMainPageView extends StatelessWidget {
