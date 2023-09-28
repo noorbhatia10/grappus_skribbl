@@ -1,4 +1,3 @@
-import 'package:api/session/bloc/session_bloc.dart';
 import 'package:api/session/chat_bloc/chat_bloc.dart';
 import 'package:api/session/points_bloc/points_bloc.dart';
 import 'package:api/session/round_bloc/round_bloc.dart';

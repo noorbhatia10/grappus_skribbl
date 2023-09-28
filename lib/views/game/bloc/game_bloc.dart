@@ -19,11 +19,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   final GameRepository _gameRepository;
-  StreamSubscription<Map<String, dynamic>?>? _roundStream;
+  StreamSubscription<WebSocketResponse?>? _roundStream;
 
   void _onConnectGame(ConnectGame event, Emitter<GameState> emit) {
-    _roundStream = _gameRepository.roundStream.listen((roundData) {
-      if (roundData != null) add(OnMapData(roundData: roundData));
+    _roundStream = _gameRepository.webSocketStream.listen((response) {
+      if (response != null) {
+        if (response.eventType == EventType.roundStart ||
+            response.eventType == EventType.roundEnd ||
+            response.eventType == EventType.addPlayer ||
+            response.eventType == EventType.gameEnd) {
+          add(OnMapData(roundData: response.data));
+        }
+      }
     });
   }
 

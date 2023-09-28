@@ -16,7 +16,7 @@ class LoginPage extends StatelessWidget {
     return BlocProvider<LoginBloc>(
       create: (context) => LoginBloc(
         gameService: GameService(),
-        gameRepository: getIt.get<GameRepository>(),
+        gameRepository: getIt<GameRepository>(),
       ),
       child: const LoginPageView(),
     );

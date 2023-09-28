@@ -162,7 +162,8 @@ class _ChatComponentViewState extends State<ChatComponentView> {
                 final gameState = context.read<GameBloc>().state;
                 final player = gameState.players
                     .where(
-                        (player) => player.userId == gameState.currentPlayerUid)
+                      (player) => player.userId == gameState.currentPlayerUid,
+                    )
                     .first;
                 print('player is :$player');
                 final isCorrectWord =

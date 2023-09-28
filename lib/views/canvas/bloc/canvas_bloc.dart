@@ -18,7 +18,7 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
   }
 
   final GameRepository _gameRepository;
-  StreamSubscription<DrawingPointsWrapper?>? _pointsStream;
+  StreamSubscription<WebSocketResponse?>? _pointsStream;
 
   void _onAddPointsToServer(
       AddPointsToServer event, Emitter<CanvasState> emit) {
@@ -26,10 +26,19 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
   }
 
   void _onConnectPointStream(
-      ConnectPointsStream event, Emitter<CanvasState> emit) {
-    _pointsStream = _gameRepository.pointsStream.listen((points) {
-      if (points != null) {
-        emit(CanvasState(drawingPointsWrapper: points));
+    ConnectPointsStream event,
+    Emitter<CanvasState> emit,
+  ) {
+    _pointsStream = _gameRepository.webSocketStream.listen((response) {
+      if (response != null) {
+        if (response.eventType == EventType.drawing) {
+          emit(
+            CanvasState(
+              drawingPointsWrapper:
+                  DrawingPointsWrapper.fromJson(response.data),
+            ),
+          );
+        }
       }
     });
   }

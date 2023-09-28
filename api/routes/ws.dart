@@ -10,13 +10,13 @@ import 'package:models/models.dart';
 /// Websocket Handler
 Future<Response> onRequest(RequestContext context) async {
   final handler = webSocketHandler((channel, protocol) {
+
     final chatBloc = context.read<ChatBloc>()..subscribe(channel);
     final pointsBloc = context.read<PointsBloc>()..subscribe(channel);
     final roundBloc = context.read<RoundBloc>()..subscribe(channel);
 
     channel.stream.listen(
       (data) {
-        print('data is :$data');
         try {
           if (data == null || data.toString().isEmpty) {
             channel.sink.add(
@@ -47,8 +47,8 @@ Future<Response> onRequest(RequestContext context) async {
             roundBloc.add(const OnGameEnded());
             return;
           }
-
           */
+
           final jsonData = jsonDecode(data.toString());
           if (jsonData is! Map<String, dynamic>) {
             channel.sink.add(
@@ -61,11 +61,11 @@ Future<Response> onRequest(RequestContext context) async {
 
           final websocketEvent = WebSocketEvent.fromJson(jsonData);
 
-          print('websocket data is: ${websocketEvent.data}');
           if (websocketEvent.eventType == EventType.addPlayer) {
             final player = Player.fromJson(websocketEvent.data);
             print('adding player');
             roundBloc.add(AddPlayer(player: player));
+            // channel.sink.add(roundBloc.state.toString());
           }
 
           if (websocketEvent.eventType == EventType.drawing) {

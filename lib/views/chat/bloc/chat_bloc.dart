@@ -19,11 +19,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   final GameRepository _gameRepository;
-  StreamSubscription<ChatModel?>? _messageSubsciption;
+  StreamSubscription<WebSocketResponse?>? _messageSubsciption;
 
   void _connectChatStream(ConnectChatStream event, Emitter<ChatState> emit) {
-    _messageSubsciption = _gameRepository.messageStream.listen((message) {
-      if (message != null) add(SendChatsToLocal(message: message));
+    _messageSubsciption = _gameRepository.webSocketStream.listen((response) {
+      if (response != null) {
+        if (response.eventType == EventType.chat) {
+          add(SendChatsToLocal(message: ChatModel.fromJson(response.data)));
+        }
+      }
     });
   }
 

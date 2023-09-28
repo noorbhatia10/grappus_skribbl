@@ -36,14 +36,14 @@ class RoundBloc extends BroadcastBloc<RoundEvent, RoundState> {
     //   eventType: EventType.addPlayer,
     // );
     // final players = state.players
-    print('playerList before: ${state.players}');
+    // print('playerList before: ${state.players}');
     emit(
       state.copyWith(
         players: [...state.players, event.player],
         eventType: EventType.addPlayer,
       ),
     );
-    print('playerList after: ${state.players}');
+    // print('playerList after: ${state.players}');
 
   }
 
@@ -214,6 +214,7 @@ class RoundBloc extends BroadcastBloc<RoundEvent, RoundState> {
 
   @override
   Object toMessage(RoundState state) {
+    print('ok sent');
     return WebSocketResponse(
       data: state.toJson(),
       eventType: state.eventType,
